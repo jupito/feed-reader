@@ -1,0 +1,30 @@
+body { font-family: sans-serif; }
+
+a { text-decoration: none; }
+
+table { border-collapse: collapse; }
+th { border-bottom: 1px solid black; }
+tr:last-of-type {
+    border-top: 1px solid black;
+    font-style: italic;
+}
+th:not(:last-of-type), td:not(:last-of-type) {
+    border-right: 1px solid black;
+}
+
+#top, #bottom { background: #f0f0f0; }
+
+#top, #bottom, #categories, #feeds, #entries { padding: 0.5pc; }
+
+.feed, .entry, .entry_alt { padding: 0.5pc; }
+
+.entry { background: #ffffff; }
+.entry_alt { background: #f0f0f0; }
+
+.entryinfo { font-size: small; }
+.title {}
+.description { padding-left: 1pc; }
+.enclosure {
+    padding-left: 1pc;
+    font-size: small;
+}
