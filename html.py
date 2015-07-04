@@ -1,5 +1,7 @@
 from __future__ import division, print_function
 
+IND = ' '*4 # Indentation.
+
 def tag(name, content=None, *attributes):
     a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
     d = dict(n=name, a=a, c=content)
@@ -15,17 +17,17 @@ def href(link, content):
 def ulist(items):
     s = '\n'
     for item in items:
-        s += ' ' * 4 + tag('li', item) + '\n'
+        s += IND + tag('li', item) + '\n'
     return tag('ul', s)
 
 def table(rows, headers=None):
     s = '\n'
     if headers:
         row = reduce(lambda x, y: x + tag('th', y), headers, '')
-        s += ' ' * 4 + tag('tr', row) + '\n'
+        s += IND + tag('tr', row) + '\n'
     for items in rows:
         row = reduce(lambda x, y: x + tag('td', y), items, '')
-        s += ' ' * 4 + tag('tr', row) + '\n'
+        s += IND + tag('tr', row) + '\n'
     return tag('table', s)
 
 def head_redirect(link, time=0):
