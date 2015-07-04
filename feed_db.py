@@ -191,21 +191,21 @@ class FeedDb(object):
         self.cur.execute('DELETE FROM Entries WHERE feed_id=?', (i,))
         self.cur.execute('DELETE FROM Feeds WHERE id=?', (i,))
 
-    def get_next(self, any=0, cat=None, feed=None, limit=1):
-        """Get next (unread or any) entry (entries) (from category)."""
+    def get_next(self, minprg=0, maxprg=0, cat=None, feed=None, limit=1):
+        """Get next entry or entries."""
         if limit == 0:
             limit = -1
         self.cur.execute("""
                 SELECT Entries.*
                 FROM Entries INNER JOIN Feeds
                 ON Entries.feed_id = Feeds.id
-                WHERE (? OR progress < 1)
+                WHERE (progress between ? and ?)
                         AND (? OR Feeds.category LIKE ?)
                         AND (? OR feed_id = ?)
                 ORDER BY priority, updated
                 LIMIT ?
                 """,
-                (any,
+                (minprg, maxprg,
                 not cat, cat or '%',
                 not feed, feed,
                 limit))

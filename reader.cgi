@@ -218,7 +218,8 @@ def print_entry(e, f, alt=False):
 def show_entries(db):
     any = args['any']
     n = db.n_entries(maxprg=any, cat=args['cat'], feed=args['feed'])
-    entries = db.get_next(any, args['cat'], args['feed'], args['limit'])
+    entries = db.get_next(maxprg=any, cat=args['cat'], feed=args['feed'],
+            limit=args['limit'])
     ids = [e['id'] for e in entries]
     print(html.head('%i in %s entries' % (n, 'all' if any else 'unread'), SHEET))
     print_top(ids)
@@ -231,7 +232,7 @@ def show_entries(db):
     print(html.tail())
 
 def redirect(db):
-    entries = db.get_next(0, args['cat'], args['feed'], 1)
+    entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1)
     if entries:
         e = entries[0]
         print(html.head('Redirecting...', SHEET, e['link']))

@@ -105,7 +105,7 @@ if args.categories:
         print(cat, str(db.n_entries(maxprg=0, cat=cat)))
 
 if args.get:
-    print(feed_util.describe(db.get_next(0, args.category)[0], 1))
+    print(feed_util.describe(db.get_next(maxprg=0, cat=args.category)[0], 1))
 
 if args.verbose:
     print(db_info(db))
