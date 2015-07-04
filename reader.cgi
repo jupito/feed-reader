@@ -40,7 +40,7 @@ def time_fmt(secs):
     return time.strftime(TIME_FMT, time.localtime(secs))
 
 def file_age(filename):
-    seconds = time.time() - os.path.getmtime(filename)
+    seconds = int(time.time() - os.path.getmtime(filename))
     age = datetime.timedelta(seconds=seconds)
     return age
 
