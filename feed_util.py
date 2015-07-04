@@ -43,10 +43,9 @@ def parse_entry(x):
 
 def get_updated(x):
     """Get updated field or current time as seconds."""
-    if 'published_parsed' in x:
-        return int(time.mktime(x['published_parsed']))
-    else:
-        return 0
+    st = getattr(x, 'published_parsed', time.gmtime(0))
+    seconds = int(time.mktime())
+    return seconds
 
 def get_enc(x):
     """Return the first enclosure."""
