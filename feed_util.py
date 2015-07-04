@@ -13,9 +13,8 @@ def parse_url(url):
     if entries:
         # Set feed publish time as newest entry publish time.
         feed['updated'] = max(e['updated'] for e in entries)
-        return feed, entries
-    else:
-        raise Exception('No entries in feed: {}'.format(url), feed)
+    #raise Exception('No entries in feed: {}'.format(url), feed)
+    return feed, entries
 
 def parse_feed(url, x):
     d = dict(
@@ -46,7 +45,7 @@ def parse_entry(x):
 def get_updated(x):
     """Get updated field or current time as seconds."""
     st = getattr(x, 'published_parsed', time.gmtime(0))
-    seconds = int(time.mktime())
+    seconds = int(time.mktime(st))
     return seconds
 
 def get_enc(x):
