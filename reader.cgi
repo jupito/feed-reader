@@ -160,7 +160,7 @@ def print_feed(f, n_unread, n_total):
     print('<div class="feed">')
     print_feedinfo(f, n_unread, n_total)
     print_feeddates(f)
-    print_description(f)
+    print_description(f, plaintext=True)
     print('</div>')
 
 def show_feeds(db):
