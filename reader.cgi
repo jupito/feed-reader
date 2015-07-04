@@ -133,7 +133,7 @@ def print_feedinfo(f, n_unread, n_total):
     rows = [
             '%i: %s %s %s' % (
                     f['id'],
-                    html.href(link_entries('', f['id']), f['title']),
+                    html.href(link_entries(feed=f['id']), f['title']),
                     html.href(f['link'], '(site)'),
                     html.href(f['url'], '(feed)'),
                     ),
@@ -174,8 +174,8 @@ def show_feeds(db):
 
 def print_entryinfo(e, f):
     updated = html.tag('em', util.time_fmt(e['updated']))
-    cat = html.href(link_entries(f['category'], ''), f['category'])
-    feed = html.href(link_entries('', f['id']), f['title'])
+    cat = html.href(link_entries(cat=f['category']), f['category'])
+    feed = html.href(link_entries(feed=f['id']), f['title'])
     flink = html.href(f['link'], '=>')
     print('<div class="entryinfo">')
     print(' &mdash; '.join([updated, cat, feed + flink]))
