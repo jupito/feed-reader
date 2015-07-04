@@ -81,4 +81,5 @@ def describe_short(x):
     return '%i: %s' % (x['id'], x['title'])
 
 def describe_long(x):
-    return '\n'.join(['%s:\t%s' % field_fmt(x, k) for k in x.keys()]) + '\n'
+    lines = ['%s:\t%s' % field_fmt(x, k) for k in x.keys()]
+    return '\n'.join(lines) + '\n'
