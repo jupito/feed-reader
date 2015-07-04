@@ -21,7 +21,7 @@ def parse_feed(url, f):
         'url': url,
         'refreshed': util.now(),
         'updated': get_updated(f),
-        'title': get_title(f),
+        'title': getattr(f, 'title', '(no title)'),
         'link': get_link(f),
         'description': get_description(f),
         }
@@ -29,10 +29,10 @@ def parse_feed(url, f):
 def parse_entry(e):
     enc_url, enc_length, enc_type = get_enc(e)
     return {
-        'guid': get_guid(e),
+        'guid': e['guid'],
         'refreshed': util.now(),
         'updated': get_updated(e),
-        'title': get_title(e),
+        'title': getattr(e, 'title', '(no title)'),
         'link': get_link(e),
         'description': get_description(e),
         'enc_url': enc_url,
@@ -46,12 +46,6 @@ def get_updated(x):
         return int(time.mktime(x['published_parsed']))
     else:
         return 0
-
-def get_title(x):
-    return elem_or(x, 'title', get_updated(x))
-
-def get_guid(x):
-    return elem_or(x, 'guid', get_title(x))
 
 def get_description(x):
     return elem_or(x, 'description')
