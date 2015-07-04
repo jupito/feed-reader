@@ -27,11 +27,12 @@ ARG_NAMES = [
 def get_args():
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
-    args = {x: form.getvalue(x) or '' for x in ARG_NAMES}
+    args = {x: form.getfirst(x) or '' for x in ARG_NAMES}
     if args['limit'] and args['limit'].isdigit():
         args['limit'] = int(args['limit'])
     else:
         args['limit'] = DEFAULT_LIMIT
+    args['maxprg'] = int(args['maxprg'])
     return args
 
 def markread(db):
