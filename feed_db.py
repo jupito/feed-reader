@@ -42,7 +42,7 @@ DELETE_DB = """
 class FeedDb(object):
     def __init__(self, filename):
         self.conn = sqlite3.connect(filename)
-        self.conn.execute("PRAGMA foreign_keys=ON")
+        self.conn.execute('PRAGMA foreign_keys=ON')
         self.conn.row_factory = sqlite3.Row
         self.create_db()
         self.cur = self.conn.cursor()
@@ -58,7 +58,7 @@ class FeedDb(object):
         self.conn.executescript(DELETE_DB)
 
     def insert_feed(self, url, category, priority):
-        "Insert feed url."
+        """Insert feed url."""
         self.cur.execute("""
                 INSERT OR IGNORE
                 INTO Feeds(url, category, priority) VALUES(?, ?, ?)
@@ -71,14 +71,14 @@ class FeedDb(object):
                 """, (category, priority, url))
 
     def insert_entry(self, guid, feed_id):
-        "Insert entry guid."
+        """Insert entry guid."""
         self.cur.execute("""
                 INSERT OR IGNORE
                 INTO Entries(guid, feed_id) VALUES(?, ?)
                 """, (guid, feed_id))
 
     def update_feed(self, x):
-        "Update feed."
+        """Update feed."""
         self.cur.execute("""
                 UPDATE Feeds
                 SET refreshed=?, updated=?, title=?, description=?, link=?
@@ -89,7 +89,7 @@ class FeedDb(object):
                 x['url']))
 
     def update_entry(self, x):
-        "Update entry."
+        """Update entry."""
         self.cur.execute("""
                 UPDATE Entries
                 SET refreshed=?, updated=?, title=?, description=?, link=?,
@@ -102,8 +102,8 @@ class FeedDb(object):
                 x['guid']))
 
     def refresh_feed(self, i, parse_url):
-        "Refresh given feed."
-        self.cur.execute("SELECT url FROM Feeds WHERE id=?", (i,))
+        """Refresh given feed."""
+        self.cur.execute('SELECT url FROM Feeds WHERE id=?', (i,))
         row = self.cur.fetchone()
         for url in row:
             try:
@@ -118,18 +118,18 @@ class FeedDb(object):
                 self.update_entry(entry)
 
     def refresh_all(self, parse_url):
-        "Refresh and update all feeds and their entries."
+        """Refresh and update all feeds and their entries."""
         for i in self.get_feed_ids():
             self.refresh_feed(i, parse_url)
 
     def get_feed_ids(self):
-        "Get all feed ids."
-        self.cur.execute("SELECT id FROM Feeds")
+        """Get all feed ids."""
+        self.cur.execute('SELECT id FROM Feeds')
         rows = self.cur.fetchall()
         return [row[0] for row in rows]
 
     def n_feeds(self, cat=None):
-        "Return the number of feeds in the database."
+        """Return the number of feeds in the database."""
         self.cur.execute("""
                 SELECT COUNT(*) FROM Feeds
                 WHERE (? OR Feeds.category LIKE ?)
@@ -137,7 +137,7 @@ class FeedDb(object):
         return self.cur.fetchone()[0]
 
     def n_entries(self, any=0, cat=None, feed=None):
-        "Return the number of entries in the database."
+        """Return the number of entries in the database."""
         self.cur.execute("""
                 SELECT COUNT(*)
                 FROM Entries INNER JOIN Feeds
@@ -152,12 +152,12 @@ class FeedDb(object):
         return self.cur.fetchone()[0]
 
     def get_feed(self, i):
-        "Get given feed."
-        self.cur.execute("SELECT * FROM Feeds WHERE id=?", (i,))
+        """Get given feed."""
+        self.cur.execute('SELECT * FROM Feeds WHERE id=?', (i,))
         return self.cur.fetchone()
 
     def get_feeds(self, cat=None):
-        "Get feeds."
+        """Get feeds."""
         self.cur.execute("""
                 SELECT *
                 FROM Feeds
@@ -167,31 +167,31 @@ class FeedDb(object):
         return self.cur.fetchall()
 
     def get_entry(self, i):
-        "Get given entry."
-        self.cur.execute("SELECT * FROM Entries WHERE id=?", (i,))
+        """Get given entry."""
+        self.cur.execute('SELECT * FROM Entries WHERE id=?', (i,))
         return self.cur.fetchone()
 
     def get_entries(self):
-        "Get all entries."
-        self.cur.execute("SELECT * FROM Entries ORDER BY id")
+        """Get all entries."""
+        self.cur.execute('SELECT * FROM Entries ORDER BY id')
         return self.cur.fetchall()
 
     def get_categories(self):
-        self.cur.execute("SELECT DISTINCT category FROM Feeds")
+        self.cur.execute('SELECT DISTINCT category FROM Feeds')
         rows = self.cur.fetchall()
         return sorted([row[0] for row in rows])
 
     def add_feed(self, url, category, priority):
-        "Add feed."
+        """Add feed."""
         self.insert_feed(url, category, priority)
 
     def remove_feed(self, i):
-        "Remove given feed and all its entries."
-        self.cur.execute("DELETE FROM Entries WHERE feed_id=?", (i,))
-        self.cur.execute("DELETE FROM Feeds WHERE id=?", (i,))
+        """Remove given feed and all its entries."""
+        self.cur.execute('DELETE FROM Entries WHERE feed_id=?', (i,))
+        self.cur.execute('DELETE FROM Feeds WHERE id=?', (i,))
 
     def get_next(self, any=0, cat=None, feed=None, limit=1):
-        "Get next (unread or any) entry (entries) (from category)."
+        """Get next (unread or any) entry (entries) (from category)."""
         if limit == 0:
             limit = -1
         self.cur.execute("""
@@ -211,14 +211,14 @@ class FeedDb(object):
         return self.cur.fetchall()
 
     def pop(self):
-        "Get next unread entry and mark it read."
+        """Get next unread entry and mark it read."""
         rows = self.get_next()
         if rows:
             self.set_progress(rows[0]['id'], 1)
         return rows[0]
 
     def set_progress(self, id, progress):
-        "Set progress of given entry."
+        """Set progress of given entry."""
         self.cur.execute("""
                 UPDATE Entries
                 SET progress=?
