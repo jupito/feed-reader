@@ -86,15 +86,13 @@ def print_top(ids = None):
             html.href(link_feeds(), 'Feeds'),
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
+            time.strftime(TIMEFMT, time.localtime(os.path.getmtime(__file__))),
+            time.strftime(TIMEFMT, time.localtime(os.path.getmtime(FILENAME))),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
     print('<div id="top">')
     print(' | '.join(elems))
-    print(__file__, time.strftime(TIMEFORMAT,
-            time.localtime(os.path.getmtime(__file__))))
-    print(time.strftime(TIMEFORMAT,
-            time.localtime(os.path.getmtime(FILENAME))))
     print('</div>')
 
 def print_bottom(ids = None):
