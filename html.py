@@ -9,15 +9,6 @@ def tag(name, content=None, *attributes):
         s = u'<{n}{a}>{c}</{n}>'
     else:
         s = u'<{n}{a} />'
-    #return s.format(**d).encode('ascii', 'xmlcharrefreplace')
-    #return s.format(**d).encode('utf-8', errors='xmlcharrefreplace')
-    #return unicode(s.format(**d), encoding='utf-8')
-    #if content:
-    #    print(type(s))
-    #    print(type(content))
-    #    print(content)
-    #return s.format(**d).decode('utf8', errors='replace')
-    #return s.format(**d).encode('utf8', errors='xmlcharrefreplace')
     return s.format(**d)
 
 def href(link, content):
