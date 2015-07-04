@@ -79,10 +79,13 @@ def get_args():
     return args
 
 def markread(db):
-    for i in args['markread'].split(','):
-        if i.isdigit():
-            db.set_progress(int(i), 1)
-    args['markread'] = ''
+    #for i in args['markread'].split(','):
+    #    if i.isdigit():
+    #        db.set_progress(int(i), 1)
+    #args['markread'] = ''
+    for i in args['markread']:
+        db.set_progress(i, 1)
+    args['markread'] = []
 
 def link(a):
     url = sys.argv[0]
