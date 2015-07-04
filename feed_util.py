@@ -2,7 +2,7 @@ from __future__ import division, print_function
 import time
 import feedparser
 
-def get_now():
+def now():
     "Get current time as seconds."
     return int(time.time())
 
@@ -16,7 +16,7 @@ def parse_url(url):
 def parse_feed(url, f):
     return {
         'url': url,
-        'refreshed': get_now(),
+        'refreshed': now(),
         'updated': get_updated(f),
         'title': get_title(f),
         'link': get_link(f),
@@ -27,7 +27,7 @@ def parse_entry(e):
     enc_url, enc_length, enc_type = get_enc(e)
     return {
         'guid': get_guid(e),
-        'refreshed': get_now(),
+        'refreshed': now(),
         'updated': get_updated(e),
         'title': get_title(e),
         'link': get_link(e),
@@ -39,7 +39,7 @@ def parse_entry(e):
 
 def get_updated(x):
     "Get updated field or current time as seconds."
-    return time.mktime(x.updated_parsed) if 'updated' in x else get_now()
+    return time.mktime(x.updated_parsed) if 'updated' in x else now()
 
 def get_title(x):
     return elem_or(x, 'title', get_updated(x))
