@@ -2,7 +2,7 @@ from __future__ import division, print_function
 import collections
 
 def tag(name, content=None, params={}):
-    p = ''.join(' {k}="{v}"'format(k=k, v=v) for k, v in params.items())
+    p = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in params.items())
     d = dict(n=name, p=p, c=content)
     if content:
         s = '<{n}{p}>{c}</{n}>'
