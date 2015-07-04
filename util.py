@@ -12,12 +12,12 @@ def now():
 
 def time_fmt(secs):
     """Format time represented as seconds."""
-    #TIMEFMT = '%Y-%m-%d %H:%M %Z'
-    TIME_FMT = '%a, %d %b %Y %H:%M %Z'
-    return time.strftime(TIME_FMT, time.localtime(secs))
+    #fmt = '%Y-%m-%d %H:%M %Z'
+    fmt = '%a, %d %b %Y %H:%M %Z'
+    return time.strftime(fmt, time.localtime(secs))
 
 def file_age(filename):
-    """"Return file age as a timedelta, with second precision."""
+    """Return file age as a timedelta, with second precision."""
     seconds = int(time.time() - os.path.getmtime(filename))
     age = datetime.timedelta(seconds=seconds)
     return age
