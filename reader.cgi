@@ -270,7 +270,7 @@ print(CONTENT_TYPE)
 if args['foo'] == 'baz':
     try:
         reader()
-    except sqlite3.OperationalError, e:
+    except Exception, e:
         if e.message == 'database is locked':
             print(e.message)
         else:
