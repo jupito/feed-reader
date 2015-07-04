@@ -30,7 +30,7 @@ def parse_feed(url, x):
 def parse_entry(x):
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
-        guid=x['guid'],
+        guid=getattr(x, 'guid', x['link']),
         refreshed=util.now(),
         updated=get_updated(x),
         title=getattr(x, 'title', '(no title)'),
