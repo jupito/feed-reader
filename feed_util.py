@@ -66,19 +66,19 @@ def get_enc(x):
 def elem_or(x, elem, default=None):
     return getattr(x, elem) if elem in x else default
 
-def field_fmt(x, k):
+def field_fmt(k, v):
     """Return object field name and value formatted."""
     if k == 'refreshed' or k == 'updated':
-        return k, util.time_fmt(x[k])
+        return k, util.time_fmt(v)
     elif k == 'description':
-        return k, '\n' + (x[k] or '')
+        return k, '\n' + (v or '')
     else:
-        return k, x[k]
+        return k, v
 
 def describe(x, verbosity):
     """Describe a feed or an entry."""
     if verbosity:
-        lines = ['%s:\t%s' % field_fmt(x, k) for k in x.keys()]
+        lines = ['%s:\t%s' % field_fmt(k, x[k]) for k in x.keys()]
         return '\n'.join(lines) + '\n'
     else:
         return u'{id}: {title}'.format(**x)
