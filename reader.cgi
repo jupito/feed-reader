@@ -110,8 +110,8 @@ def show_categories(db):
     print_top()
     headers = ['Category', 'Feeds', 'Unread', 'Total']
     rows = [[
-            html.href(link_entries(cat), cat),
-            html.href(link_feeds(cat), db.n_feeds(cat)),
+            html.href(link_entries(cat=cat), cat),
+            html.href(link_feeds(cat=cat), db.n_feeds(cat)),
             str(db.n_entries(maxprg=0, cat=cat)),
             str(db.n_entries(maxprg=1, cat=cat)),
             ] for cat in db.get_categories()]
@@ -138,7 +138,7 @@ def print_feedinfo(f, n_unread, n_total):
                     html.href(f['url'], '(feed)'),
                     ),
             'Category %s, priority %i' % (
-                    html.href(link_feeds(f['category']), f['category']),
+                    html.href(link_feeds(cat=f['category']), f['category']),
                     f['priority']),
             '%i unread, %i total' % (n_unread, n_total),
             ]
