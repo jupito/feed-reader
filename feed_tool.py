@@ -12,7 +12,8 @@ import feed_db
 import feed_util
 
 def db_info(db):
-    d = dict(nf=db.n_feeds(), ne=db.n_entries(1), nu=db.n_entries(0))
+    d = dict(nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
+            nu=db.n_entries(maxprg=0))
     return 'Total {nf} feeds, {ne} entries ({nu} unread).'.format(**d)
 
 def parse_args():
@@ -100,8 +101,8 @@ if args.entries is not None:
     print_entries(db, args.entries, args.verbose)
 
 if args.categories:
-    for x in db.get_categories():
-        print(x + str(db.n_entries(0, x)))
+    for cat in db.get_categories():
+        print(cat, str(db.n_entries(maxprg=0, cat=cat)))
 
 if args.get:
     print(feed_util.describe(db.get_next(0, args.category)[0], 1))

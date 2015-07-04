@@ -137,17 +137,17 @@ class FeedDb(object):
                 """, (not cat, cat or '%'))
         return self.cur.fetchone()[0]
 
-    def n_entries(self, any=0, cat=None, feed=None):
+    def n_entries(self, minprg=0, maxprg=0, cat=None, feed=None):
         """Return the number of entries in the database."""
         self.cur.execute("""
                 SELECT COUNT(*)
                 FROM Entries INNER JOIN Feeds
                 ON Entries.feed_id = Feeds.id
-                WHERE (? OR progress < 1)
+                WHERE (progress between ? and ?)
                         AND (? OR Feeds.category LIKE ?)
                         AND (? OR feed_id = ?)
                 """,
-                (any,
+                (minprg, maxprg,
                 not cat, cat or '%',
                 not feed, feed))
         return self.cur.fetchone()[0]

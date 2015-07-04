@@ -101,14 +101,14 @@ def show_categories(db):
     rows = [[
             html.href(link_entries(cat), cat),
             html.href(link_feeds(cat), db.n_feeds(cat)),
-            str(db.n_entries(0, cat)),
-            str(db.n_entries(1, cat)),
+            str(db.n_entries(maxprg=0, cat=cat)),
+            str(db.n_entries(maxprg=1, cat=cat)),
             ] for cat in db.get_categories()]
     rows.append([
             html.href(link_entries(''), 'All'),
             html.href(link_feeds(''), db.n_feeds()),
-            str(db.n_entries(0)),
-            str(db.n_entries(1)),
+            str(db.n_entries(maxprg=0)),
+            str(db.n_entries(maxprg=1)),
             ])
     table = html.table(rows, headers)
     print('<div id="categories">')
@@ -169,8 +169,8 @@ def show_feeds(db):
     print_top()
     print('<div id="feeds">')
     for f in feeds:
-        n_unread = db.n_entries(0, None, f['id'])
-        n_total = db.n_entries(1, None, f['id'])
+        n_unread = db.n_entries(maxprg=0, feed=f['id'])
+        n_total = db.n_entries(maxprg=1, feed=f['id'])
         print_feed(f, n_unread, n_total)
     print('</div>')
     print_bottom()
@@ -217,7 +217,7 @@ def print_entry(e, f, alt=False):
 
 def show_entries(db):
     any = args['any']
-    n = db.n_entries(any, args['cat'], args['feed'])
+    n = db.n_entries(maxprg=any, cat=args['cat'], feed=args['feed'])
     entries = db.get_next(any, args['cat'], args['feed'], args['limit'])
     ids = [e['id'] for e in entries]
     print(html.head('%i in %s entries' % (n, 'all' if any else 'unread'), SHEET))
