@@ -13,10 +13,16 @@ class HTMLStripper(HTMLParser):
         self.fed = []
 
     def handle_data(self, data):
-        self.lines.append(data)
+        self.fed.append(data)
 
     def get_data(self):
-        return ''.join(self.lines)
+        return ''.join(self.fed)
+
+def plaintext(text):
+    """Strip markup from text, returning only the plaintext."""
+    parser = HTMLStripper()
+    parser.feed(text)
+    return parser.get_data()
 
 def now():
     """Get current time as seconds."""
@@ -51,9 +57,3 @@ def first_line(s):
     lines = s.lstrip().splitlines() or ['']
     line = lines[0].rstrip()
     return line
-
-def plaintext(text):
-    """Strip markup from text, returning only the plaintext."""
-    parser = HTMLStripper()
-    parser.feed(text)
-    return parser.get_data()
