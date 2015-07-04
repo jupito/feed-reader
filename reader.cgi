@@ -6,6 +6,7 @@ import cgitb; cgitb.enable()
 import os
 import sys
 import time
+import datetime
 
 import feed_db
 import html
@@ -87,7 +88,9 @@ def print_top(ids = None):
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
             time_fmt(os.path.getmtime(__file__)),
-            time_fmt(os.path.getmtime(FILENAME)),
+            #time_fmt(os.path.getmtime(FILENAME)),
+            #(time.time() - os.path.getmtime(FILENAME)) / 60,
+            datetime.timedelta(time.time() - os.path.getmtime(FILENAME)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
