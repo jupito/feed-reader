@@ -17,25 +17,25 @@ def parse_url(url):
     else:
         raise Exception('No entries in feed: {}'.format(url), feed)
 
-def parse_feed(url, f):
+def parse_feed(url, x):
     return {
         'url': url,
         'refreshed': util.now(),
-        'updated': get_updated(f),
-        'title': getattr(f, 'title', '(no title)'),
-        'link': get_link(f),
-        'description': get_description(f),
+        'updated': get_updated(x),
+        'title': getattr(x, 'title', '(no title)'),
+        'link': get_link(x),
+        'description': get_description(x),
         }
 
-def parse_entry(e):
-    enc_url, enc_length, enc_type = get_enc(e)
+def parse_entry(x):
+    enc_url, enc_length, enc_type = get_enc(x)
     return {
-        'guid': e['guid'],
+        'guid': x['guid'],
         'refreshed': util.now(),
-        'updated': get_updated(e),
-        'title': getattr(e, 'title', '(no title)'),
-        'link': get_link(e),
-        'description': get_description(e),
+        'updated': get_updated(x),
+        'title': getattr(x, 'title', '(no title)'),
+        'link': get_link(x),
+        'description': get_description(x),
         'enc_url': enc_url,
         'enc_length': enc_length,
         'enc_type': enc_type,
