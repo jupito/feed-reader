@@ -5,7 +5,7 @@ import feedparser
 import util
 
 def parse_url(url):
-    "Parse a feed and its entries."
+    """Parse a feed and its entries."""
     d = feedparser.parse(url)
     feed = parse_feed(url, d.feed)
     entries = [parse_entry(e) for e in d.entries]
@@ -36,7 +36,7 @@ def parse_entry(e):
         }
 
 def get_updated(x):
-    "Get updated field or current time as seconds."
+    """Get updated field or current time as seconds."""
     return time.mktime(x.updated_parsed) if 'updated' in x else util.now()
 
 def get_title(x):
@@ -64,12 +64,12 @@ def elem_or(x, elem, default=None):
     return getattr(x, elem) if elem in x else default
 
 def time_fmt(secs):
-    "Format time represented as seconds."
+    """Format time represented as seconds."""
     TIME_FMT = '%Y-%m-%d %H:%M'
     return time.strftime(TIME_FMT, time.gmtime(secs))
 
 def field_fmt(x, k):
-    "Return object field name and value formatted."
+    """Return object field name and value formatted."""
     if k == 'refreshed' or k == 'updated':
         return k, time_fmt(x[k])
     elif k == 'description':
@@ -78,7 +78,7 @@ def field_fmt(x, k):
         return k, x[k]
 
 def describe_short(x):
-    return "%i: %s" % (x['id'], x['title'])
+    return '%i: %s' % (x['id'], x['title'])
 
 def describe_long(x):
-    return '\n'.join(["%s:\t%s" % field_fmt(x, k) for k in x.keys()]) + '\n'
+    return '\n'.join(['%s:\t%s' % field_fmt(x, k) for k in x.keys()]) + '\n'
