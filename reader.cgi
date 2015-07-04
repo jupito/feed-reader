@@ -203,8 +203,9 @@ def print_enclosure(e):
         print(html.href(url, 'Enclosure (type: {t}, length: {l})'.format(**d)))
         print('</div>')
 
-def print_entry(e, f, alt=False):
-    print('<div class="%s">' % ('entry_alt' if alt else 'entry'))
+def print_entry(e, f, cls=0):
+    classes = 'entry', 'entry_alt'
+    print('<div class="{}">'.format(classes[cls]))
     print_entryinfo(e, f)
     print_title(e)
     print_description(e)
@@ -222,7 +223,7 @@ def show_entries(db):
     print('<div id="entries">')
     for i, e in enumerate(entries):
         f = db.get_feed(e['feed_id'])
-        print_entry(e, f, i%2)
+        print_entry(e, f, cls=i%2)
     print('</div>')
     print_bottom(ids)
     print(html.tail())
