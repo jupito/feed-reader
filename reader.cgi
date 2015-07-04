@@ -47,7 +47,7 @@ def get_args():
     return args
 
 def markread(db):
-    for i in args['markread']:
+    for i in args['markread'] or []:
         db.set_progress(i, 1)
     args['markread'] = None
 
@@ -266,8 +266,7 @@ def redirect(db):
 
 def reader():
     db = feed_db.FeedDb(DB_FILENAME)
-    if args['markread']:
-        markread(db)
+    markread(db)
     action = args['action'] or 'cats'
     if action == 'cats':
         show_categories(db)
