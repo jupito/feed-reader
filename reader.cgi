@@ -5,11 +5,10 @@ import cgi
 import cgitb; cgitb.enable()
 import os
 import sys
-import time
-import datetime
 
 import feed_db
 import html
+import util
 
 FILENAME = '_reader.db'
 CONTENT_TYPE = 'Content-Type: text/html\n'
@@ -32,18 +31,6 @@ def markread(db):
         if i.isdigit():
             db.set_progress(int(i), 1)
     args['markread'] = ''
-
-def time_fmt(secs):
-    "Format time represented as seconds."
-    #TIMEFMT = '%Y-%m-%d %H:%M %Z'
-    TIME_FMT = '%a, %d %b %Y %H:%M %Z'
-    return time.strftime(TIME_FMT, time.localtime(secs))
-
-def file_age(filename):
-    """"Return file age as a timedelta, with second precision."""
-    seconds = int(time.time() - os.path.getmtime(filename))
-    age = datetime.timedelta(seconds=seconds)
-    return age
 
 def link(a):
     url = sys.argv[0]
@@ -93,8 +80,8 @@ def print_top(ids = None):
             html.href(link_feeds(), 'Feeds'),
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
-            time_fmt(os.path.getmtime(__file__)),
-            str(file_age(FILENAME)),
+            util.time_fmt(os.path.getmtime(__file__)),
+            str(util.file_age(FILENAME)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
@@ -137,8 +124,8 @@ def print_feed_(f, n_unread, n_total):
     cat = html.href(link_feeds(f['category']), f['category'])
     priority = 'Priority %i' % f['priority']
     n_entries = '%i unread, %i total' % (n_unread, n_total)
-    updated = 'Updated %s' % time_fmt(f['updated'])
-    refreshed = 'Refreshed %s' % time_fmt(f['refreshed'])
+    updated = 'Updated %s' % util.time_fmt(f['updated'])
+    refreshed = 'Refreshed %s' % util.time_fmt(f['refreshed'])
     desc = f['description'] or ''
     rows = [feed + link, cat, priority, n_entries, updated, refreshed, desc]
     par = html.tag('p', html.tag('br').join(rows))
@@ -166,8 +153,8 @@ def print_feedinfo(f, n_unread, n_total):
 
 def print_feeddates(f):
     print('<div class="feeddates">')
-    print(('Updated %s, refreshed %s' % (time_fmt(f['updated']),
-            time_fmt(f['refreshed']))).encode('utf-8'))
+    print(('Updated %s, refreshed %s' % (util.time_fmt(f['updated']),
+            util.time_fmt(f['refreshed']))).encode('utf-8'))
     print('</div>')
 
 def print_feed(f, n_unread, n_total):
@@ -191,7 +178,7 @@ def show_feeds(db):
     print(html.tail())
 
 def print_entryinfo(e, f):
-    updated = html.tag('em', time_fmt(e['updated']))
+    updated = html.tag('em', util.time_fmt(e['updated']))
     cat = html.href(link_entries(f['category'], ''), f['category'])
     feed = html.href(link_entries('', f['id']), f['title'])
     flink = html.href(f['link'], '=>')
