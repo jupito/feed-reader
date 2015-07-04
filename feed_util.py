@@ -40,6 +40,7 @@ def get_updated(x):
     return time.mktime(x.updated_parsed) if 'updated' in x else util.now()
 
 def get_title(x):
+    print(x)
     return elem_or(x, 'title', get_updated(x))
 
 def get_guid(x):
