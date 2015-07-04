@@ -268,7 +268,10 @@ if sys.stderr.encoding != 'UTF-8':
 args = get_args()
 print(CONTENT_TYPE)
 if args['foo'] == 'baz':
-    reader()
+    try:
+        reader()
+    except sqlite3.OperationalError, e:
+        raise
 else:
     print(sys.path)
     cgi.test()
