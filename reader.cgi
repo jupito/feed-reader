@@ -14,12 +14,20 @@ DB_FILENAME = '_reader.db' # Database filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
 DEFAULT_LIMIT = 5 # How many articles to show simultaneously.
+ARG_NAMES = [
+        'foo',
+        'action', # What to do.
+        'maxprg', # Maximum progress of entries to show.
+        'limit', # How many entries to show.
+        'cat', # Feed category.
+        'feed', # Feed id.
+        'markread', # Entries to mark as read (progress set to 1).
+        ]
 
 def get_args():
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
-    arg_names = ['foo', 'action', 'any', 'limit', 'cat', 'feed', 'markread']
-    args = {x: form.getvalue(x) or '' for x in arg_names}
+    args = {x: form.getvalue(x) or '' for x in ARG_NAMES}
     if args['limit'] and args['limit'].isdigit():
         args['limit'] = int(args['limit'])
     else:
@@ -216,12 +224,12 @@ def print_entry(e, f, alt=False):
     print('</div>')
 
 def show_entries(db):
-    any = args['any']
-    n = db.n_entries(maxprg=any, cat=args['cat'], feed=args['feed'])
-    entries = db.get_next(maxprg=any, cat=args['cat'], feed=args['feed'],
+    maxprg = args['maxprg']
+    n = db.n_entries(maxprg=maxprg, cat=args['cat'], feed=args['feed'])
+    entries = db.get_next(maxprg=maxprg, cat=args['cat'], feed=args['feed'],
             limit=args['limit'])
     ids = [e['id'] for e in entries]
-    print(html.head('%i in %s entries' % (n, 'all' if any else 'unread'), SHEET))
+    print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg), SHEET))
     print_top(ids)
     print('<div id="entries">')
     for i, e in enumerate(entries):
