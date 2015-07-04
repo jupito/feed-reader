@@ -259,6 +259,7 @@ def reader():
     db.close()
 
 
+sys.setdefaultencoding('utf8')
 args = get_args()
 print(CONTENT_TYPE)
 if args['foo'] == 'baz':
