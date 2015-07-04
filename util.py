@@ -12,16 +12,19 @@ class HTMLStripper(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.fed = []
+
     def handle_data(self, data):
         self.fed.append(data)
+
     def get_data(self):
         return ''.join(self.fed)
 
-def plaintext(text):
-    """Strip markup from text, returning only the plaintext."""
-    parser = HTMLStripper()
-    parser.feed(text)
-    return parser.get_data()
+    @classmethod
+    def strip(cls, text):
+        """Strip markup from text, returning only the plaintext."""
+        parser = cls()
+        parser.feed(text)
+        return parser.get_data()
 
 def now():
     """Get current time as seconds."""

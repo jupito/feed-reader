@@ -195,7 +195,7 @@ def print_description(x, plaintext=False):
         return
     desc = x['description']
     if plaintext:
-        desc = util.plaintext(desc)
+        desc = util.HTMLStripper.strip(desc)
     print('<div class="description">')
     print(desc)
     print('</div>')
