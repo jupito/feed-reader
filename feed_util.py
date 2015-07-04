@@ -18,28 +18,30 @@ def parse_url(url):
         raise Exception('No entries in feed: {}'.format(url), feed)
 
 def parse_feed(url, x):
-    return {
-        'url': url,
-        'refreshed': util.now(),
-        'updated': get_updated(x),
-        'title': getattr(x, 'title', '(no title)'),
-        'link': getattr(x, 'link', '(no link)'),
-        'description': getattr(x, 'description', '(no description)'),
-        }
+    d = dict(
+        url=url,
+        refreshed=util.now(),
+        updated=get_updated(x),
+        title=getattr(x, 'title', '(no title)'),
+        link=getattr(x, 'link', '(no link)'),
+        description=getattr(x, 'description', '(no description)'),
+        )
+    return d
 
 def parse_entry(x):
     enc_url, enc_length, enc_type = get_enc(x)
-    return {
-        'guid': x['guid'],
-        'refreshed': util.now(),
-        'updated': get_updated(x),
-        'title': getattr(x, 'title', '(no title)'),
-        'link': getattr(x, 'link', '(no link)'),
-        'description': getattr(x, 'description', '(no description)'),
-        'enc_url': enc_url,
-        'enc_length': enc_length,
-        'enc_type': enc_type,
-        }
+    d = dict(
+        guid=x['guid'],
+        refreshed=util.now(),
+        updated=get_updated(x),
+        title=getattr(x, 'title', '(no title)'),
+        link=getattr(x, 'link', '(no link)'),
+        description=getattr(x, 'description', '(no description)'),
+        enc_url=enc_url,
+        enc_length=enc_length,
+        enc_type=enc_type,
+        )
+    return d
 
 def get_updated(x):
     """Get updated field or current time as seconds."""
