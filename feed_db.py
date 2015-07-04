@@ -112,7 +112,8 @@ class FeedDb(object):
             except Exception, e:
                 print(url)
                 print(e)
-                continue
+                #continue
+                raise
             self.update_feed(feed)
             for entry in entries:
                 self.insert_entry(entry['guid'], i)
