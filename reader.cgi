@@ -128,21 +128,6 @@ def show_categories(db):
     print_bottom()
     print(html.tail())
 
-def print_feed_(f, n_unread, n_total):
-    feed = html.href(link_entries('', f['id']), f['title'])
-    link = html.href(f['link'], '=>')
-    cat = html.href(link_feeds(f['category']), f['category'])
-    priority = 'Priority %i' % f['priority']
-    n_entries = '%i unread, %i total' % (n_unread, n_total)
-    updated = 'Updated %s' % util.time_fmt(f['updated'])
-    refreshed = 'Refreshed %s' % util.time_fmt(f['refreshed'])
-    desc = f['description'] or ''
-    rows = [feed + link, cat, priority, n_entries, updated, refreshed, desc]
-    par = html.tag('p', html.tag('br').join(rows))
-    print('<div class="feed">')
-    print(par)
-    print('</div>')
-
 def print_feedinfo(f, n_unread, n_total):
     print('<div class="feedinfo">')
     rows = [
