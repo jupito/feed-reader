@@ -191,14 +191,13 @@ def print_title(x):
     print('</div>')
 
 def print_description(x, plaintext=False):
-    if not x['description']:
-        return
     desc = x['description']
-    if plaintext:
-        desc = util.HTMLStripper.strip(desc)
-    print('<div class="description">')
-    print(desc)
-    print('</div>')
+    if desc:
+        if plaintext:
+            desc = util.HTMLStripper.strip(desc)
+        print('<div class="description">')
+        print(desc)
+        print('</div>')
 
 def print_enclosure(e):
     if not e['enc_url']:
