@@ -12,7 +12,7 @@ def tag(name, content=None, *attributes):
     #return s.format(**d).encode('ascii', 'xmlcharrefreplace')
     #return s.format(**d).encode('utf-8')
     #return unicode(s.format(**d), encoding='utf-8')
-    return s.format(**d).decode('utf-8')
+    return s.format(**d).decode('utf8', errors='replace')
 
 def href(link, content):
     return tag('a', content, ('href', link))
