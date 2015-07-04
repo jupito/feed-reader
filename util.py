@@ -2,9 +2,8 @@
 
 from __future__ import division, print_function
 from HTMLParser import HTMLParser
-import os
-
 import datetime
+import os
 import time
 
 class HTMLStripper(HTMLParser):
