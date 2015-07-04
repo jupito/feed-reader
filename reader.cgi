@@ -37,7 +37,7 @@ def link(a):
     params = []
     for k, v in a.iteritems():
         if v:
-            params.append('%s=%s' % (k, v))
+            params.append('{k}={v}'.format(k=k, v=v))
     return url + '?' + '&'.join(params)
 
 def link_cats():
