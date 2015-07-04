@@ -39,6 +39,11 @@ def time_fmt(secs):
     TIME_FMT = '%a, %d %b %Y %H:%M %Z'
     return time.strftime(TIME_FMT, time.localtime(secs))
 
+def file_age(filename):
+    seconds = time.time() - os.path.getmtime(filename)
+    age = datetime.timedelta(seconds=seconds)
+    return age
+
 def link(a):
     url = sys.argv[0]
     params = []
@@ -90,8 +95,7 @@ def print_top(ids = None):
             time_fmt(os.path.getmtime(__file__)),
             #time_fmt(os.path.getmtime(FILENAME)),
             #(time.time() - os.path.getmtime(FILENAME)) / 60,
-            seconds = time.time() - os.path.getmtime(FILENAME)
-            str(datetime.timedelta(seconds=seconds)),
+            str(file_age(FILENAME)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
