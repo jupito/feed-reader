@@ -36,10 +36,7 @@ DEFAULT_LIMIT = 5 # How many articles to show simultaneously.
 #    return args
 
 def list_converter(s):
-    if s:
-        return [int(i) for i in s.split(',')]
-    else:
-        return []
+    return [int(i) for i in s.split(',') if i.isdigit()] or None
 
 # Arguments (name, converter, default).
 ARGS = [
@@ -85,7 +82,7 @@ def markread(db):
     #args['markread'] = ''
     for i in args['markread']:
         db.set_progress(i, 1)
-    args['markread'] = []
+    args['markread'] = None
 
 def link(a):
     url = sys.argv[0]
@@ -302,7 +299,8 @@ def redirect(db):
 
 def reader():
     db = feed_db.FeedDb(DB_FILENAME)
-    markread(db)
+    if args['markread']:
+        markread(db)
     action = args['action'] or 'cats'
     if action == 'cats':
         show_categories(db)
