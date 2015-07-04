@@ -47,16 +47,14 @@ def parse_args():
     return args
 
 def print_feeds(db, ids, v):
-    describe = feed_util.describe_long if v > 0 else feed_util.describe_short
     xs = map(db.get_feed, ids) if ids else db.get_feeds()
     for x in xs:
-        print(describe(x))
+        print(feed_util.describe(x, v))
 
 def print_entries(db, ids, v):
-    describe = feed_util.describe_long if v > 0 else feed_util.describe_short
     xs = map(db.get_entry, ids) if ids else db.get_entries()
     for x in xs:
-        print(describe(x))
+        print(feed_util.describe(x, v))
 
 def add_feed(db, params, v):
     """Add feed tuple."""
@@ -106,9 +104,9 @@ if args.categories:
         print(x + str(db.n_entries(0, x)))
 
 if args.get:
-    print(feed_util.describe_long(db.get_next(0, args.category)[0]))
+    print(feed_util.describe(db.get_next(0, args.category)[0], 1))
 if args.pop:
-    print(feed_util.describe_long(db.pop()))
+    print(feed_util.describe(db.pop(), 1))
 
 if args.verbose:
     print(db_info(db))

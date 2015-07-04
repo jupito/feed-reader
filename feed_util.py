@@ -70,9 +70,10 @@ def field_fmt(x, k):
     else:
         return k, x[k]
 
-def describe_short(x):
-    return '%i: %s' % (x['id'], x['title'])
-
-def describe_long(x):
-    lines = ['%s:\t%s' % field_fmt(x, k) for k in x.keys()]
-    return '\n'.join(lines) + '\n'
+def describe(x, verbosity):
+    """Describe a feed or an entry."""
+    if verbosity:
+        lines = ['%s:\t%s' % field_fmt(x, k) for k in x.keys()]
+        return '\n'.join(lines) + '\n'
+    else:
+        return u'{id}: {title}'.format(**x)
