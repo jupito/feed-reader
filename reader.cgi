@@ -68,7 +68,7 @@ def get_args():
     for n, c, d in ARGS:
         try:
             args[n] = c(form.getfirst(n, d))
-            print(form.getlist(n))
+            #print(form.getlist(n))
         except ValueError, e:
             print(e)
             args[n] = c(d)
