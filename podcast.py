@@ -9,9 +9,9 @@ import feed_db
 
 DB_FILENAME = '_podcast.db'
 
-def print_db_info(db):
-    print('Total %i feeds, %i entries (%i unread).' % (
-            db.n_feeds(), db.n_entries(), db.n_unread_entries()))
+def db_info(db):
+    d = dict(nf=db.n_feeds(), ne=db.n_entries(), nu=db.n_unread_entries())
+    return 'Total {nf} feeds, {ne} entries ({nu} unread).'.format(**d)
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
@@ -30,5 +30,5 @@ def parse_args():
 args = parse_args()
 db = feed_db.FeedDb(DB_FILENAME)
 
-print_db_info(db)
+print(db_info(db))
 db.close()
