@@ -36,7 +36,7 @@ def time_fmt(secs):
     "Format time represented as seconds."
     #TIMEFMT = '%Y-%m-%d %H:%M %Z'
     TIME_FMT = "%a %b %d %Y, %H:%M"
-    return time.strftime(TIME_FMT, time.gmtime(secs))
+    return time.strftime(TIME_FMT, time.localtime(secs))
 
 def link(a):
     url = sys.argv[0]
