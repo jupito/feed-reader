@@ -30,19 +30,19 @@ def table(rows, headers=None):
     return tag('table', s)
 
 def head_redirect(link, time=0):
-    ps = collections.OrderedDict([
+    attributes = collections.OrderedDict([
             ('http-equiv', 'refresh'),
             ('content', '{t}; {l}'.format(t=time, l=link)),
             ])
-    return tag('meta', None, ps)
+    return tag('meta', None, attributes=attributes)
 
 def stylesheet(sheet):
-    ps = collections.OrderedDict([
+    attributes = collections.OrderedDict([
             ('rel', 'stylesheet'),
             ('type', 'text/css'),
             ('href', sheet),
             ])
-    return tag('link', None, ps)
+    return tag('link', None, attributes=attributes)
 
 def head(title, sheet=None, redirect=None):
     s = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
