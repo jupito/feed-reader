@@ -3,7 +3,6 @@
 from __future__ import division, print_function
 import cgi
 import cgitb; cgitb.enable()
-import os
 import sys
 
 import feed_db
