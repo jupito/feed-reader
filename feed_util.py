@@ -9,9 +9,12 @@ def parse_url(url):
     d = feedparser.parse(url)
     feed = parse_feed(url, d.feed)
     entries = [parse_entry(e) for e in d.entries]
-    # Set feed publish time as newest entry publish time.
-    feed['updated'] = max(e['updated'] for e in entries)
-    return feed, entries
+    if entries:
+        # Set feed publish time as newest entry publish time.
+        feed['updated'] = max(e['updated'] for e in entries)
+        return feed, entries
+    else:
+        raise Exception('No entries in feed: {}'.format(url), feed)
 
 def parse_feed(url, f):
     return {
