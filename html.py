@@ -1,12 +1,14 @@
 from __future__ import division, print_function
 import collections
 
-def tag(name, s=None, params={}):
-    p = ''.join(' %s="%s"' % (k, v) for k, v in params.items())
-    if s:
-        return '<%s%s>%s</%s>' % (name, p, s, name)
+def tag(name, content=None, params={}):
+    p = ''.join(' {k}="{v}"'format(k=k, v=v) for k, v in params.items())
+    d = dict(n=name, p=p, c=content)
+    if content:
+        s = '<{n}{p}>{c}</{n}>'
     else:
-        return '<%s%s />' % (name, p)
+        s = '<{n}{p} />'
+    return s.format(**d)
 
 def href(link, s):
     return tag('a', s, {'href': link})
@@ -28,7 +30,6 @@ def table(rows, headers=None):
     return tag('table', s)
 
 def head_redirect(link, time=0):
-    #ps = {'http-equiv': 'refresh', 'content': '{t}; {l}'.format(t=time, l=link)}
     ps = collections.OrderedDict([
             ('http-equiv', 'refresh'),
             ('content', '{t}; {l}'.format(t=time, l=link)),
@@ -36,7 +37,6 @@ def head_redirect(link, time=0):
     return tag('meta', None, ps)
 
 def stylesheet(sheet):
-    #ps = {'rel': 'stylesheet', 'type': 'text/css', 'href': sheet}
     ps = collections.OrderedDict([
             ('rel', 'stylesheet'),
             ('type', 'text/css'),
