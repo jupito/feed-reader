@@ -4,7 +4,6 @@
 from __future__ import division, print_function
 import sys
 import argparse
-import requests
 
 import feed_db
 import feed_util
@@ -26,8 +25,8 @@ def parse_args():
     p.add_argument('--pop', action='store_true',
             help='show next unread and mark it read')
     args = p.parse_args()
-    if __debug__: print(args)
     return args
+
 
 args = parse_args()
 db = feed_db.FeedDb(DB_FILENAME)

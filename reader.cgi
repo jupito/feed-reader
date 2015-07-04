@@ -3,7 +3,6 @@
 from __future__ import division, print_function
 import cgi
 import cgitb; cgitb.enable()
-import os
 import sys
 import time
 
@@ -261,6 +260,7 @@ def reader():
     elif action == 'redirect':
         redirect(db)
     db.close()
+
 
 args = get_args()
 print(CONTENT_TYPE)

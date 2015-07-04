@@ -44,7 +44,6 @@ def parse_args():
     p.add_argument('--verbose', '-v', action='count',
             help='be more verbose')
     args = p.parse_args()
-    #if __debug__: print(args)
     return args
 
 def print_feeds(db, ids, v):
@@ -71,6 +70,7 @@ def remove_feed(db, i, v):
         feed = db.get_feed(i)
         print('Removing %s (%s)' % (feed['title'], feed['url']))
     db.remove_feed(i)
+
 
 args = parse_args()
 db = feed_db.FeedDb(args.file)
