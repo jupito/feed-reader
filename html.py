@@ -10,13 +10,13 @@ def tag(name, content=None, *attributes):
     else:
         s = '<{n}{a} />'
     #return s.format(**d).encode('ascii', 'xmlcharrefreplace')
-    #return s.format(**d).encode('utf-8')
+    return s.format(**d).encode('utf-8', errors='xmlcharrefreplace')
     #return unicode(s.format(**d), encoding='utf-8')
-    if content:
-        print(type(s))
-        print(type(content))
-        print(content)
-    return s.format(**d).decode('utf8', errors='replace')
+    #if content:
+    #    print(type(s))
+    #    print(type(content))
+    #    print(content)
+    #return s.format(**d).decode('utf8', errors='replace')
 
 def href(link, content):
     return tag('a', content, ('href', link))
