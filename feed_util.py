@@ -9,6 +9,8 @@ def parse_url(url):
     d = feedparser.parse(url)
     feed = parse_feed(url, d.feed)
     entries = [parse_entry(e) for e in d.entries]
+    # Set feed publish time as newest entry publish time.
+    feed['updated'] = max(e['updated'] for e in entries)
     return feed, entries
 
 def parse_feed(url, f):
@@ -37,7 +39,10 @@ def parse_entry(e):
 
 def get_updated(x):
     """Get updated field or current time as seconds."""
-    return time.mktime(x.updated_parsed) if 'updated' in x else util.now()
+    if 'published_parsed' in x:
+        return int(time.mktime(x['published_parsed']))
+    else:
+        return 0
 
 def get_title(x):
     return elem_or(x, 'title', get_updated(x))
