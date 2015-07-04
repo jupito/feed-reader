@@ -3,15 +3,12 @@ from __future__ import division, print_function
 IND = ' '*4 # Indentation.
 
 def tag(name, content=None, *attributes):
-    a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
-    if content:
-        content = content.encode('utf8', 'xmlcharrefreplace')
-    print(content)
+    a = ''.join(u' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
     d = dict(n=name, a=a, c=content)
     if content:
-        s = '<{n}{a}>{c}</{n}>'
+        s = u'<{n}{a}>{c}</{n}>'
     else:
-        s = '<{n}{a} />'
+        s = u'<{n}{a} />'
     #return s.format(**d).encode('ascii', 'xmlcharrefreplace')
     #return s.format(**d).encode('utf-8', errors='xmlcharrefreplace')
     #return unicode(s.format(**d), encoding='utf-8')
@@ -20,7 +17,7 @@ def tag(name, content=None, *attributes):
     #    print(type(content))
     #    print(content)
     #return s.format(**d).decode('utf8', errors='replace')
-    return s.format(**d)
+    return s.format(**d).encode('utf8', errors='xmlcharrefreplace')
 
 def href(link, content):
     return tag('a', content, ('href', link))
