@@ -35,7 +35,7 @@ def markread(db):
 def time_fmt(secs):
     "Format time represented as seconds."
     #TIMEFMT = '%Y-%m-%d %H:%M %Z'
-    TIME_FMT = "%a %b %d %Y, %H:%M"
+    TIME_FMT = '%a, %d %b %Y %H:%M %Z'
     return time.strftime(TIME_FMT, time.localtime(secs))
 
 def link(a):
