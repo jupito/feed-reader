@@ -1,8 +1,7 @@
 from __future__ import division, print_function
-import collections
 
-def tag(name, content=None, attributes={}):
-    a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes.items())
+def tag(name, content=None, *attributes):
+    a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
     d = dict(n=name, a=a, c=content)
     if content:
         s = '<{n}{a}>{c}</{n}>'
@@ -30,19 +29,15 @@ def table(rows, headers=None):
     return tag('table', s)
 
 def head_redirect(link, time=0):
-    attributes = collections.OrderedDict([
+    return tag('meta', None,
             ('http-equiv', 'refresh'),
-            ('content', '{t}; {l}'.format(t=time, l=link)),
-            ])
-    return tag('meta', None, attributes=attributes)
+            ('content', '{t}; {l}'.format(t=time, l=link)))
 
 def stylesheet(sheet):
-    attributes = collections.OrderedDict([
+    return tag('link', None,
             ('rel', 'stylesheet'),
             ('type', 'text/css'),
-            ('href', sheet),
-            ])
-    return tag('link', None, attributes=attributes)
+            ('href', sheet))
 
 def head(title, sheet=None, redirect=None):
     s = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
