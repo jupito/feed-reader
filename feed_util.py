@@ -23,8 +23,8 @@ def parse_feed(url, x):
         'refreshed': util.now(),
         'updated': get_updated(x),
         'title': getattr(x, 'title', '(no title)'),
-        'link': get_link(x),
-        'description': get_description(x),
+        'link': getattr(x, 'link', '(no link)'),
+        'description': getattr(x, 'description', '(no description)'),
         }
 
 def parse_entry(x):
@@ -34,8 +34,8 @@ def parse_entry(x):
         'refreshed': util.now(),
         'updated': get_updated(x),
         'title': getattr(x, 'title', '(no title)'),
-        'link': get_link(x),
-        'description': get_description(x),
+        'link': getattr(x, 'link', '(no link)'),
+        'description': getattr(x, 'description', '(no description)'),
         'enc_url': enc_url,
         'enc_length': enc_length,
         'enc_type': enc_type,
@@ -47,12 +47,6 @@ def get_updated(x):
         return int(time.mktime(x['published_parsed']))
     else:
         return 0
-
-def get_description(x):
-    return elem_or(x, 'description')
-
-def get_link(x):
-    return elem_or(x, 'link')
 
 def get_enc(x):
     if 'enclosures' in x and len(x.enclosures) > 0:
