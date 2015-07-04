@@ -13,7 +13,7 @@ import feed_util
 ENC = 'utf-8'
 
 def db_info(db):
-    return "Total %i feeds, %i entries (%i unread)." % (
+    return 'Total %i feeds, %i entries (%i unread).' % (
             db.n_feeds(), db.n_entries(1), db.n_entries(0))
 
 def parse_args():
@@ -60,7 +60,7 @@ def print_entries(db, ids, v):
         print(describe(x).encode(ENC))
 
 def add_feed(db, params, v):
-    "Add feed tuple."
+    """Add feed tuple."""
     category, priority, url = params
     if v:
         print('Adding %s' % url)
@@ -87,9 +87,9 @@ for i in args.remove or []:
     remove_feed(db, i, args.verbose)
 
 if args.refresh:
-    if args.verbose: print("Refreshing...")
+    if args.verbose: print('Refreshing...')
     db.refresh_all(feed_util.parse_url)
-    if args.verbose: print("Done.")
+    if args.verbose: print('Done.')
 
 if args.feeds is not None:
     print_feeds(db, args.feeds, args.verbose)
