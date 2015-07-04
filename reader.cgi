@@ -80,6 +80,8 @@ def print_top(ids=None):
             html.href(link_feeds(), 'Feeds'),
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
+            #util.time_fmt(os.path.getmtime(__file__)),
+            str(util.file_age(FILENAME)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
@@ -91,8 +93,6 @@ def print_bottom(ids=None):
     print('<div id="bottom">')
     if ids:
         print(html.href(link_markread(ids), 'Mark these read'))
-        print(util.time_fmt(os.path.getmtime(__file__)))
-        print(str(util.file_age(FILENAME)))
     print('</div>')
 
 def show_categories(db):
