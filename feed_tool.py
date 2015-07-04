@@ -12,8 +12,8 @@ import feed_util
 ENC = 'utf-8'
 
 def db_info(db):
-    return 'Total %i feeds, %i entries (%i unread).' % (
-            db.n_feeds(), db.n_entries(1), db.n_entries(0))
+    d = dict(nf=db.n_feeds(), ne=db.n_entries(1), nu=db.n_entries(0))
+    return 'Total {nf} feeds, {ne} entries ({nu} unread).'.format(**d)
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
