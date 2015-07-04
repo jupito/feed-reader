@@ -6,6 +6,10 @@ import os
 import datetime
 import time
 
+def now():
+    """Get current time as seconds."""
+    return int(time.time())
+
 def time_fmt(secs):
     """Format time represented as seconds."""
     #TIMEFMT = '%Y-%m-%d %H:%M %Z'
