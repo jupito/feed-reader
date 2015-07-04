@@ -63,7 +63,7 @@ def get_args():
     #    args['limit'] = DEFAULT_LIMIT
     #args['maxprg'] = int(args['maxprg'])
     #return args
-    #form = cgi.FieldStorage()
+    form = cgi.FieldStorage()
     args = {}
     for n, c, d in ARGS:
         try:
