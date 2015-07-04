@@ -1,5 +1,4 @@
 #!/usr/bin/env python2
-# -*- coding: iso-8859-15 -*-
 
 """Manage podcasts."""
 
