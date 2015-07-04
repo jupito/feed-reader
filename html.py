@@ -1,5 +1,5 @@
 from __future__ import division, print_function
-import collections.OrderedDict
+import collections
 
 def tag(name, s=None, params={}):
     p = ''.join(' %s="%s"' % (k, v) for k, v in params.items())
