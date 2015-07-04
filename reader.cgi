@@ -13,27 +13,6 @@ import util
 DB_FILENAME = '_reader.db' # Database filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
-DEFAULT_LIMIT = 5 # How many articles to show simultaneously.
-#ARG_NAMES = [
-#        'foo',
-#        'action', # What to do.
-#        'maxprg', # Maximum progress of entries to show.
-#        'limit', # How many entries to show.
-#        'cat', # Feed category.
-#        'feed', # Feed id.
-#        'markread', # Entries to mark as read (progress set to 1).
-#        ]
-#
-#def get_args():
-#    """Collect arguments into a dictionary."""
-#    form = cgi.FieldStorage()
-#    args = {x: form.getfirst(x) or '' for x in ARG_NAMES}
-#    if args['limit'] and args['limit'].isdigit():
-#        args['limit'] = int(args['limit'])
-#    else:
-#        args['limit'] = DEFAULT_LIMIT
-#    args['maxprg'] = int(args['maxprg'])
-#    return args
 
 def list_converter(s):
     return [int(i) for i in s.split(',') if i.isdigit()] or None
@@ -52,14 +31,6 @@ ARGS = [
 
 def get_args():
     """Collect arguments into a dictionary."""
-    #form = cgi.FieldStorage()
-    #args = {x: form.getfirst(x) or '' for x in ARG_NAMES}
-    #if args['limit'] and args['limit'].isdigit():
-    #    args['limit'] = int(args['limit'])
-    #else:
-    #    args['limit'] = DEFAULT_LIMIT
-    #args['maxprg'] = int(args['maxprg'])
-    #return args
     form = cgi.FieldStorage()
     args = {}
     for name, converter, default in ARGS:
@@ -76,10 +47,6 @@ def get_args():
     return args
 
 def markread(db):
-    #for i in args['markread'].split(','):
-    #    if i.isdigit():
-    #        db.set_progress(int(i), 1)
-    #args['markread'] = ''
     for i in args['markread']:
         db.set_progress(i, 1)
     args['markread'] = None
