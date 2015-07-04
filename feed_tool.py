@@ -90,9 +90,11 @@ for i in args.remove or []:
     remove_feed(db, i, args.verbose)
 
 if args.refresh:
-    if args.verbose: print('Refreshing...')
+    if args.verbose:
+        print('Refreshing...')
     db.refresh_all(feed_util.parse_url)
-    if args.verbose: print('Done.')
+    if args.verbose:
+        print('Done.')
 
 if args.feeds is not None:
     print_feeds(db, args.feeds, args.verbose)
