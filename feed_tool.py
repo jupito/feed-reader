@@ -4,12 +4,12 @@
 
 from __future__ import division, print_function
 import argparse
+import codecs
 import csv
+import sys
 
 import feed_db
 import feed_util
-
-ENC = 'utf-8'
 
 def db_info(db):
     d = dict(nf=db.n_feeds(), ne=db.n_entries(1), nu=db.n_entries(0))
@@ -50,13 +50,13 @@ def print_feeds(db, ids, v):
     describe = feed_util.describe_long if v > 0 else feed_util.describe_short
     xs = map(db.get_feed, ids) if ids else db.get_feeds()
     for x in xs:
-        print(describe(x).encode(ENC))
+        print(describe(x))
 
 def print_entries(db, ids, v):
     describe = feed_util.describe_long if v > 0 else feed_util.describe_short
     xs = map(db.get_entry, ids) if ids else db.get_entries()
     for x in xs:
-        print(describe(x).encode(ENC))
+        print(describe(x))
 
 def add_feed(db, params, v):
     """Add feed tuple."""
@@ -71,6 +71,12 @@ def remove_feed(db, i, v):
         print('Removing %s (%s)' % (feed['title'], feed['url']))
     db.remove_feed(i)
 
+
+# Install UTF-8 conversion wrapper for output.
+if sys.stdout.encoding != 'UTF-8':
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
+if sys.stderr.encoding != 'UTF-8':
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
 args = parse_args()
 db = feed_db.FeedDb(args.file)
@@ -97,12 +103,12 @@ if args.entries is not None:
 
 if args.categories:
     for x in db.get_categories():
-        print(x.encode(ENC) + str(db.n_entries(0, x)))
+        print(x + str(db.n_entries(0, x)))
 
 if args.get:
-    print(feed_util.describe_long(db.get_next(0, args.category)[0]).encode(ENC))
+    print(feed_util.describe_long(db.get_next(0, args.category)[0]))
 if args.pop:
-    print(feed_util.describe_long(db.pop()).encode(ENC))
+    print(feed_util.describe_long(db.pop()))
 
 if args.verbose:
     print(db_info(db))
