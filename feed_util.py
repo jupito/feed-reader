@@ -61,15 +61,10 @@ def get_enc(x):
 def elem_or(x, elem, default=None):
     return getattr(x, elem) if elem in x else default
 
-def time_fmt(secs):
-    """Format time represented as seconds."""
-    fmt = '%Y-%m-%d %H:%M'
-    return time.strftime(fmt, time.gmtime(secs))
-
 def field_fmt(x, k):
     """Return object field name and value formatted."""
     if k == 'refreshed' or k == 'updated':
-        return k, time_fmt(x[k])
+        return k, util.time_fmt(x[k])
     elif k == 'description':
         return k, '\n' + (x[k] or '')
     else:
