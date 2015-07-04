@@ -40,6 +40,7 @@ def time_fmt(secs):
     return time.strftime(TIME_FMT, time.localtime(secs))
 
 def file_age(filename):
+    """"Return file age as a timedelta, with second precision."""
     seconds = int(time.time() - os.path.getmtime(filename))
     age = datetime.timedelta(seconds=seconds)
     return age
@@ -93,8 +94,6 @@ def print_top(ids = None):
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
             time_fmt(os.path.getmtime(__file__)),
-            #time_fmt(os.path.getmtime(FILENAME)),
-            #(time.time() - os.path.getmtime(FILENAME)) / 60,
             str(file_age(FILENAME)),
             ]
     if ids:
