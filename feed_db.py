@@ -109,9 +109,9 @@ class FeedDb(object):
         for url in row:
             try:
                 feed, entries = parse_url(url)
-            except Exception, err:
-                print(err)
+            except Exception, e:
                 print(url)
+                print(e)
                 continue
             self.update_feed(feed)
             for entry in entries:
