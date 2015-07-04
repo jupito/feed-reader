@@ -225,7 +225,7 @@ def show_entries(db):
     print('<div id="entries">')
     for i, e in enumerate(entries):
         f = db.get_feed(e['feed_id'])
-        print_entry(e, f, i % 2)
+        print_entry(e, f, i%2)
     print('</div>')
     print_bottom(ids)
     print(html.tail())
