@@ -49,14 +49,13 @@ def get_updated(x):
         return 0
 
 def get_enc(x):
-    if 'enclosures' in x and len(x.enclosures) > 0:
+    """Return the first enclosure."""
+    names = 'url', 'length' 'type'
+    if 'enclosures' in x and x.enclosures:
         enc = x.enclosures[0]
-        return elem_or(enc, 'url'), elem_or(enc, 'length'), elem_or(enc, 'type')
+        return tuple(getattr(enc, s, None) for s in names)
     else:
-        return None, None, None
-
-def elem_or(x, elem, default=None):
-    return getattr(x, elem) if elem in x else default
+        return tuple(None for _ in names)
 
 def field_fmt(k, v):
     """Return object field name and value formatted."""
