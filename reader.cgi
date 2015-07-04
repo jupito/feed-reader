@@ -14,7 +14,6 @@ FILENAME = '_reader.db'
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
 DEFAULT_LIMIT = 5
-TIMEFMT = '%Y-%m-%d %H:%M %Z'
 
 def get_args():
     "Collect arguments into a dictionary."
@@ -35,6 +34,7 @@ def markread(db):
 
 def time_fmt(secs):
     "Format time represented as seconds."
+    #TIMEFMT = '%Y-%m-%d %H:%M %Z'
     TIME_FMT = "%a %b %d %Y, %H:%M"
     return time.strftime(TIME_FMT, time.gmtime(secs))
 
@@ -86,8 +86,8 @@ def print_top(ids = None):
             html.href(link_feeds(), 'Feeds'),
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
-            time.strftime(TIMEFMT, time.localtime(os.path.getmtime(__file__))),
-            time.strftime(TIMEFMT, time.localtime(os.path.getmtime(FILENAME))),
+            time_fmt(os.path.getmtime(__file__)),
+            time_fmt(os.path.getmtime(FILENAME)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
