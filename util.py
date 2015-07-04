@@ -9,11 +9,14 @@ import time
 
 class HTMLStripper(HTMLParser):
     def __init__(self):
+        HTMLParser.__init__(self)
         self.fed = []
-    def handle_data(self, d):
-        self.fed.append(d)
+
+    def handle_data(self, data):
+        self.lines.append(data)
+
     def get_data(self):
-        return ''.join(self.fed)
+        return ''.join(self.lines)
 
 def now():
     """Get current time as seconds."""
