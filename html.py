@@ -12,7 +12,7 @@ def tag(name, content=None, *attributes):
 def href(link, content):
     return tag('a', content, ('href', link))
 
-def list(items):
+def ulist(items):
     s = '\n'
     for item in items:
         s += ' ' * 4 + tag('li', item) + '\n'
