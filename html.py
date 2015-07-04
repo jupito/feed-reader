@@ -17,7 +17,8 @@ def tag(name, content=None, *attributes):
     #    print(type(content))
     #    print(content)
     #return s.format(**d).decode('utf8', errors='replace')
-    return s.format(**d).encode('utf8', errors='xmlcharrefreplace')
+    #return s.format(**d).encode('utf8', errors='xmlcharrefreplace')
+    return s.format(**d)
 
 def href(link, content):
     return tag('a', content, ('href', link))
