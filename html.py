@@ -1,7 +1,7 @@
 from __future__ import division, print_function
 
 def tag(tag, s=None, params={}):
-    p = ''.join([' %s="%s"' % (k, v) for k, v in params.items()])
+    p = ''.join(' %s="%s"' % (k, v) for k, v in params.items())
     if s:
         return '<%s%s>%s</%s>' % (tag, p, s, tag)
     else:
@@ -35,7 +35,7 @@ def stylesheet(sheet):
     return tag('link', None, ps)
 
 def head(title, sheet=None, redirect=None):
-    return '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    s = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr">
 <head>
@@ -44,11 +44,11 @@ def head(title, sheet=None, redirect=None):
 {s}
 {r}
 </head>
-<body>'''.format(
-        t=title,
+<body>'''
+    d = dict(t=title,
         s=stylesheet(sheet) if sheet else '',
-        r=head_redirect(redirect) if redirect else '',
-        )
+        r=head_redirect(redirect) if redirect else '')
+    return s.format(**d)
 
 def tail():
     return '</body>\n</html>'
