@@ -165,7 +165,7 @@ def print_feed(f, n_unread, n_total):
 
 def show_feeds(db):
     feeds = db.get_feeds(args['cat'])
-    print(html.head('Feeds (%s)' % (args['cat'] or 'all'), SHEET))
+    print(html.head('Feeds ({cat})'.format(cat=args['cat'] or 'all'), SHEET))
     print_top()
     print('<div id="feeds">')
     for f in feeds:
