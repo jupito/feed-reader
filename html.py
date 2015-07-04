@@ -1,11 +1,11 @@
 from __future__ import division, print_function
 
-def tag(tag, s=None, params={}):
+def tag(name, s=None, params={}):
     p = ''.join(' %s="%s"' % (k, v) for k, v in params.items())
     if s:
-        return '<%s%s>%s</%s>' % (tag, p, s, tag)
+        return '<%s%s>%s</%s>' % (name, p, s, name)
     else:
-        return '<%s%s />' % (tag, p)
+        return '<%s%s />' % (name, p)
 
 def href(link, s):
     return tag('a', s, {'href': link})
