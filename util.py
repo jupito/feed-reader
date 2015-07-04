@@ -1,8 +1,8 @@
 """Utility functionality."""
 
 from __future__ import division, print_function
+from HTMLParser import HTMLParser
 import os
-import HTMLParser
 
 import datetime
 import time
