@@ -19,7 +19,7 @@ def get_args():
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
     arg_names = ['foo', 'action', 'any', 'limit', 'cat', 'feed', 'markread']
-    args = dict([(x, form.getvalue(x) or '') for x in arg_names])
+    args = {x: form.getvalue(x) or '' for x in arg_names}
     if args['limit'] and args['limit'].isdigit():
         args['limit'] = int(args['limit'])
     else:
