@@ -32,10 +32,10 @@ def now():
 def time_fmt(secs=None, local=False, fmt='rfc2822'):
     """Format time represented as seconds since the epoch."""
     formats = dict(
-            iso8601='%Y-%m-%dT%H:%M %z',
-            rfc2822='%a, %d %b %Y %H:%M %z',
-            locale='%c',
-            )
+        iso8601='%Y-%m-%dT%H:%M %z',
+        rfc2822='%a, %d %b %Y %H:%M %z',
+        locale='%c',
+        )
     if fmt in formats:
         fmt = formats[fmt]
     if secs is None:
