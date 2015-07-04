@@ -1,5 +1,5 @@
 from __future__ import division, print_function
-import OrderedDict
+import collections.OrderedDict
 
 def tag(name, s=None, params={}):
     p = ''.join(' %s="%s"' % (k, v) for k, v in params.items())
@@ -29,7 +29,7 @@ def table(rows, headers=None):
 
 def head_redirect(link, time=0):
     #ps = {'http-equiv': 'refresh', 'content': '{t}; {l}'.format(t=time, l=link)}
-    ps = OrderedDict(
+    ps = collections.OrderedDict(
             ('http-equiv', 'refresh'),
             ('content', '{t}; {l}'.format(t=time, l=link)),
             )
@@ -37,7 +37,7 @@ def head_redirect(link, time=0):
 
 def stylesheet(sheet):
     #ps = {'rel': 'stylesheet', 'type': 'text/css', 'href': sheet}
-    ps = OrderedDict(
+    ps = collections.OrderedDict(
             ('rel', 'stylesheet'),
             ('type', 'text/css'),
             ('href', sheet),
