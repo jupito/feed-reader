@@ -33,3 +33,9 @@ def file_age(filename):
     seconds = int(time.time() - os.path.getmtime(filename))
     age = datetime.timedelta(seconds=seconds)
     return age
+
+def first_line(s):
+    """Return the first line with characters from a string, stripped."""
+    lines = s.lstrip().splitlines() or ['']
+    line = lines[0].rstrip()
+    return line

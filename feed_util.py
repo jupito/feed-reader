@@ -71,14 +71,17 @@ def field_fmt(k, v):
     if k == 'refreshed' or k == 'updated':
         return k, util.time_fmt(v)
     elif k == 'description':
-        return k, '\n' + (v or '')
+        return k, util.first_line(v or '')
     else:
         return k, v
 
 def describe(x, verbosity):
     """Describe a feed or an entry."""
     if verbosity:
-        lines = ['%s:\t%s' % field_fmt(k, x[k]) for k in x.keys()]
+        max_keylen = max(len(k) for k in x.keys())
+        pairs = [field_fmt(k, x[k]) for k in x.keys()]
+        s = u'{k:%i}: {v}' % max_keylen
+        lines = [s.format(k=k, v=v) for k, v in pairs]
         return '\n'.join(lines) + '\n'
     else:
         return u'{id}: {title}'.format(**x)
