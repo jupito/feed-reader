@@ -200,14 +200,12 @@ def print_description(x, plaintext=False):
         print('</div>')
 
 def print_enclosure(e):
-    if not e['enc_url']:
-        return
-    print('<div class="enclosure">')
-    print(html.href(e['enc_url'],
-            'Enclosure (type: %s, length: %s)' %
-            ((e['enc_type'] or 'unknown'), (e['enc_length'] or 'unknown'))
-            ))
-    print('</div>')
+    url = e['enc_url']
+    if url:
+        d = dict(t=e['enc_type'] or 'unknown', l=e['enc_length'] or 'unknown')
+        print('<div class="enclosure">')
+        print(html.href(url, 'Enclosure (type: {t}, length: {l})'.format(**d)))
+        print('</div>')
 
 def print_entry(e, f, alt=False):
     print('<div class="%s">' % ('entry_alt' if alt else 'entry'))
