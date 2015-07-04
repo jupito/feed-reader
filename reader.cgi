@@ -190,11 +190,14 @@ def print_title(x):
     print(html.href(x['link'], x['title']))
     print('</div>')
 
-def print_description(x):
+def print_description(x, plaintext=False):
     if not x['description']:
         return
+    desc = x['description']
+    if plaintext:
+        desc = util.plaintext(desc)
     print('<div class="description">')
-    print(x['description'])
+    print(desc)
     print('</div>')
 
 def print_enclosure(e):
