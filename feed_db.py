@@ -43,6 +43,7 @@ class FeedDb(object):
     def __init__(self, filename):
         self.conn = sqlite3.connect(filename, timeout=5)
         self.conn.execute('PRAGMA foreign_keys=ON')
+        #self.conn.execute('PRAGMA journal_mode=WAL')
         self.conn.row_factory = sqlite3.Row
         self.create_db()
         self.cur = self.conn.cursor()
