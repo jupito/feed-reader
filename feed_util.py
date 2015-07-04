@@ -54,11 +54,9 @@ def get_link(x):
 def get_enc(x):
     if 'enclosures' in x and len(x.enclosures) > 0:
         enc = x.enclosures[0]
-        return (elem_or(enc, 'url'),
-                elem_or(enc, 'length'),
-                elem_or(enc, 'type'))
+        return elem_or(enc, 'url'), elem_or(enc, 'length'), elem_or(enc, 'type')
     else:
-        return (None, None, None)
+        return None, None, None
 
 def elem_or(x, elem, default=None):
     return getattr(x, elem) if elem in x else default
