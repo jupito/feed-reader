@@ -16,7 +16,7 @@ SHEET = 'reader.css'
 DEFAULT_LIMIT = 5
 
 def get_args():
-    "Collect arguments into a dictionary."
+    """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
     arg_names = ['foo', 'action', 'any', 'limit', 'cat', 'feed', 'markread']
     args = dict([(x, form.getvalue(x) or '') for x in arg_names])
@@ -221,7 +221,7 @@ def show_entries(db):
     n = db.n_entries(any, args['cat'], args['feed'])
     entries = db.get_next(any, args['cat'], args['feed'], args['limit'])
     ids = [e['id'] for e in entries]
-    print(html.head("%i in %s entries" % (n, 'all' if any else 'unread'), SHEET))
+    print(html.head('%i in %s entries' % (n, 'all' if any else 'unread'), SHEET))
     print_top(ids)
     print('<div id="entries">')
     for i, e in enumerate(entries):
@@ -235,13 +235,13 @@ def redirect(db):
     entries = db.get_next(0, args['cat'], args['feed'], 1)
     if entries:
         e = entries[0]
-        print(html.head("Redirecting...", SHEET, e['link']))
+        print(html.head('Redirecting...', SHEET, e['link']))
         print('Redirecting to:')
         f = db.get_feed(e['feed_id'])
         print_entry(e, f)
         db.set_progress(e['id'], 1)
     else:
-        print(html.head("Cannot redirect", SHEET))
+        print(html.head('Cannot redirect', SHEET))
         print('No unread entries.')
     print(html.tail())
 
