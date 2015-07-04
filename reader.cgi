@@ -9,7 +9,7 @@ import feed_db
 import html
 import util
 
-FILENAME = '_reader.db'
+DB_FILENAME = '_reader.db' # Database filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
 DEFAULT_LIMIT = 5 # How many articles to show simultaneously.
@@ -80,7 +80,7 @@ def print_top(ids=None):
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
             #util.time_fmt(os.path.getmtime(__file__)),
-            str(util.file_age(FILENAME)),
+            str(util.file_age(DB_FILENAME)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
@@ -245,7 +245,7 @@ def redirect(db):
     print(html.tail())
 
 def reader():
-    db = feed_db.FeedDb(FILENAME)
+    db = feed_db.FeedDb(DB_FILENAME)
     markread(db)
     action = args['action'] or 'cats'
     if action == 'cats':
