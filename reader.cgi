@@ -57,25 +57,22 @@ def link(a):
 def link_cats():
     a = args.copy()
     a['action'] = 'cats'
-    a['cat'] = ''
-    a['feed'] = ''
+    a['cat'] = None
+    a['feed'] = None
     return link(a)
 
 def link_feeds(cat=None):
     a = args.copy()
     a['action'] = 'feeds'
-    if cat != None:
-        a['cat'] = cat
-    a['feed'] = ''
+    a['cat'] = cat
+    a['feed'] = None
     return link(a)
 
 def link_entries(cat=None, feed=None):
     a = args.copy()
     a['action'] = 'entries'
-    if cat != None:
-        a['cat'] = cat
-    if feed != None:
-        a['feed'] = feed
+    a['cat'] = cat
+    a['feed'] = feed
     return link(a)
 
 def link_redirect():
