@@ -14,7 +14,7 @@ FILENAME = '_reader.db'
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
 DEFAULT_LIMIT = 5
-TIMEFMT = '%Y-%m-%d %H:%M'
+TIMEFMT = '%Y-%m-%d %H:%M %Z'
 
 def get_args():
     "Collect arguments into a dictionary."
