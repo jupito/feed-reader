@@ -10,7 +10,7 @@ def tag(name, content=None, *attributes):
     return s.format(**d)
 
 def href(link, content):
-    return tag('a', content, {'href': link})
+    return tag('a', content, ('href', link))
 
 def list(items):
     s = '\n'
