@@ -12,7 +12,7 @@ import util
 FILENAME = '_reader.db'
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
-DEFAULT_LIMIT = 5
+DEFAULT_LIMIT = 5 # How many articles to show simultaneously.
 
 def get_args():
     """Collect arguments into a dictionary."""
