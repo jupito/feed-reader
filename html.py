@@ -10,7 +10,8 @@ def tag(name, content=None, *attributes):
     else:
         s = '<{n}{a} />'
     #return s.format(**d).encode('ascii', 'xmlcharrefreplace')
-    return s.format(**d).encode('utf-8')
+    #return s.format(**d).encode('utf-8')
+    return unicode(s.format(**d), encoding='utf-8')
 
 def href(link, content):
     return tag('a', content, ('href', link))
