@@ -1,3 +1,4 @@
+from __future__ import division, print_function
 import sqlite3
 
 CREATE_DB = """
@@ -108,8 +109,8 @@ class FeedDb(object):
             try:
                 feed, entries = parse_url(url)
             except Exception, err:
-                print err
-                print url
+                print(err)
+                print(url)
                 continue
             self.update_feed(feed)
             for entry in entries:

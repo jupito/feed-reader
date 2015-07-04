@@ -1,10 +1,12 @@
 #!/usr/bin/env python2
 
+from __future__ import division, print_function
 import cgi
 import cgitb; cgitb.enable()
 import os
 import sys
 import time
+
 import feed_db
 import html
 
@@ -86,18 +88,18 @@ def print_top(ids = None):
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
-    print '<div id="top">'
-    print ' | '.join(elems)
-    print '</div>'
+    print('<div id="top">')
+    print(' | '.join(elems))
+    print('</div>')
 
 def print_bottom(ids = None):
-    print '<div id="bottom">'
+    print('<div id="bottom">')
     if ids:
-        print html.href(link_markread(ids), 'Mark these read')
-    print '</div>'
+        print(html.href(link_markread(ids), 'Mark these read'))
+    print('</div>')
 
 def show_categories(db):
-    print html.head('Categories', SHEET)
+    print(html.head('Categories', SHEET))
     print_top()
     headers = ['Category', 'Feeds', 'Unread', 'Total']
     rows = [[
@@ -113,11 +115,11 @@ def show_categories(db):
             str(db.n_entries(1)),
             ])
     table = html.table(rows, headers)
-    print '<div id="categories">'
-    print table.encode('utf-8')
-    print '</div>'
+    print('<div id="categories">')
+    print(table.encode('utf-8'))
+    print('</div>')
     print_bottom()
-    print html.tail()
+    print(html.tail())
 
 def print_feed_(f, n_unread, n_total):
     feed = html.href(link_entries('', f['id']), f['title'])
@@ -130,12 +132,12 @@ def print_feed_(f, n_unread, n_total):
     desc = f['description'] or ''
     rows = [feed + link, cat, priority, n_entries, updated, refreshed, desc]
     par = html.tag('p', html.tag('br').join(rows))
-    print '<div class="feed">'
-    print par.encode('utf-8')
-    print '</div>'
+    print('<div class="feed">')
+    print(par.encode('utf-8'))
+    print('</div>')
 
 def print_feedinfo(f, n_unread, n_total):
-    print '<div class="feedinfo">'
+    print('<div class="feedinfo">')
     rows = [
             '%i: %s %s %s' % (
                     f['id'],
@@ -149,102 +151,102 @@ def print_feedinfo(f, n_unread, n_total):
             '%i unread, %i total' % (n_unread, n_total),
             ]
     par = html.tag('p', html.tag('br').join(rows))
-    print par.encode('utf-8')
-    print '</div>'
+    print(par.encode('utf-8'))
+    print('</div>')
 
 def print_feeddates(f):
-    print '<div class="feeddates">'
-    print ('Updated %s, refreshed %s' % (time_fmt(f['updated']),
-            time_fmt(f['refreshed']))).encode('utf-8')
-    print '</div>'
+    print('<div class="feeddates">')
+    print(('Updated %s, refreshed %s' % (time_fmt(f['updated']),
+            time_fmt(f['refreshed']))).encode('utf-8'))
+    print('</div>')
 
 def print_feed(f, n_unread, n_total):
-    print '<div class="feed">'
+    print('<div class="feed">')
     print_feedinfo(f, n_unread, n_total)
     print_feeddates(f)
     print_description(f)
-    print '</div>'
+    print('</div>')
 
 def show_feeds(db):
     feeds = db.get_feeds(args['cat'])
-    print html.head('Feeds (%s)' % (args['cat'] or 'all'), SHEET)
+    print(html.head('Feeds (%s)' % (args['cat'] or 'all'), SHEET))
     print_top()
-    print '<div id="feeds">'
+    print('<div id="feeds">')
     for f in feeds:
         n_unread = db.n_entries(0, None, f['id'])
         n_total = db.n_entries(1, None, f['id'])
         print_feed(f, n_unread, n_total)
-    print '</div>'
+    print('</div>')
     print_bottom()
-    print html.tail()
+    print(html.tail())
 
 def print_entryinfo(e, f):
     updated = html.tag('em', time_fmt(e['updated']))
     cat = html.href(link_entries(f['category'], ''), f['category'])
     feed = html.href(link_entries('', f['id']), f['title'])
     flink = html.href(f['link'], '=>')
-    print '<div class="entryinfo">'
-    print ' &mdash; '.join([updated, cat, feed + flink]).encode('utf-8')
-    print '</div>'
+    print('<div class="entryinfo">')
+    print(' &mdash; '.join([updated, cat, feed + flink]).encode('utf-8'))
+    print('</div>')
 
 def print_title(x):
-    print '<div class="title">'
-    print html.href(x['link'], x['title']).encode('utf-8')
-    print '</div>'
+    print('<div class="title">')
+    print(html.href(x['link'], x['title']).encode('utf-8'))
+    print('</div>')
 
 def print_description(x):
     if not x['description']:
         return
-    print '<div class="description">'
-    print x['description'].encode('utf-8')
-    print '</div>'
+    print('<div class="description">')
+    print(x['description'].encode('utf-8'))
+    print('</div>')
 
 def print_enclosure(e):
     if not e['enc_url']:
         return
-    print '<div class="enclosure">'
-    print html.href(e['enc_url'],
+    print('<div class="enclosure">')
+    print(html.href(e['enc_url'],
             'Enclosure (type: %s, length: %s)' %
             ((e['enc_type'] or 'unknown'), (e['enc_length'] or 'unknown'))
-            ).encode('utf-8')
-    print '</div>'
+            ).encode('utf-8'))
+    print('</div>')
 
 def print_entry(e, f, alt = False):
-    print '<div class="%s">' % ('entry_alt' if alt else 'entry')
+    print('<div class="%s">' % ('entry_alt' if alt else 'entry'))
     print_entryinfo(e, f)
     print_title(e)
     print_description(e)
     print_enclosure(e)
-    print '</div>'
+    print('</div>')
 
 def show_entries(db):
     any = args['any']
     n = db.n_entries(any, args['cat'], args['feed'])
     entries = db.get_next(any, args['cat'], args['feed'], args['limit'])
     ids = [e['id'] for e in entries]
-    print html.head("%i in %s entries" % (n, 'all' if any else 'unread'), SHEET)
+    print(html.head("%i in %s entries" % (n, 'all' if any else 'unread'), SHEET))
     print_top(ids)
-    print '<div id="entries">'
+    print('<div id="entries">')
     for i, e in enumerate(entries):
         f = db.get_feed(e['feed_id'])
         print_entry(e, f, i % 2)
-    print '</div>'
+    print('</div>')
     print_bottom(ids)
-    print html.tail()
+    print(html.tail())
 
 def redirect(db):
     entries = db.get_next(0, args['cat'], args['feed'], 1)
     if entries:
         e = entries[0]
-        print html.head("Redirecting...", SHEET, e['link'])
-        print 'Redirecting to:'
+        print(html.head("Redirecting...", SHEET, e['link']))
+        print('Redirecting to:')
         f = db.get_feed(e['feed_id'])
         print_entry(e, f)
         db.set_progress(e['id'], 1)
     else:
-        print html.head("Cannot redirect", SHEET)
-        print 'No unread entries.'
-    print html.tail()
+        print(html.head("Cannot redirect", SHEET))
+        print('No unread entries.')
+    print(html.tail())
 
 def reader():
     db = feed_db.FeedDb(FILENAME)
@@ -261,9 +263,9 @@ def reader():
     db.close()
 
 args = get_args()
-print CONTENT_TYPE
+print(CONTENT_TYPE)
 if args['foo'] == 'baz':
     reader()
 else:
-    print sys.path
+    print(sys.path)
     cgi.test()

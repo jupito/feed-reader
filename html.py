@@ -1,3 +1,5 @@
+from __future__ import division, print_function
+
 def tag(tag, s = None, params = {}):
     p = ''.join([' %s="%s"' % (k, v) for k, v in params.items()])
     if s:

@@ -1,9 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: iso-8859-15 -*-
 
+from __future__ import division, print_function
 import sys
 import argparse
 import csv
+
 import feed_db
 import feed_util
 
@@ -42,32 +44,32 @@ def parse_args():
     p.add_argument('--verbose', '-v', action='count',
             help='be more verbose')
     args = p.parse_args()
-    #if __debug__: print args
+    #if __debug__: print(args)
     return args
 
 def print_feeds(db, ids, v):
     describe = feed_util.describe_long if v > 0 else feed_util.describe_short
     xs = map(db.get_feed, ids) if ids else db.get_feeds()
     for x in xs:
-        print describe(x).encode(ENC)
+        print(describe(x).encode(ENC))
 
 def print_entries(db, ids, v):
     describe = feed_util.describe_long if v > 0 else feed_util.describe_short
     xs = map(db.get_entry, ids) if ids else db.get_entries()
     for x in xs:
-        print describe(x).encode(ENC)
+        print(describe(x).encode(ENC))
 
 def add_feed(db, params, v):
     "Add feed tuple."
     category, priority, url = params
     if v:
-        print 'Adding %s' % url
+        print('Adding %s' % url)
     db.add_feed(url, category, int(priority))
 
 def remove_feed(db, i, v):
     if v:
         feed = db.get_feed(i)
-        print 'Removing %s (%s)' % (feed['title'], feed['url'])
+        print('Removing %s (%s)' % (feed['title'], feed['url']))
     db.remove_feed(i)
 
 args = parse_args()
@@ -84,9 +86,9 @@ for i in args.remove or []:
     remove_feed(db, i, args.verbose)
 
 if args.refresh:
-    if args.verbose: print "Refreshing..."
+    if args.verbose: print("Refreshing...")
     db.refresh_all(feed_util.parse_url)
-    if args.verbose: print "Done."
+    if args.verbose: print("Done.")
 
 if args.feeds is not None:
     print_feeds(db, args.feeds, args.verbose)
@@ -95,14 +97,14 @@ if args.entries is not None:
 
 if args.categories:
     for x in db.get_categories():
-        print x.encode(ENC) + str(db.n_entries(0, x))
+        print(x.encode(ENC) + str(db.n_entries(0, x)))
 
 if args.get:
-    print feed_util.describe_long(db.get_next(0, args.category)[0]).encode(ENC)
+    print(feed_util.describe_long(db.get_next(0, args.category)[0]).encode(ENC))
 if args.pop:
-    print feed_util.describe_long(db.pop()).encode(ENC)
+    print(feed_util.describe_long(db.pop()).encode(ENC))
 
 if args.verbose:
-    print db_info(db)
+    print(db_info(db))
 
 db.close()

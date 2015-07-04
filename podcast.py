@@ -1,17 +1,19 @@
 #!/usr/bin/env python2.7
 # -*- coding: iso-8859-15 -*-
 
+from __future__ import division, print_function
 import sys
 import argparse
 import requests
+
 import feed_db
 import feed_util
 
 DB_FILENAME = '_podcast.db'
 
 def print_db_info(db):
-    print "Total %i feeds, %i entries (%i unread)." % (
-            db.n_feeds(), db.n_entries(), db.n_unread_entries())
+    print("Total %i feeds, %i entries (%i unread)." % (
+            db.n_feeds(), db.n_entries(), db.n_unread_entries()))
 
 def parse_args():
     p = argparse.ArgumentParser(description = 'Manage podcasts.')
@@ -24,7 +26,7 @@ def parse_args():
     p.add_argument('--pop', action='store_true',
             help='show next unread and mark it read')
     args = p.parse_args()
-    if __debug__: print args
+    if __debug__: print(args)
     return args
 
 args = parse_args()
