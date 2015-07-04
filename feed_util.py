@@ -2,6 +2,10 @@ from __future__ import division, print_function
 import time
 import feedparser
 
+def get_now():
+    "Get current time as seconds."
+    return int(time.time())
+
 def parse_url(url):
     "Parse a feed and its entries."
     d = feedparser.parse(url)
@@ -32,10 +36,6 @@ def parse_entry(e):
         'enc_length': enc_length,
         'enc_type': enc_type,
         }
-
-def get_now():
-    "Get current time as seconds."
-    return int(time.time())
 
 def get_updated(x):
     "Get updated field or current time as seconds."
