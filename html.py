@@ -23,10 +23,10 @@ def ulist(items):
 def table(rows, headers=None):
     s = '\n'
     if headers:
-        row = reduce(lambda x, y: x + tag('th', y), headers, '')
+        row = ''.join(tag('th', s) for s in headers)
         s += IND + tag('tr', row) + '\n'
     for items in rows:
-        row = reduce(lambda x, y: x + tag('td', y), items, '')
+        row = ''.join(tag('td', s) for s in items)
         s += IND + tag('tr', row) + '\n'
     return tag('table', s)
 
