@@ -65,13 +65,16 @@ def get_args():
     #return args
     form = cgi.FieldStorage()
     args = {}
-    for n, c, d in ARGS:
-        try:
-            args[n] = c(form.getfirst(n, d))
-            #print(form.getlist(n))
-        except ValueError, e:
-            print(e)
-            args[n] = c(d)
+    for name, converter, default in ARGS:
+        value = form.getfirst(name, default)
+        if value is None:
+            args[name] = val
+        else:
+            try:
+                args[name] = converter(val)
+            except ValueError, e:
+                print(e)
+                args[name] = default
     print(args)
     return args
 
