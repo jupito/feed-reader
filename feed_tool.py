@@ -39,8 +39,6 @@ def parse_args():
             help='list categories')
     p.add_argument('--get', action='store_true',
             help='show next unread')
-    p.add_argument('--pop', action='store_true',
-            help='show next unread and mark it read')
     p.add_argument('--verbose', '-v', action='count',
             help='be more verbose')
     args = p.parse_args()
@@ -107,8 +105,6 @@ if args.categories:
 
 if args.get:
     print(feed_util.describe(db.get_next(0, args.category)[0], 1))
-if args.pop:
-    print(feed_util.describe(db.pop(), 1))
 
 if args.verbose:
     print(db_info(db))

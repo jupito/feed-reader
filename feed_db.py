@@ -211,13 +211,6 @@ class FeedDb(object):
                 limit))
         return self.cur.fetchall()
 
-    def pop(self):
-        """Get next unread entry and mark it read."""
-        rows = self.get_next()
-        if rows:
-            self.set_progress(rows[0]['id'], 1)
-        return rows[0]
-
     def set_progress(self, id, progress):
         """Set progress of given entry."""
         self.cur.execute("""
