@@ -1,13 +1,13 @@
 from __future__ import division, print_function
 import collections
 
-def tag(name, content=None, params={}):
-    p = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in params.items())
-    d = dict(n=name, p=p, c=content)
+def tag(name, content=None, attributes={}):
+    a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes.items())
+    d = dict(n=name, a=a, c=content)
     if content:
-        s = '<{n}{p}>{c}</{n}>'
+        s = '<{n}{a}>{c}</{n}>'
     else:
-        s = '<{n}{p} />'
+        s = '<{n}{a} />'
     return s.format(**d)
 
 def href(link, s):
