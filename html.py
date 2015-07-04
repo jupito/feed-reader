@@ -10,8 +10,8 @@ def tag(name, content=None, attributes={}):
         s = '<{n}{a} />'
     return s.format(**d)
 
-def href(link, s):
-    return tag('a', s, {'href': link})
+def href(link, content):
+    return tag('a', content, {'href': link})
 
 def list(items):
     s = '\n'
