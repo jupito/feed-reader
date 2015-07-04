@@ -79,7 +79,6 @@ def print_top(ids=None):
             html.href(link_feeds(), 'Feeds'),
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
-            #util.time_fmt(os.path.getmtime(__file__)),
             str(util.file_age(DB_FILENAME)),
             ]
     if ids:
