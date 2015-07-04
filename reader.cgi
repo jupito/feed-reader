@@ -72,7 +72,7 @@ def get_args():
         except ValueError, e:
             print(e)
             args[n] = c(d)
-    print args
+    print(args)
     return args
 
 def markread(db):
