@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: iso-8859-15 -*-
 
+"""Manage feeds."""
+
 from __future__ import division, print_function
 import argparse
 import csv
@@ -15,7 +17,7 @@ def db_info(db):
             db.n_feeds(), db.n_entries(1), db.n_entries(0))
 
 def parse_args():
-    p = argparse.ArgumentParser(description = 'Manage feeds.')
+    p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('file',
             help='Database file name')
     p.add_argument('--add', nargs='+', metavar='string',

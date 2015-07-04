@@ -47,7 +47,7 @@ def link_cats():
     a['feed'] = ''
     return link(a)
 
-def link_feeds(cat = None):
+def link_feeds(cat=None):
     a = args.copy()
     a['action'] = 'feeds'
     if cat != None:
@@ -55,7 +55,7 @@ def link_feeds(cat = None):
     a['feed'] = ''
     return link(a)
 
-def link_entries(cat = None, feed = None):
+def link_entries(cat=None, feed=None):
     a = args.copy()
     a['action'] = 'entries'
     if cat != None:
@@ -74,7 +74,7 @@ def link_markread(ids):
     a['markread'] = ','.join(map(str, ids))
     return link(a)
 
-def print_top(ids = None):
+def print_top(ids=None):
     elems = [
             html.href(link_cats(), 'Categories'),
             html.href(link_feeds(), 'Feeds'),
@@ -89,7 +89,7 @@ def print_top(ids = None):
     print(' | '.join(elems))
     print('</div>')
 
-def print_bottom(ids = None):
+def print_bottom(ids=None):
     print('<div id="bottom">')
     if ids:
         print(html.href(link_markread(ids), 'Mark these read'))
@@ -208,7 +208,7 @@ def print_enclosure(e):
             ).encode('utf-8'))
     print('</div>')
 
-def print_entry(e, f, alt = False):
+def print_entry(e, f, alt=False):
     print('<div class="%s">' % ('entry_alt' if alt else 'entry'))
     print_entryinfo(e, f)
     print_title(e)

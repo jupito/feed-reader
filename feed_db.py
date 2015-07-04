@@ -128,7 +128,7 @@ class FeedDb(object):
         rows = self.cur.fetchall()
         return [row[0] for row in rows]
 
-    def n_feeds(self, cat = None):
+    def n_feeds(self, cat=None):
         "Return the number of feeds in the database."
         self.cur.execute("""
                 SELECT COUNT(*) FROM Feeds
@@ -136,7 +136,7 @@ class FeedDb(object):
                 """, (not cat, cat or '%'))
         return self.cur.fetchone()[0]
 
-    def n_entries(self, any = 0, cat = None, feed = None):
+    def n_entries(self, any=0, cat=None, feed=None):
         "Return the number of entries in the database."
         self.cur.execute("""
                 SELECT COUNT(*)
@@ -156,7 +156,7 @@ class FeedDb(object):
         self.cur.execute("SELECT * FROM Feeds WHERE id=?", (i,))
         return self.cur.fetchone()
 
-    def get_feeds(self, cat = None):
+    def get_feeds(self, cat=None):
         "Get feeds."
         self.cur.execute("""
                 SELECT *
@@ -190,7 +190,7 @@ class FeedDb(object):
         self.cur.execute("DELETE FROM Entries WHERE feed_id=?", (i,))
         self.cur.execute("DELETE FROM Feeds WHERE id=?", (i,))
 
-    def get_next(self, any = 0, cat = None, feed = None, limit = 1):
+    def get_next(self, any=0, cat=None, feed=None, limit=1):
         "Get next (unread or any) entry (entries) (from category)."
         if limit == 0:
             limit = -1

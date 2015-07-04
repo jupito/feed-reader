@@ -60,7 +60,7 @@ def get_enc(x):
     else:
         return (None, None, None)
 
-def elem_or(x, elem, default = None):
+def elem_or(x, elem, default=None):
     return getattr(x, elem) if elem in x else default
 
 def time_fmt(secs):
