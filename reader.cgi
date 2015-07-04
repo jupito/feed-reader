@@ -50,8 +50,8 @@ def markread(db):
     args['markread'] = None
 
 def link(a):
-    params = '&'.join('{k}={v}'.format(k=k, v=v) for k, v in a.items() if v)
-    url = '{path}?{params}'.format(path=sys.argv[0], params=params)
+    params = ['{k}={v}'.format(k=k, v=v) for k, v in a.items() if not v is None]
+    url = '{path}?{params}'.format(path=sys.argv[0], params='&'.join(params))
     return url
 
 def link_cats():
