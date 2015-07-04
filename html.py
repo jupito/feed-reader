@@ -29,19 +29,19 @@ def table(rows, headers=None):
 
 def head_redirect(link, time=0):
     #ps = {'http-equiv': 'refresh', 'content': '{t}; {l}'.format(t=time, l=link)}
-    ps = collections.OrderedDict(
+    ps = collections.OrderedDict([
             ('http-equiv', 'refresh'),
             ('content', '{t}; {l}'.format(t=time, l=link)),
-            )
+            ])
     return tag('meta', None, ps)
 
 def stylesheet(sheet):
     #ps = {'rel': 'stylesheet', 'type': 'text/css', 'href': sheet}
-    ps = collections.OrderedDict(
+    ps = collections.OrderedDict([
             ('rel', 'stylesheet'),
             ('type', 'text/css'),
             ('href', sheet),
-            )
+            ])
     return tag('link', None, ps)
 
 def head(title, sheet=None, redirect=None):
