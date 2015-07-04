@@ -41,9 +41,7 @@ def get_args():
             try:
                 args[name] = converter(value)
             except ValueError, e:
-                print(e)
                 args[name] = default
-    print(args)
     return args
 
 def markread(db):
@@ -52,12 +50,9 @@ def markread(db):
     args['markread'] = None
 
 def link(a):
-    url = sys.argv[0]
-    params = []
-    for k, v in a.iteritems():
-        if v:
-            params.append('{k}={v}'.format(k=k, v=v))
-    return url + '?' + '&'.join(params)
+    params = '&'.join('{k}={v}'.format(k=k, v=v) for k, v in a.items() if v)
+    url = '{path}?{params}'.format(path=sys.argv[0], params=params)
+    return url
 
 def link_cats():
     a = args.copy()
