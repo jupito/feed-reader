@@ -67,7 +67,7 @@ def elem_or(x, elem, default = None):
 
 def time_fmt(secs):
     "Format time represented as seconds."
-    TIME_FMT = "%Y-%m-%d %H:%M"
+    TIME_FMT = '%Y-%m-%d %H:%M'
     return time.strftime(TIME_FMT, time.gmtime(secs))
 
 def field_fmt(x, k):
