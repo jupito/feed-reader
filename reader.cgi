@@ -152,8 +152,8 @@ def print_feedinfo(f, n_unread, n_total):
 
 def print_feeddates(f):
     print('<div class="feeddates">')
-    print(('Updated %s, refreshed %s' % (util.time_fmt(f['updated']),
-            util.time_fmt(f['refreshed']))).encode('utf-8'))
+    d = dict(u=util.time_fmt(f['updated']), r=util.time_fmt(f['refreshed']))
+    print('Updated {u}, refreshed {r}'.format(**d).encode('utf-8'))
     print('</div>')
 
 def print_feed(f, n_unread, n_total):
