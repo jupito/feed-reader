@@ -4,9 +4,11 @@ IND = ' '*4 # Indentation.
 
 def tag(name, content=None, *attributes):
     a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
-    d = dict(n=name, a=a, c=content)
     if content:
         content = content.encode('utf8', 'xmlcharrefreplace')
+    print(content)
+    d = dict(n=name, a=a, c=content)
+    if content:
         s = '<{n}{a}>{c}</{n}>'
     else:
         s = '<{n}{a} />'
