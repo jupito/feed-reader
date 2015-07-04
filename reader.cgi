@@ -271,7 +271,10 @@ if args['foo'] == 'baz':
     try:
         reader()
     except sqlite3.OperationalError, e:
-        raise
+        if e.message == 'database is locked':
+            print(e.message)
+        else:
+            raise
 else:
     print(sys.path)
     cgi.test()
