@@ -3,6 +3,7 @@
 from __future__ import division, print_function
 import cgi
 import cgitb; cgitb.enable()
+import os
 import sys
 import time
 
@@ -13,6 +14,7 @@ FILENAME = '_reader.db'
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
 DEFAULT_LIMIT = 5
+TIMEFORMAT = '%Y-%m-%d %H:%M'
 
 def get_args():
     "Collect arguments into a dictionary."
@@ -89,6 +91,10 @@ def print_top(ids = None):
         elems.append(html.href(link_markread(ids), 'Mark these read'))
     print('<div id="top">')
     print(' | '.join(elems))
+    print(__file__, time.strftime(TIMEFORMAT,
+            time.localtime(os.path.getmtime(__file__))))
+    print(time.strftime(TIMEFORMAT,
+            time.localtime(os.path.getmtime(FILENAME))))
     print('</div>')
 
 def print_bottom(ids = None):
