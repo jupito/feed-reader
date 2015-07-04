@@ -27,7 +27,7 @@ def table(rows, headers=None):
     return tag('table', s)
 
 def head_redirect(link, time=0):
-    ps = {'http-equiv': 'refresh', 'content': '%s; %s' % (time, link)}
+    ps = {'http-equiv': 'refresh', 'content': '{t}; {l}'.format(t=time, l=link)}
     return tag('meta', None, ps)
 
 def stylesheet(sheet):
@@ -52,24 +52,3 @@ def head(title, sheet=None, redirect=None):
 
 def tail():
     return '</body>\n</html>'
-
-class Tag(object):
-    def __init__(self, name):
-        self.name = name
-
-    def __get__(self, obj, objtype):
-        return self.tag
-
-    def tag(self, text=None, **params):
-        ps = ''
-        for k, v in params.items():
-            ps += ' {}="{}"'.format(k, v)
-        if text:
-            return '<{n}{p}>{t}</{n}>'.format(n=self.name, p=ps, t=text)
-        else:
-            return '<{n}{p} />'.format(n=self.name, p=ps)
-
-class Html(object):
-    hr = Tag('hr')
-    em = Tag('em')
-    a = Tag('a')
