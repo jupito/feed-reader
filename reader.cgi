@@ -90,7 +90,8 @@ def print_top(ids = None):
             time_fmt(os.path.getmtime(__file__)),
             #time_fmt(os.path.getmtime(FILENAME)),
             #(time.time() - os.path.getmtime(FILENAME)) / 60,
-            str(datetime.timedelta(time.time() - os.path.getmtime(FILENAME))),
+            seconds = time.time() - os.path.getmtime(FILENAME)
+            str(datetime.timedelta(seconds=seconds)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
