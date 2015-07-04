@@ -2,7 +2,6 @@
 # -*- coding: iso-8859-15 -*-
 
 from __future__ import division, print_function
-import sys
 import argparse
 import csv
 
