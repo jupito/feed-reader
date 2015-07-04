@@ -68,10 +68,10 @@ def get_args():
     for name, converter, default in ARGS:
         value = form.getfirst(name, default)
         if value is None:
-            args[name] = val
+            args[name] = value
         else:
             try:
-                args[name] = converter(val)
+                args[name] = converter(value)
             except ValueError, e:
                 print(e)
                 args[name] = default
