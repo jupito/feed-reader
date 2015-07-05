@@ -112,7 +112,7 @@ class FeedDb(object):
         row = self.cur.fetchone()
         if row is None:
             raise Exception('Could not find feed {i}'.format(**d))
-        url = row[0]:
+        url = row[0]
         try:
             feed, entries = parse_url(url)
         except Exception, e:
@@ -132,7 +132,7 @@ class FeedDb(object):
         logger.info('Refresh starting for {nf} feeds.'.format(**d))
         for i in feed_ids:
             d['ne'] += self.refresh_feed(i, parse_url)
-        logger.info('Refresh done for {nf} feeds, {ne} entries.').format(**d)
+        logger.info('Refresh done for {nf} feeds, {ne} entries.'.format(**d))
 
     def get_feed_ids(self):
         """Get all feed ids."""
