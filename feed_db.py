@@ -159,9 +159,10 @@ class FeedDb(object):
                 not feed, feed))
         return self.cur.fetchone()[0]
 
-    def get_feed(self, i):
+    def get_feed(self, feed_id):
         """Get given feed."""
-        self.cur.execute('SELECT * FROM Feeds WHERE id=?', (i,))
+        d = dict(i=feed_id)
+        self.cur.execute('SELECT * FROM Feeds WHERE id=:i', d)
         return self.cur.fetchone()
 
     def get_feeds(self, cat=None):
@@ -174,9 +175,10 @@ class FeedDb(object):
                 """, (not cat, cat or '%'))
         return self.cur.fetchall()
 
-    def get_entry(self, i):
+    def get_entry(self, entry_id):
         """Get given entry."""
-        self.cur.execute('SELECT * FROM Entries WHERE id=?', (i,))
+        d = dict(i=entry_id)
+        self.cur.execute('SELECT * FROM Entries WHERE id=:i', d)
         return self.cur.fetchone()
 
     def get_entries(self):
@@ -193,10 +195,11 @@ class FeedDb(object):
         """Add feed."""
         self.insert_feed(url, category, priority)
 
-    def remove_feed(self, i):
+    def remove_feed(self, feed_id):
         """Remove given feed and all its entries."""
-        self.cur.execute('DELETE FROM Entries WHERE feed_id=?', (i,))
-        self.cur.execute('DELETE FROM Feeds WHERE id=?', (i,))
+        d = dict(i=feed_id)
+        self.cur.execute('DELETE FROM Entries WHERE feed_id=:i', d)
+        self.cur.execute('DELETE FROM Feeds WHERE id=:i', d)
 
     def get_next(self, minprg=0, maxprg=0, cat=None, feed=None, limit=1):
         """Get next entry or entries."""
@@ -218,10 +221,10 @@ class FeedDb(object):
                 limit))
         return self.cur.fetchall()
 
-    def set_progress(self, id, progress):
+    def set_progress(self, entry_id, progress):
         """Set progress of given entry."""
         self.cur.execute("""
                 UPDATE Entries
-                SET progress=?
-                WHERE id=?
-                """, (progress, id))
+                SET progress=:p
+                WHERE id=:i
+                """, dict(p=progress, i=entry_id))
