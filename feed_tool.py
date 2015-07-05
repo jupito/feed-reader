@@ -43,6 +43,10 @@ def parse_args():
             help='show next unread')
     p.add_argument('--verbose', '-v', action='count',
             help='be more verbose')
+    p.add_argument('--log', default='ERROR',
+            help='set loglevel')
+    p.add_argument('--logfile',
+            help='set logfile')
     args = p.parse_args()
     return args
 
@@ -77,7 +81,13 @@ if sys.stderr.encoding != 'UTF-8':
     sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
 args = parse_args()
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+loglevel = getattr(logging, args.log.upper(), None)
+if loglevel is None:
+    raise ValueError('Invalid log level: {}'.format(loglevel))
+logging.basicConfig(format='%(asctime)s %(message)s', filename=args.logfile,
+        level=loglevel)
+logging.captureWarnings(True)
+
 db = feed_db.FeedDb(args.file)
 
 for s in args.add or []:
