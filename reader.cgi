@@ -243,8 +243,8 @@ def redirect(db):
         print('No unread entries.')
     print(html.tail())
 
-def reader():
-    db = feed_db.FeedDb(DB_FILENAME)
+def reader(db_filename):
+    db = feed_db.FeedDb(db_filename)
     markread(db)
     action = args['action'] or 'cats'
     if action == 'cats':
@@ -268,7 +268,7 @@ args = get_args()
 print(CONTENT_TYPE)
 if args['foo'] == 'baz':
     try:
-        reader()
+        reader(DB_FILENAME)
     except Exception, e:
         if e.message == 'database is locked':
             print(e.message)
