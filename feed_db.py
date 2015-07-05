@@ -223,8 +223,9 @@ class FeedDb(object):
 
     def set_progress(self, entry_id, progress):
         """Set progress of given entry."""
+        d = dict(p=progress, i=entry_id)
         self.cur.execute("""
                 UPDATE Entries
                 SET progress=:p
                 WHERE id=:i
-                """, dict(p=progress, i=entry_id))
+                """, d)
