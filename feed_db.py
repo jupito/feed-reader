@@ -115,7 +115,7 @@ class FeedDb(object):
         url = row[0]
         try:
             feed, entries = parse_url(url)
-        except Exception, e:
+        except Exception as e:
             d.update(u=url, e=e.message)
             logger.error('Error parsing {i}: {u}: {e}'.format(**d))
             return 0 # Continue with other feeds.

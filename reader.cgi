@@ -42,7 +42,7 @@ def get_args():
         else:
             try:
                 args[name] = converter(value)
-            except ValueError, e:
+            except ValueError:
                 args[name] = default
     return args
 
@@ -278,7 +278,7 @@ print(CONTENT_TYPE)
 if args['foo'] == 'baz':
     try:
         reader(DBFILE)
-    except Exception, e:
+    except Exception as e:
         if e.message == 'database is locked':
             print(e.message)
             logging.info('Database locked: {}'.format(DBFILE))
