@@ -2,6 +2,8 @@ from __future__ import division, print_function
 import sqlite3
 import logging
 
+logger = logging.getLogger(__name__)
+
 CREATE_DB = """
         CREATE TABLE IF NOT EXISTS Feeds(
             id INTEGER PRIMARY KEY,
@@ -112,7 +114,7 @@ class FeedDb(object):
                 feed, entries = parse_url(url)
             except Exception, e:
                 d = dict(u=url, e=e.message)
-                logging.error('Error occurred refreshing {u}: {e}'.format(**d))
+                logger.error('Error occurred refreshing {u}: {e}'.format(**d))
                 raise
             self.update_feed(feed)
             for entry in entries:
@@ -121,16 +123,18 @@ class FeedDb(object):
 
     def refresh_all(self, parse_url):
         """Refresh and update all feeds and their entries."""
-        logging.info('Starting to refresh all feeds.')
-        for i in self.get_feed_ids():
+        ids = self.get_feed_ids()
+        logger.info('Starting to refresh all {n} feeds.'.format(n=len(ids)))
+        for i in ids:
             self.refresh_feed(i, parse_url)
-        logging.info('Finished refreshing all feeds.')
+        logger.info('Finished refreshing all feeds.')
 
     def get_feed_ids(self):
         """Get all feed ids."""
         self.cur.execute('SELECT id FROM Feeds')
         rows = self.cur.fetchall()
-        return [row[0] for row in rows]
+        ids = [row[0] for row in rows]
+        return ids
 
     def n_feeds(self, cat=None):
         """Return the number of feeds in the database."""
