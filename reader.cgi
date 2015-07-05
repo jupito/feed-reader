@@ -11,7 +11,7 @@ import feed_db
 import html
 import util
 
-DB_FILENAME = '_reader.db' # Database filename.
+DBFILE = '_reader.db' # Database filename.
 LOGFILE = 'reader.log' # Log filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
@@ -93,7 +93,7 @@ def print_top(ids=None):
             html.href(link_feeds(), 'Feeds'),
             html.href(link_entries(), 'Entries'),
             html.href(link_redirect(), 'Redirect'),
-            str(util.file_age(DB_FILENAME)),
+            str(util.file_age(DBFILE)),
             ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
@@ -277,11 +277,11 @@ logging.captureWarnings(True)
 print(CONTENT_TYPE)
 if args['foo'] == 'baz':
     try:
-        reader(DB_FILENAME)
+        reader(DBFILE)
     except Exception, e:
         if e.message == 'database is locked':
             print(e.message)
-            logging.info('Database locked: {}'.format(DB_FILENAME))
+            logging.info('Database locked: {}'.format(DBFILE))
         else:
             raise
 else:
