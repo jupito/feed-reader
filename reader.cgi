@@ -13,8 +13,8 @@ import util
 
 DBFILE = '_reader.db' # Database filename.
 LOGFILE = 'reader.log' # Log filename.
-CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
+CONTENT_TYPE = 'Content-Type: text/html\n'
 
 def list_converter(s):
     return [int(i) for i in s.split(',') if i.isdigit()] or None
