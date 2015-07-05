@@ -4,12 +4,11 @@ IND = ' '*4 # Indentation.
 
 def tag(name, content=None, *attributes):
     a = ''.join(u' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
-    d = dict(n=name, a=a, c=content)
     if content:
         s = u'<{n}{a}>{c}</{n}>'
     else:
         s = u'<{n}{a} />'
-    return s.format(**d)
+    return s.format(n=name, a=a, c=content)
 
 def href(link, content):
     return tag('a', content, ('href', link))
@@ -56,8 +55,7 @@ def head(title, sheet='', redirect=''):
 {redirect}
 </head>
 <body>'''
-    d = dict(title=title, sheet=sheet, redirect=redirect)
-    return s.format(**d)
+    return s.format(title=title, sheet=sheet, redirect=redirect)
 
 def tail():
     return '</body>\n</html>'
