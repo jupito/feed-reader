@@ -105,29 +105,34 @@ class FeedDb(object):
                 x['enc_url'], x['enc_length'], x['enc_type'],
                 x['guid']))
 
-    def refresh_feed(self, i, parse_url):
+    def refresh_feed(self, feed_id, parse_url):
         """Refresh given feed."""
-        self.cur.execute('SELECT url FROM Feeds WHERE id=?', (i,))
+        d = dict(i=feed_id)
+        self.cur.execute('SELECT url FROM Feeds WHERE id=:i', d)
         row = self.cur.fetchone()
-        for url in row:
-            try:
-                feed, entries = parse_url(url)
-            except Exception, e:
-                d = dict(u=url, e=e.message)
-                logger.error('Error occurred refreshing {u}: {e}'.format(**d))
-                raise
-            self.update_feed(feed)
-            for entry in entries:
-                self.insert_entry(entry['guid'], i)
-                self.update_entry(entry)
+        if row is None:
+            raise Exception('Could not find feed {i}'.format(**d))
+        url = row[0]:
+        try:
+            feed, entries = parse_url(url)
+        except Exception, e:
+            d.update(u=url, e=e.message)
+            logger.error('Error parsing {i}: {u}: {e}'.format(**d))
+            return 0 # Continue with other feeds.
+        self.update_feed(feed)
+        for entry in entries:
+            self.insert_entry(entry['guid'], feed_id)
+            self.update_entry(entry)
+        return len(entries)
 
     def refresh_all(self, parse_url):
         """Refresh and update all feeds and their entries."""
-        ids = self.get_feed_ids()
-        logger.info('Starting to refresh all {n} feeds.'.format(n=len(ids)))
-        for i in ids:
-            self.refresh_feed(i, parse_url)
-        logger.info('Finished refreshing all feeds.')
+        feed_ids = self.get_feed_ids()
+        d = dict(nf=len(feed_ids), ne=0)
+        logger.info('Refresh starting for {nf} feeds.'.format(**d))
+        for i in feed_ids:
+            d['ne'] += self.refresh_feed(i, parse_url)
+        logger.info('Refresh done for {nf} feeds, {ne} entries.').format(**d)
 
     def get_feed_ids(self):
         """Get all feed ids."""
