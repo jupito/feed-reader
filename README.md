@@ -7,6 +7,7 @@ I wrote most of this while still learning Python, so the code is messy and kind
 of stupid. Will be renovated.
 
 Todo:
-- Graceful lock handling.
+- Better lock handling.
 - Web UI for database management.
 - Proper authentication.
+- HTML templating.
