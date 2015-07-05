@@ -12,6 +12,7 @@ import html
 import util
 
 DB_FILENAME = '_reader.db' # Database filename.
+LOGFILE = 'reader.log' # Log filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 SHEET = 'reader.css'
 
@@ -265,6 +266,14 @@ if sys.stderr.encoding != 'UTF-8':
     sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
 args = get_args()
+logging.basicConfig(
+    format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
+    datefmt='%Y-%m-%d %H:%M',
+    filename=LOGFILE,
+    level=logging.DEBUG,
+    )
+logging.captureWarnings(True)
+
 print(CONTENT_TYPE)
 if args['foo'] == 'baz':
     try:
