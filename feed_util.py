@@ -1,4 +1,5 @@
 from __future__ import division, print_function
+import logging
 import time
 
 import feedparser
@@ -13,10 +14,12 @@ def parse_url(url):
     if entries:
         # Set feed publish time as newest entry publish time.
         feed['updated'] = max(e['updated'] for e in entries)
-    #raise Exception('No entries in feed: {}'.format(url), feed)
+    else:
+        logging.error('Feed with no entries: {}'.format(url))
     return feed, entries
 
 def parse_feed(url, x):
+    logging.debug('Parsing feed {}'.format(url))
     d = dict(
         url=url,
         refreshed=util.now(),
@@ -28,9 +31,13 @@ def parse_feed(url, x):
     return d
 
 def parse_entry(x):
+    if 'guid' in x:
+        logging.debug('Entry GUID: {id}'.format(**x))
+    else:
+        logging.info('Entry without GUID, link: {link}'.format(**x))
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
-        guid=getattr(x, 'guid', x['link']),
+        guid=getattr(x, 'id', x['link']),
         refreshed=util.now(),
         updated=get_updated(x),
         title=getattr(x, 'title', '(no title)'),

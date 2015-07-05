@@ -6,6 +6,7 @@ from __future__ import division, print_function
 import argparse
 import codecs
 import csv
+import logging
 import sys
 
 import feed_db
@@ -76,6 +77,7 @@ if sys.stderr.encoding != 'UTF-8':
     sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
 args = parse_args()
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 db = feed_db.FeedDb(args.file)
 
 for s in args.add or []:

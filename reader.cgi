@@ -4,6 +4,7 @@ from __future__ import division, print_function
 import cgi
 import cgitb; cgitb.enable()
 import codecs
+import logging
 import sys
 
 import feed_db
@@ -271,6 +272,7 @@ if args['foo'] == 'baz':
     except Exception, e:
         if e.message == 'database is locked':
             print(e.message)
+            logging.info('Database locked: {}'.format(DB_FILENAME))
         else:
             raise
 else:
