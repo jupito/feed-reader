@@ -81,11 +81,15 @@ if sys.stderr.encoding != 'UTF-8':
     sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
 args = parse_args()
-loglevel = getattr(logging, args.log.upper(), None)
-if loglevel is None:
-    raise ValueError('Invalid log level: {}'.format(loglevel))
-logging.basicConfig(format='%(asctime)s %(message)s', filename=args.logfile,
-        level=loglevel)
+d = dict(
+    format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
+    datefmt='%Y-%m-%d %H:%M',
+    filename=args.logfile,
+    level=getattr(logging, args.log.upper(), None),
+    )
+if d['level'] is None:
+    raise ValueError('Invalid log level: {}'.format(args.log))
+logging.basicConfig(**d)
 logging.captureWarnings(True)
 
 db = feed_db.FeedDb(args.file)
