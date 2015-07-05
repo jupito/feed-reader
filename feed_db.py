@@ -1,4 +1,4 @@
-from __future__ import division, print_function
+from __future__ import division, print_function)
 import sqlite3
 import logging
 
@@ -228,9 +228,6 @@ class FeedDb(object):
 
     def set_progress(self, entry_id, progress):
         """Set progress of given entry."""
+        s = 'UPDATE Entries SET progress=:p WHERE id=:i'
         d = dict(p=progress, i=entry_id)
-        self.cur.execute("""
-                UPDATE Entries
-                SET progress=:p
-                WHERE id=:i
-                """, d)
+        self.cur.execute(s, d)
