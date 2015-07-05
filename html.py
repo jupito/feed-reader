@@ -41,9 +41,11 @@ def stylesheet(sheet):
             ('type', 'text/css'),
             ('href', sheet))
 
-def head(title, sheet=None, redirect=None):
-    sheet = stylesheet(sheet) if sheet else ''
-    redirect = head_redirect(redirect) if redirect else ''
+def head(title, sheet='', redirect=''):
+    if sheet:
+        sheet = stylesheet(sheet)
+    if redirect:
+        redirect = head_redirect(redirect)
     s = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr">
