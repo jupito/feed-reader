@@ -13,7 +13,7 @@ import util
 
 DBFILE = '_reader.db' # Database filename.
 LOGFILE = 'reader.log' # Log filename.
-SHEET = 'reader.css'
+SHEET = 'reader.css' # Stylesheet filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 
 def list_converter(s):
