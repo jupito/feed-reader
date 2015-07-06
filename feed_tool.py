@@ -21,7 +21,7 @@ def db_info(db):
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('file',
+    p.add_argument('file', metavar='DB_FILE',
             help='Database file name')
     p.add_argument('--add', nargs='+', metavar='STRING',
             help='add feeds from strings (category,priority,url)')
