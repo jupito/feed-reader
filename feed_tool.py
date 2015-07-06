@@ -45,7 +45,7 @@ def parse_args():
             help='show next unread')
     p.add_argument('--verbose', '-v', action='count',
             help='be more verbose')
-    p.add_argument('--log', metavar=loglevel, default='WARNING',
+    p.add_argument('--log', metavar='loglevel', default='WARNING',
             help='set loglevel ({})'.format(', '.join(LOGLEVELS)))
     p.add_argument('--logfile',
             help='set logfile')
