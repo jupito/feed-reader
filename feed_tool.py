@@ -12,6 +12,8 @@ import sys
 import feed_db
 import feed_util
 
+LOGLEVELS = 'DEBUG INFO WARNING ERROR CRITICAL'.split()
+
 def db_info(db):
     d = dict(nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
             nu=db.n_entries(maxprg=0))
@@ -43,8 +45,8 @@ def parse_args():
             help='show next unread')
     p.add_argument('--verbose', '-v', action='count',
             help='be more verbose')
-    p.add_argument('--log', default='ERROR',
-            help='set loglevel')
+    p.add_argument('--log', default='WARNING',
+            help='set loglevel ({})'.format(', '.join(LOGLEVELS)))
     p.add_argument('--logfile',
             help='set logfile')
     args = p.parse_args()
