@@ -23,21 +23,21 @@ def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('file',
             help='Database file name')
-    p.add_argument('--add', nargs='+', metavar='string',
+    p.add_argument('--add', nargs='+', metavar='STRING',
             help='add feeds from strings (category,priority,url)')
-    p.add_argument('--addcsv', nargs='+', metavar='file',
+    p.add_argument('--addcsv', nargs='+', metavar='CSV_FILE',
             help='add feeds from CSV file (category,priority,url)')
-    p.add_argument('--remove', nargs='+', metavar='id', type=int,
+    p.add_argument('--remove', nargs='+', metavar='FEED_ID', type=int,
             help='remove feeds')
-    p.add_argument('--category', metavar='category',
+    p.add_argument('--category',
             help='category')
-    p.add_argument('--priority', metavar='priority', type=int, default=0,
+    p.add_argument('--priority', type=int, default=0,
             help='priority')
     p.add_argument('--refresh', action='store_true',
             help='refresh feeds')
-    p.add_argument('--feeds', '-f', nargs='*', metavar='id', type=int,
+    p.add_argument('--feeds', '-f', nargs='*', metavar='FEED_ID', type=int,
             help='list feeds')
-    p.add_argument('--entries', '-e', nargs='*', metavar='id', type=int,
+    p.add_argument('--entries', '-e', nargs='*', metavar='ENTRY_ID', type=int,
             help='list entries')
     p.add_argument('--categories', action='store_true',
             help='list categories')
