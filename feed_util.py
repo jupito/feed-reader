@@ -10,6 +10,9 @@ import util
 def parse_url(url):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
+    if d.status == 404:
+        logging.error('Feed not found: {}'.format(url))
+        raise IOError('404')
     feed = parse_feed(url, d.feed)
     entries = [parse_entry(e) for e in d.entries]
     if entries:
