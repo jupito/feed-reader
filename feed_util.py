@@ -37,7 +37,6 @@ def parse_entry(x):
         logging.debug('Entry GUID: {id}'.format(**x))
     else:
         logging.info('Entry without GUID, link: {link}'.format(**x))
-        logging.debug(pprint.pprint(x))
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
         guid=getattr(x, 'id', x['link']),
