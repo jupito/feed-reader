@@ -36,11 +36,8 @@ def parse_feed(url, x):
     return d
 
 def parse_entry(x):
-    if 'guid' in x:
-        logging.debug('Entry GUID: {id}'.format(**x))
-    else:
-        logging.info('Entry without GUID, link: {link}'.format(**x))
-        logging.debug(x.keys())
+    if 'id' not in x:
+        logging.debug('Entry without GUID, using link: {link}'.format(**x))
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
         guid=getattr(x, 'id', x['link']),
