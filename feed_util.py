@@ -17,7 +17,7 @@ def parse_url(url):
         feed['updated'] = max(e['updated'] for e in entries)
     else:
         logging.error('Feed with no entries: {}'.format(url))
-        logging.debug(pprint.pprint(d))
+        logging.debug(pprint.pformat(d))
     return feed, entries
 
 def parse_feed(url, x):
@@ -37,6 +37,7 @@ def parse_entry(x):
         logging.debug('Entry GUID: {id}'.format(**x))
     else:
         logging.info('Entry without GUID, link: {link}'.format(**x))
+        logging.debug(x.keys())
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
         guid=getattr(x, 'id', x['link']),
