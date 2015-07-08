@@ -82,7 +82,7 @@ def field_fmt(k, v):
     if k == 'refreshed' or k == 'updated':
         return k, util.time_fmt(v)
     elif k == 'description':
-        return k, util.first_line(v or '')
+        return k, util.first_line(v or '', maxlen=60)
     else:
         return k, v
 
@@ -91,8 +91,8 @@ def describe(x, verbosity):
     if verbosity:
         max_keylen = max(len(k) for k in x.keys())
         pairs = [field_fmt(k, x[k]) for k in x.keys()]
-        s = u'{k:%i}: {v}' % max_keylen
-        lines = [s.format(k=k, v=v) for k, v in pairs]
+        s = u'{k:{l}}: {v}'
+        lines = [s.format(k=k, v=v, l=max_keylen) for k, v in pairs]
         return '\n'.join(lines) + '\n'
     else:
         return u'{id}: {title}'.format(**x)

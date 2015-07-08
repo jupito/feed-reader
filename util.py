@@ -53,8 +53,8 @@ def file_age(filename):
     age = datetime.timedelta(seconds=seconds)
     return age
 
-def first_line(s):
+def first_line(s, maxlen=None):
     """Return the first line with characters from a string, stripped."""
     lines = s.lstrip().splitlines() or ['']
-    line = lines[0].rstrip()
+    line = lines[0][:maxlen].rstrip()
     return line
