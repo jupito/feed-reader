@@ -10,13 +10,18 @@ import util
 def parse_url(url):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
-    if 'status' not in d:
+    status = d.get('status', -1)
+    if status == -1:
         if 'bozo_exception' in d:
             raise d['bozo_exception']
         raise IOError(-1)
-    if d.status > 299:
+    if status > 299:
         logging.debug(pprint.pformat(d))
-        raise IOError(d.status)
+        raise IOError(status)
+    href = d.get('href', None)
+    if href is not None and href != url:
+        logging.debug('Redirection from {} to {}'.format(url, href))
+
     feed = parse_feed(url, d.feed)
     entries = [parse_entry(e) for e in d.entries]
     if entries:
@@ -24,7 +29,7 @@ def parse_url(url):
         feed['updated'] = max(e['updated'] for e in entries)
     else:
         logging.debug('Feed with no entries: {}'.format(url))
-        logging.debug(pprint.pformat(d))
+        #logging.debug(pprint.pformat(d))
     return feed, entries
 
 def parse_feed(url, x):
