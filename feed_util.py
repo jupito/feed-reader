@@ -38,9 +38,9 @@ def parse_feed(url, x):
         url=url,
         refreshed=util.now(),
         updated=get_updated(x),
-        title=getattr(x, 'title', '(no title)'),
-        link=getattr(x, 'link', '(no link)'),
-        description=getattr(x, 'description', '(no description)'),
+        title=x.get('title', '(no title)'),
+        link=x.get('link', '(no link)'),
+        description=x.get('description', '(no description)'),
         )
     return d
 
@@ -49,12 +49,12 @@ def parse_entry(x):
         logging.debug('Entry without GUID, using link: {link}'.format(**x))
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
-        guid=getattr(x, 'id', x['link']),
+        guid=x.get('id', x.link),
         refreshed=util.now(),
         updated=get_updated(x),
-        title=getattr(x, 'title', '(no title)'),
-        link=getattr(x, 'link', '(no link)'),
-        description=getattr(x, 'description', '(no description)'),
+        title=x.get('title', '(no title)'),
+        link=x.get('link', '(no link)'),
+        description=x.get('description', '(no description)'),
         enc_url=enc_url,
         enc_length=enc_length,
         enc_type=enc_type,
@@ -72,7 +72,7 @@ def get_enc(x):
     names = 'url', 'length', 'type'
     if 'enclosures' in x and x.enclosures:
         enc = x.enclosures[0]
-        return tuple(getattr(enc, s, None) for s in names)
+        return tuple(enc.get(s, None) for s in names)
     else:
         return tuple(None for _ in names)
 
