@@ -36,7 +36,7 @@ def parse_feed(url, x):
     logging.debug('Parsing feed {}'.format(url))
     d = dict(
         url=url,
-        refreshed=util.now(),
+        refreshed=util.now(), # TODO: Use x.headers.date instead (TZ?).
         updated=get_updated(x),
         title=x.get('title', '(no title)'),
         link=x.get('link', '(no link)'),
@@ -50,7 +50,7 @@ def parse_entry(x):
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
         guid=x.get('id', x.link),
-        refreshed=util.now(),
+        refreshed=util.now(), # TODO: Remove, use one from feed instead.
         updated=get_updated(x),
         title=x.get('title', '(no title)'),
         link=x.get('link', '(no link)'),
@@ -63,7 +63,8 @@ def parse_entry(x):
 
 def get_updated(x):
     """Get updated field or current time as seconds."""
-    st = getattr(x, 'published_parsed', time.gmtime(0))
+    # TODO: Feeds have 'updated_parsed', is it the same?
+    st = x.get('published_parsed', time.gmtime(0))
     seconds = int(time.mktime(st))
     return seconds
 
