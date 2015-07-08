@@ -82,7 +82,7 @@ def field_fmt(k, v):
     if k == 'refreshed' or k == 'updated':
         return k, util.time_fmt(v)
     elif k == 'description':
-        return k, util.first_line(v or '')[:60]
+        return k, util.HTMLStripper.strip(util.first_line(v or ''))[:66]
     else:
         return k, v
 
