@@ -80,11 +80,10 @@ def get_enc(x):
 def field_fmt(k, v):
     """Return object field name and value formatted."""
     if k == 'refreshed' or k == 'updated':
-        return k, util.time_fmt(v)
+        v = util.time_fmt(v)
     elif k == 'description':
-        return k, util.HTMLStripper.strip(util.first_line(v or ''))[:66]
-    else:
-        return k, v
+        v = util.HTMLStripper.strip(util.first_line(v or str(v)))[:66]
+    return k, unicode(v)
 
 def describe(x, verbosity):
     """Describe a feed or an entry."""
