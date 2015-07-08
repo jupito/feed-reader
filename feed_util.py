@@ -70,9 +70,9 @@ def get_updated(x):
 def get_enc(x):
     """Return the first enclosure."""
     names = 'url', 'length', 'type'
-    if 'enclosures' in x and x.enclosures:
-        enc = x.enclosures[0]
-        return tuple(enc.get(s, None) for s in names)
+    enclosures = x.get('enclosures', None)
+    if enclosures:
+        return tuple(enclosures[0].get(s, None) for s in names)
     else:
         return tuple(None for _ in names)
 
