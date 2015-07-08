@@ -10,8 +10,9 @@ import util
 def parse_url(url):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
-    if d.status[0] in (3, 4, 5):
+    if d.status > 299:
         logging.error('Cannot read feed: {d.status}: {u}'.format(d=d, u=url))
+        logging.debug(pprint.pformat(d))
         raise IOError(d.status)
     feed = parse_feed(url, d.feed)
     entries = [parse_entry(e) for e in d.entries]
