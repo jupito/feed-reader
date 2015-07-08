@@ -10,8 +10,10 @@ import util
 def parse_url(url):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
-    if 'bozo_exception' in d:
-        raise d.bozo_exception
+    if 'status' not in d:
+        if 'bozo_exception' in d:
+            raise d['bozo_exception']
+        raise IOError(-1)
     if d.status > 299:
         logging.debug(pprint.pformat(d))
         raise IOError(d.status)
