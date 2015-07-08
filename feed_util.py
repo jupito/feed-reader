@@ -10,8 +10,9 @@ import util
 def parse_url(url):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
+    if 'bozo_exception' in d:
+        raise d.bozo_exception
     if d.status > 299:
-        logging.error('Cannot read feed: {d.status}: {u}'.format(d=d, u=url))
         logging.debug(pprint.pformat(d))
         raise IOError(d.status)
     feed = parse_feed(url, d.feed)
@@ -20,7 +21,7 @@ def parse_url(url):
         # Set feed publish time as newest entry publish time.
         feed['updated'] = max(e['updated'] for e in entries)
     else:
-        logging.error('Feed with no entries: {}'.format(url))
+        logging.debug('Feed with no entries: {}'.format(url))
         logging.debug(pprint.pformat(d))
     return feed, entries
 
