@@ -142,10 +142,10 @@ def print_feedinfo(f, n_unread, n_total):
              cat=html.href(link_feeds(cat=f['category']), f['category']),
              pri=f['priority'],
              )
-    rows = ['{id}: {title} {site} {feed}',
-            'Category {cat}, priority {pri}',
-            '{nu} unread, {nt} total',
-            'Updated {u}, refreshed {r}',
+    rows = [u'{id}: {title} {site} {feed}',
+            u'Category {cat}, priority {pri}',
+            u'{nu} unread, {nt} total',
+            u'Updated {u}, refreshed {r}',
             ]
     rows = [r.format(**d) for r in rows]
     par = html.tag('p', html.tag('br').join(rows))
