@@ -1,8 +1,10 @@
 #!/usr/bin/env python2
 
+"""CGI Web UI for reading feeds."""
+
 from __future__ import division, print_function
 import cgi
-import cgitb; cgitb.enable()
+import cgitb
 import codecs
 import logging
 import sys
@@ -11,26 +13,29 @@ import feed_db
 import html
 import util
 
+cgitb.enable()
+
 DBFILE = '_reader.db' # Database filename.
 LOGFILE = 'reader.log' # Log filename.
 SHEET = 'reader.css' # Stylesheet filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 
 def list_converter(s):
+    """Convert a string of comma-separated digits into a list."""
     return [int(i) for i in s.split(',') if i.isdigit()] or None
 
 # Arguments (name, converter, default).
 ARGS = [
-        ('foo', str, None), # Temporary.
-        ('action', str, 'cats'), # What to do.
-        ('minprg', int, 0), # Minimum progress of entries to show.
-        ('maxprg', int, 0), # Maximum progress of entries to show.
-        ('limit', int, 5), # How many entries to show.
-        ('cat', str, None), # Feed category.
-        ('feed', int, None), # Feed id.
-        ('markread', list_converter, None), # Entries to mark as read.
-        ('priority', int, 1), # Sort by score?
-        ]
+    ('foo', str, None), # Temporary.
+    ('action', str, 'cats'), # What to do.
+    ('minprg', int, 0), # Minimum progress of entries to show.
+    ('maxprg', int, 0), # Maximum progress of entries to show.
+    ('limit', int, 5), # How many entries to show.
+    ('cat', str, None), # Feed category.
+    ('feed', int, None), # Feed id.
+    ('markread', list_converter, None), # Entries to mark as read.
+    ('priority', int, 1), # Sort by score?
+    ]
 
 def get_args():
     """Collect arguments into a dictionary."""
@@ -90,12 +95,12 @@ def link_markread(ids):
 
 def print_top(ids=None):
     elems = [
-            html.href(link_cats(), 'Categories'),
-            html.href(link_feeds(), 'Feeds'),
-            html.href(link_entries(), 'Entries'),
-            html.href(link_redirect(), 'Redirect'),
-            str(util.file_age(DBFILE)),
-            ]
+        html.href(link_cats(), 'Categories'),
+        html.href(link_feeds(), 'Feeds'),
+        html.href(link_entries(), 'Entries'),
+        html.href(link_redirect(), 'Redirect'),
+        str(util.file_age(DBFILE)),
+        ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
     print('<div id="top">')
@@ -113,17 +118,17 @@ def show_categories(db):
     print_top()
     headers = ['Category', 'Feeds', 'Unread', 'Total']
     rows = [[
-            html.href(link_entries(cat=cat), cat),
-            html.href(link_feeds(cat=cat), db.n_feeds(cat)),
-            str(db.n_entries(maxprg=0, cat=cat) or '&nbsp;&middot;&nbsp;'),
-            str(db.n_entries(maxprg=1, cat=cat) or '&nbsp;&middot;&nbsp;'),
-            ] for cat in db.get_categories()]
+        html.href(link_entries(cat=cat), cat),
+        html.href(link_feeds(cat=cat), db.n_feeds(cat)),
+        str(db.n_entries(maxprg=0, cat=cat) or '&nbsp;&middot;&nbsp;'),
+        str(db.n_entries(maxprg=1, cat=cat) or '&nbsp;&middot;&nbsp;'),
+        ] for cat in db.get_categories()]
     rows.append([
-            html.href(link_entries(), 'All'),
-            html.href(link_feeds(), db.n_feeds()),
-            str(db.n_entries(maxprg=0)),
-            str(db.n_entries(maxprg=1)),
-            ])
+        html.href(link_entries(), 'All'),
+        html.href(link_feeds(), db.n_feeds()),
+        str(db.n_entries(maxprg=0)),
+        str(db.n_entries(maxprg=1)),
+        ])
     table = html.table(rows, headers)
     print('<div id="categories">')
     print(table)
@@ -133,20 +138,22 @@ def show_categories(db):
 
 def print_feedinfo(f, n_unread, n_total):
     print('<div class="feedinfo">')
-    d = dict(id=f['id'],
-             title=html.href(link_entries(feed=f['id']), f['title']),
-             site=html.href(f['link'], '(site)'),
-             feed=html.href(f['url'], '(feed)'),
-             nu=n_unread, nt=n_total,
-             u=util.time_fmt(f['updated']), r=util.time_fmt(f['refreshed']),
-             cat=html.href(link_feeds(cat=f['category']), f['category']),
-             pri=f['priority'],
-             )
-    rows = [u'{id}: {title} {site} {feed}',
-            u'Category {cat}, priority {pri}',
-            u'{nu} unread, {nt} total',
-            u'Updated {u}, refreshed {r}',
-            ]
+    d = dict(
+        id=f['id'],
+        title=html.href(link_entries(feed=f['id']), f['title']),
+        site=html.href(f['link'], '(site)'),
+        feed=html.href(f['url'], '(feed)'),
+        nu=n_unread, nt=n_total,
+        u=util.time_fmt(f['updated']), r=util.time_fmt(f['refreshed']),
+        cat=html.href(link_feeds(cat=f['category']), f['category']),
+        pri=f['priority'],
+        )
+    rows = [
+        u'{id}: {title} {site} {feed}',
+        u'Category {cat}, priority {pri}',
+        u'{nu} unread, {nt} total',
+        u'Updated {u}, refreshed {r}',
+        ]
     rows = [r.format(**d) for r in rows]
     par = html.tag('p', html.tag('br').join(rows))
     print(par)
@@ -218,7 +225,7 @@ def show_entries(db):
     maxprg = args['maxprg']
     n = db.n_entries(maxprg=maxprg, cat=args['cat'], feed=args['feed'])
     entries = db.get_next(maxprg=maxprg, cat=args['cat'], feed=args['feed'],
-            limit=args['limit'], priority=args['priority'])
+                          limit=args['limit'], priority=args['priority'])
     ids = [e['id'] for e in entries]
     print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg), SHEET))
     print_top(ids)
@@ -232,7 +239,7 @@ def show_entries(db):
 
 def redirect(db):
     entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1,
-            priority=args['priority'])
+                          priority=args['priority'])
     if entries:
         e = entries[0]
         print(html.head('Redirecting...', SHEET, e['link']))
