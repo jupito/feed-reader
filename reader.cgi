@@ -236,7 +236,7 @@ def show_entries(db):
             print_entry(e, f, cls=i%2)
         print('</div>')
     else:
-        d = dict(all_cats=html.href(link_entries('All')),
+        d = dict(all_cats=html.href(link_entries(), 'All'),
                  cat=html.href(link_entries(cat=f['category']), f['category']),
                  feed=html.href(link_entries(feed=f['id']), f['title']))
         print('No entries left. Go to {all_cats}; {cat}; {feed}'.format(**d))
