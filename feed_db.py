@@ -1,3 +1,5 @@
+"""Database API."""
+
 from __future__ import division, print_function
 import logging
 import sqlite3
@@ -5,42 +7,42 @@ import sqlite3
 logger = logging.getLogger(__name__)
 
 CREATE_DB = """
-        CREATE TABLE IF NOT EXISTS Feeds(
-            id INTEGER PRIMARY KEY,
-            url TEXT UNIQUE NOT NULL,
-            refreshed INTEGER,
-            updated INTEGER,
-            title TEXT,
-            description TEXT,
-            link TEXT,
-            category TEXT NOT NULL DEFAULT 'misc',
-            priority INTEGER NOT NULL DEFAULT 0,
-            is_active INTEGER NOT NULL DEFAULT 1,
-            CHECK(is_active = 0 OR is_active = 1)
-        );
-        CREATE TABLE IF NOT EXISTS Entries(
-            id INTEGER PRIMARY KEY,
-            guid TEXT UNIQUE NOT NULL,
-            refreshed INTEGER,
-            updated INTEGER,
-            title TEXT,
-            description TEXT,
-            link TEXT,
-            enc_url TEXT,
-            enc_length INTEGER,
-            enc_type TEXT,
-            progress REAL DEFAULT 0,
-            is_important INTEGER DEFAULT 0,
-            feed_id INTEGER NOT NULL,
-            CHECK(is_important = 0 OR is_important = 1),
-            CHECK(progress BETWEEN 0 AND 1),
-            FOREIGN KEY(feed_id) REFERENCES Feeds(id)
-        );
-        """
+    CREATE TABLE IF NOT EXISTS Feeds(
+        id INTEGER PRIMARY KEY,
+        url TEXT UNIQUE NOT NULL,
+        refreshed INTEGER,
+        updated INTEGER,
+        title TEXT,
+        description TEXT,
+        link TEXT,
+        category TEXT NOT NULL DEFAULT 'misc',
+        priority INTEGER NOT NULL DEFAULT 0,
+        is_active INTEGER NOT NULL DEFAULT 1,
+        CHECK(is_active = 0 OR is_active = 1)
+    );
+    CREATE TABLE IF NOT EXISTS Entries(
+        id INTEGER PRIMARY KEY,
+        guid TEXT UNIQUE NOT NULL,
+        refreshed INTEGER,
+        updated INTEGER,
+        title TEXT,
+        description TEXT,
+        link TEXT,
+        enc_url TEXT,
+        enc_length INTEGER,
+        enc_type TEXT,
+        progress REAL DEFAULT 0,
+        is_important INTEGER DEFAULT 0,
+        feed_id INTEGER NOT NULL,
+        CHECK(is_important = 0 OR is_important = 1),
+        CHECK(progress BETWEEN 0 AND 1),
+        FOREIGN KEY(feed_id) REFERENCES Feeds(id)
+    );
+    """
 DELETE_DB = """
-        DROP TABLE IF EXISTS Entries;
-        DROP TABLE IF EXISTS Feeds;
-        """
+    DROP TABLE IF EXISTS Entries;
+    DROP TABLE IF EXISTS Feeds;
+    """
 
 class FeedDb(object):
     def __init__(self, filename):
@@ -64,46 +66,46 @@ class FeedDb(object):
     def insert_feed(self, url, category, priority):
         """Insert feed url."""
         self.cur.execute("""
-                INSERT OR IGNORE
-                INTO Feeds(url, category, priority) VALUES(?, ?, ?)
-                """, (url, category, priority))
+            INSERT OR IGNORE
+            INTO Feeds(url, category, priority) VALUES(?, ?, ?)
+            """, (url, category, priority))
         # Now update properties in case the url was already there.
         self.cur.execute("""
-                UPDATE Feeds
-                SET category=?, priority=?
-                WHERE url=?
-                """, (category, priority, url))
+            UPDATE Feeds
+            SET category=?, priority=?
+            WHERE url=?
+            """, (category, priority, url))
 
     def insert_entry(self, guid, feed_id):
         """Insert entry guid."""
         self.cur.execute("""
-                INSERT OR IGNORE
-                INTO Entries(guid, feed_id) VALUES(?, ?)
-                """, (guid, feed_id))
+            INSERT OR IGNORE
+            INTO Entries(guid, feed_id) VALUES(?, ?)
+            """, (guid, feed_id))
 
     def update_feed(self, x):
         """Update feed."""
         self.cur.execute("""
-                UPDATE Feeds
-                SET refreshed=?, updated=?, title=?, description=?, link=?
-                WHERE url=?
-                """,
-                (x['refreshed'], x['updated'],
-                x['title'], x['description'], x['link'],
-                x['url']))
+            UPDATE Feeds
+            SET refreshed=?, updated=?, title=?, description=?, link=?
+            WHERE url=?
+            """,
+            (x['refreshed'], x['updated'],
+            x['title'], x['description'], x['link'],
+            x['url']))
 
     def update_entry(self, x):
         """Update entry."""
         self.cur.execute("""
-                UPDATE Entries
-                SET refreshed=?, updated=?, title=?, description=?, link=?,
-                enc_url=?, enc_length=?, enc_type=?
-                WHERE guid=?
-                """,
-                (x['refreshed'], x['updated'],
-                x['title'], x['description'], x['link'],
-                x['enc_url'], x['enc_length'], x['enc_type'],
-                x['guid']))
+            UPDATE Entries
+            SET refreshed=?, updated=?, title=?, description=?, link=?,
+            enc_url=?, enc_length=?, enc_type=?
+            WHERE guid=?
+            """,
+            (x['refreshed'], x['updated'],
+            x['title'], x['description'], x['link'],
+            x['enc_url'], x['enc_length'], x['enc_type'],
+            x['guid']))
 
     def refresh_feed(self, feed_id, parse_url):
         """Refresh given feed."""
@@ -144,24 +146,24 @@ class FeedDb(object):
     def n_feeds(self, cat=None):
         """Return the number of feeds in the database."""
         self.cur.execute("""
-                SELECT COUNT(*) FROM Feeds
-                WHERE (? OR Feeds.category LIKE ?)
-                """, (not cat, cat or '%'))
+            SELECT COUNT(*) FROM Feeds
+            WHERE (? OR Feeds.category LIKE ?)
+            """, (not cat, cat or '%'))
         return self.cur.fetchone()[0]
 
     def n_entries(self, minprg=0, maxprg=0, cat=None, feed=None):
         """Return the number of entries in the database."""
         self.cur.execute("""
-                SELECT COUNT(*)
-                FROM Entries INNER JOIN Feeds
-                ON Entries.feed_id = Feeds.id
-                WHERE (progress between ? and ?)
-                        AND (? OR Feeds.category LIKE ?)
-                        AND (? OR feed_id = ?)
-                """,
-                (minprg, maxprg,
-                not cat, cat or '%',
-                not feed, feed))
+            SELECT COUNT(*)
+            FROM Entries INNER JOIN Feeds
+            ON Entries.feed_id = Feeds.id
+            WHERE (progress between ? and ?)
+                    AND (? OR Feeds.category LIKE ?)
+                    AND (? OR feed_id = ?)
+            """,
+            (minprg, maxprg,
+            not cat, cat or '%',
+            not feed, feed))
         return self.cur.fetchone()[0]
 
     def get_feed(self, feed_id):
@@ -173,11 +175,11 @@ class FeedDb(object):
     def get_feeds(self, cat=None):
         """Get feeds."""
         self.cur.execute("""
-                SELECT *
-                FROM Feeds
-                WHERE (? OR Feeds.category LIKE ?)
-                ORDER BY id
-                """, (not cat, cat or '%'))
+            SELECT *
+            FROM Feeds
+            WHERE (? OR Feeds.category LIKE ?)
+            ORDER BY id
+            """, (not cat, cat or '%'))
         return self.cur.fetchall()
 
     def get_entry(self, entry_id):
@@ -216,20 +218,20 @@ class FeedDb(object):
         if limit == 0:
             limit = -1
         query = """
-                SELECT Entries.*
-                FROM Entries INNER JOIN Feeds
-                ON Entries.feed_id = Feeds.id
-                WHERE (progress between ? and ?)
-                        AND (? OR Feeds.category LIKE ?)
-                        AND (? OR feed_id = ?)
-                ORDER BY {order}
-                LIMIT ?
-                """.format(order=order)
+            SELECT Entries.*
+            FROM Entries INNER JOIN Feeds
+            ON Entries.feed_id = Feeds.id
+            WHERE (progress between ? and ?)
+                    AND (? OR Feeds.category LIKE ?)
+                    AND (? OR feed_id = ?)
+            ORDER BY {order}
+            LIMIT ?
+            """.format(order=order)
         self.cur.execute(query,
-                (minprg, maxprg,
-                not cat, cat or '%',
-                not feed, feed,
-                limit))
+            (minprg, maxprg,
+            not cat, cat or '%',
+            not feed, feed,
+            limit))
         return self.cur.fetchall()
 
     def set_progress(self, entry_id, progress):
