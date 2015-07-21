@@ -164,7 +164,8 @@ def print_feed(f, n_unread, n_total):
 
 def show_feeds(db):
     feeds = db.get_feeds(args['cat'])
-    feeds = sorted(feeds, key=lambda x: x['priority'], x['updated'], x['title'])
+    feeds = sorted(feeds, key=lambda x: (x['priority'], x['updated'],
+                                         x['title']))
     print(html.head('Feeds ({cat})'.format(cat=args['cat'] or 'all'), SHEET))
     print_top()
     print('<div id="feeds">')
