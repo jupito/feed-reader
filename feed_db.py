@@ -219,21 +219,21 @@ class FeedDb(object):
             order = 'updated'
         if limit == 0:
             limit = -1
+        d = dict(minprg=minprg, maxprg=maxprg,
+                 notcat=not cat, cat=cat or '%',
+                 notfeed=not feed, feed=feed,
+                 limit=limit)
         query = """
             SELECT Entries.*
             FROM Entries INNER JOIN Feeds
             ON Entries.feed_id = Feeds.id
-            WHERE (progress between ? and ?)
-                    AND (? OR Feeds.category LIKE ?)
-                    AND (? OR feed_id = ?)
+            WHERE (progress between :minprg and :maxprg)
+                    AND (:notcat OR Feeds.category LIKE :cat)
+                    AND (:notfeed OR feed_id = :feed)
             ORDER BY {order}
-            LIMIT ?
+            LIMIT :limit
             """.format(order=order)
-        self.cur.execute(query,
-            (minprg, maxprg,
-            not cat, cat or '%',
-            not feed, feed,
-            limit))
+        self.cur.execute(query, d)
         return self.cur.fetchall()
 
     def set_progress(self, entry_id, progress):
