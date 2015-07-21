@@ -133,21 +133,21 @@ def show_categories(db):
 
 def print_feedinfo(f, n_unread, n_total):
     print('<div class="feedinfo">')
-    d = dict(nu=n_unread, nt=n_total, u=util.time_fmt(f['updated']),
-             r=util.time_fmt(f['refreshed']))
-    rows = [
-            '%i: %s %s %s' % (
-                    f['id'],
-                    html.href(link_entries(feed=f['id']), f['title']),
-                    html.href(f['link'], '(site)'),
-                    html.href(f['url'], '(feed)'),
-                    ),
-            'Category %s, priority %i' % (
-                    html.href(link_feeds(cat=f['category']), f['category']),
-                    f['priority']),
-            '{nu} unread, {nt} total'.format(**d),
-            'Updated {u}, refreshed {r}'.format(**d),
+    d = dict(id=f['id'],
+             title=html.href(link_entries(feed=f['id']), f['title']),
+             site=html.href(f['link'], '(site)'),
+             feed=html.href(f['url'], '(feed)'),
+             nu=n_unread, nt=n_total,
+             u=util.time_fmt(f['updated']), r=util.time_fmt(f['refreshed']),
+             cat=html.href(link_feeds(cat=f['category']), f['category']),
+             pri=f['priority'],
+             )
+    rows = ['{id}: {title} {site} {feed}',
+            'Category {cat}, priority {pri}',
+            '{nu} unread, {nt} total',
+            'Updated {u}, refreshed {r}',
             ]
+    rows = [r.format(**d) for r in rows]
     par = html.tag('p', html.tag('br').join(rows))
     print(par)
     print('</div>')
