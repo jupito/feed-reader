@@ -133,6 +133,8 @@ def show_categories(db):
 
 def print_feedinfo(f, n_unread, n_total):
     print('<div class="feedinfo">')
+    d = dict(nu=n_unread, nt=n_total, u=util.time_fmt(f['updated']),
+             r=util.time_fmt(f['refreshed']))
     rows = [
             '%i: %s %s %s' % (
                     f['id'],
@@ -143,22 +145,16 @@ def print_feedinfo(f, n_unread, n_total):
             'Category %s, priority %i' % (
                     html.href(link_feeds(cat=f['category']), f['category']),
                     f['priority']),
-            '{nu} unread, {nt} total'.format(nu=n_unread, nt=n_total),
+            '{nu} unread, {nt} total'.format(**d),
+            'Updated {u}, refreshed {r}'.format(**d),
             ]
     par = html.tag('p', html.tag('br').join(rows))
     print(par)
     print('</div>')
 
-def print_feeddates(f):
-    print('<div class="feeddates">')
-    d = dict(u=util.time_fmt(f['updated']), r=util.time_fmt(f['refreshed']))
-    print('Updated {u}, refreshed {r}'.format(**d))
-    print('</div>')
-
 def print_feed(f, n_unread, n_total):
     print('<div class="feed">')
     print_feedinfo(f, n_unread, n_total)
-    print_feeddates(f)
     print_description(f, plaintext=True)
     print('</div>')
 
