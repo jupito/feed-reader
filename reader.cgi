@@ -182,12 +182,12 @@ def show_feeds(db):
     print(html.tail())
 
 def print_entryinfo(e, f):
-    updated = html.tag('em', util.time_fmt(e['updated']))
-    cat = html.href(link_entries(cat=f['category']), f['category'])
-    feed = html.href(link_entries(feed=f['id']), f['title'])
-    flink = html.href(f['link'], '&rarr;')
+    d = dict(updated=html.tag('em', util.time_fmt(e['updated'])),
+             cat=html.href(link_entries(cat=f['category']), f['category']),
+             feed=html.href(link_entries(feed=f['id']), f['title']),
+             flink = html.href(f['link'], '&rarr;'))
     print('<div class="entryinfo">')
-    print(' &mdash; '.join([updated, cat, feed + flink]))
+    print('{updated} &mdash; {cat} &mdash; {feed} {flink}'.format(**d))
     print('</div>')
 
 def print_title(x):
