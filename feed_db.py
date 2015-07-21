@@ -145,25 +145,26 @@ class FeedDb(object):
 
     def n_feeds(self, cat=None):
         """Return the number of feeds in the database."""
+        d = dict(notcat=not cat, cat=cat or '%')
         self.cur.execute("""
             SELECT COUNT(*) FROM Feeds
-            WHERE (? OR Feeds.category LIKE ?)
-            """, (not cat, cat or '%'))
+            WHERE (:notcat OR Feeds.category LIKE :cat)
+            """, d)
         return self.cur.fetchone()[0]
 
     def n_entries(self, minprg=0, maxprg=0, cat=None, feed=None):
         """Return the number of entries in the database."""
+        d = dict(minprg=minprg, maxprg=maxprg,
+                 notcat=not cat, cat=cat or '%',
+                 notfeed=not feed, feed=feed)
         self.cur.execute("""
             SELECT COUNT(*)
             FROM Entries INNER JOIN Feeds
             ON Entries.feed_id = Feeds.id
-            WHERE (progress between ? and ?)
-                    AND (? OR Feeds.category LIKE ?)
-                    AND (? OR feed_id = ?)
-            """,
-            (minprg, maxprg,
-            not cat, cat or '%',
-            not feed, feed))
+            WHERE (progress between :minprg and :maxprg)
+                    AND (:notcat OR Feeds.category LIKE :cat)
+                    AND (:notfeed OR feed_id = :feed)
+            """, d)
         return self.cur.fetchone()[0]
 
     def get_feed(self, feed_id):
@@ -174,12 +175,13 @@ class FeedDb(object):
 
     def get_feeds(self, cat=None):
         """Get feeds."""
+        d = dict(notcat=not cat, cat=cat or '%')
         self.cur.execute("""
             SELECT *
             FROM Feeds
-            WHERE (? OR Feeds.category LIKE ?)
+            WHERE (:notcat OR Feeds.category LIKE :cat)
             ORDER BY id
-            """, (not cat, cat or '%'))
+            """, d)
         return self.cur.fetchall()
 
     def get_entry(self, entry_id):
