@@ -29,6 +29,7 @@ ARGS = [
         ('cat', str, None), # Feed category.
         ('feed', int, None), # Feed id.
         ('markread', list_converter, None), # Entries to mark as read.
+        ('priority', int, 1), # Sort by score?
         ]
 
 def get_args():
@@ -218,7 +219,7 @@ def show_entries(db):
     maxprg = args['maxprg']
     n = db.n_entries(maxprg=maxprg, cat=args['cat'], feed=args['feed'])
     entries = db.get_next(maxprg=maxprg, cat=args['cat'], feed=args['feed'],
-            limit=args['limit'])
+            limit=args['limit'], priority=args['priority'])
     ids = [e['id'] for e in entries]
     print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg), SHEET))
     print_top(ids)
@@ -231,7 +232,8 @@ def show_entries(db):
     print(html.tail())
 
 def redirect(db):
-    entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1)
+    entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1,
+            priority=args['priority'])
     if entries:
         e = entries[0]
         print(html.head('Redirecting...', SHEET, e['link']))
