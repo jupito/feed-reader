@@ -65,23 +65,25 @@ class FeedDb(object):
 
     def insert_feed(self, url, category, priority):
         """Insert feed url."""
+        d = dict(url=url, cat=category, pri=priority)
         self.cur.execute("""
             INSERT OR IGNORE
-            INTO Feeds(url, category, priority) VALUES(?, ?, ?)
-            """, (url, category, priority))
+            INTO Feeds(url, category, priority) VALUES(:url, :cat, :pri)
+            """, d)
         # Now update properties in case the url was already there.
         self.cur.execute("""
             UPDATE Feeds
-            SET category=?, priority=?
-            WHERE url=?
-            """, (category, priority, url))
+            SET category=:cat, priority=:pri
+            WHERE url=:url
+            """, d)
 
     def insert_entry(self, guid, feed_id):
         """Insert entry guid."""
+        d = dict(guid=guid, feed_id=feed_id)
         self.cur.execute("""
             INSERT OR IGNORE
-            INTO Entries(guid, feed_id) VALUES(?, ?)
-            """, (guid, feed_id))
+            INTO Entries(guid, feed_id) VALUES(:guid, :feed_id)
+            """, d)
 
     def update_feed(self, x):
         """Update feed."""
