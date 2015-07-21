@@ -87,27 +87,40 @@ class FeedDb(object):
 
     def update_feed(self, x):
         """Update feed."""
+        #self.cur.execute("""
+        #    UPDATE Feeds
+        #    SET refreshed=?, updated=?, title=?, description=?, link=?
+        #    WHERE url=?
+        #    """,
+        #    (x['refreshed'], x['updated'],
+        #    x['title'], x['description'], x['link'],
+        #    x['url']))
         self.cur.execute("""
             UPDATE Feeds
-            SET refreshed=?, updated=?, title=?, description=?, link=?
-            WHERE url=?
-            """,
-            (x['refreshed'], x['updated'],
-            x['title'], x['description'], x['link'],
-            x['url']))
+            SET refreshed=:refreshed, updated=:updated,
+                title=:title, description=:description, link=:link
+            WHERE url=:url
+            """, x)
 
     def update_entry(self, x):
         """Update entry."""
+        #self.cur.execute("""
+        #    UPDATE Entries
+        #    SET refreshed=?, updated=?, title=?, description=?, link=?,
+        #    enc_url=?, enc_length=?, enc_type=?
+        #    WHERE guid=?
+        #    """,
+        #    (x['refreshed'], x['updated'],
+        #    x['title'], x['description'], x['link'],
+        #    x['enc_url'], x['enc_length'], x['enc_type'],
+        #    x['guid']))
         self.cur.execute("""
             UPDATE Entries
-            SET refreshed=?, updated=?, title=?, description=?, link=?,
-            enc_url=?, enc_length=?, enc_type=?
-            WHERE guid=?
-            """,
-            (x['refreshed'], x['updated'],
-            x['title'], x['description'], x['link'],
-            x['enc_url'], x['enc_length'], x['enc_type'],
-            x['guid']))
+            SET refreshed=:refreshed, updated=:updated,
+                title=:title, description=:description, link=:link,
+            enc_url=:enc_url, enc_length=:enc_length, enc_type=:enc_type
+            WHERE guid=:guid
+            """, x)
 
     def refresh_feed(self, feed_id, parse_url):
         """Refresh given feed."""
