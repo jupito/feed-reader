@@ -215,20 +215,20 @@ class FeedDb(object):
             order = 'updated'
         if limit == 0:
             limit = -1
-        self.cur.execute("""
+        query = """
                 SELECT Entries.*
                 FROM Entries INNER JOIN Feeds
                 ON Entries.feed_id = Feeds.id
                 WHERE (progress between ? and ?)
                         AND (? OR Feeds.category LIKE ?)
                         AND (? OR feed_id = ?)
-                ORDER BY ?
+                ORDER BY {order}
                 LIMIT ?
-                """,
+                """.format(order=order)
+        self.cur.execute(query,
                 (minprg, maxprg,
                 not cat, cat or '%',
                 not feed, feed,
-                order,
                 limit))
         return self.cur.fetchall()
 
