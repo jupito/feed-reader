@@ -115,8 +115,8 @@ def show_categories(db):
     rows = [[
             html.href(link_entries(cat=cat), cat),
             html.href(link_feeds(cat=cat), db.n_feeds(cat)),
-            str(db.n_entries(maxprg=0, cat=cat) or ''),
-            str(db.n_entries(maxprg=1, cat=cat) or ''),
+            str(db.n_entries(maxprg=0, cat=cat) or ' &middot; '),
+            str(db.n_entries(maxprg=1, cat=cat) or ' &middot; '),
             ] for cat in db.get_categories()]
     rows.append([
             html.href(link_entries(), 'All'),
