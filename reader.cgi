@@ -171,8 +171,9 @@ def show_feeds(db):
     print('<div id="feeds">')
     for f in feeds:
         n_unread = db.n_entries(maxprg=0, feed=f['id'])
-        n_total = db.n_entries(maxprg=1, feed=f['id'])
-        print_feed(f, n_unread, n_total)
+        if n_unread or args['maxprg'] == 1:
+            n_total = db.n_entries(maxprg=1, feed=f['id'])
+            print_feed(f, n_unread, n_total)
     print('</div>')
     print_bottom()
     print(html.tail())
