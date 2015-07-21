@@ -229,11 +229,17 @@ def show_entries(db):
     ids = [e['id'] for e in entries]
     print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg), SHEET))
     print_top(ids)
-    print('<div id="entries">')
-    for i, e in enumerate(entries):
-        f = db.get_feed(e['feed_id'])
-        print_entry(e, f, cls=i%2)
-    print('</div>')
+    if entries:
+        print('<div id="entries">')
+        for i, e in enumerate(entries):
+            f = db.get_feed(e['feed_id'])
+            print_entry(e, f, cls=i%2)
+        print('</div>')
+    else:
+        d = dict(all_cats=html.href(link_entries('All')),
+                 cat=html.href(link_entries(cat=f['category']), f['category']),
+                 feed=html.href(link_entries(feed=f['id']), f['title']))
+        print('No entries left. Go to {all_cats}; {cat}; {feed}'.format(**d))
     print_bottom(ids)
     print(html.tail())
 
