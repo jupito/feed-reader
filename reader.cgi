@@ -141,8 +141,8 @@ def print_feedinfo(f, n_unread, n_total):
     d = dict(
         id=f['id'],
         title=html.href(link_entries(feed=f['id']), f['title']),
-        site=html.href(f['link'], '(site)'),
-        feed=html.href(f['url'], '(feed)'),
+        site=html.href(f['link'], '&rarr;'),
+        feed=html.href(f['url'], '&loz;'),
         nu=n_unread, nt=n_total,
         u=util.time_fmt(f['updated']), r=util.time_fmt(f['refreshed']),
         cat=html.href(link_feeds(cat=f['category']), f['category']),
@@ -185,7 +185,7 @@ def print_entryinfo(e, f):
     updated = html.tag('em', util.time_fmt(e['updated']))
     cat = html.href(link_entries(cat=f['category']), f['category'])
     feed = html.href(link_entries(feed=f['id']), f['title'])
-    flink = html.href(f['link'], '=>')
+    flink = html.href(f['link'], '&rarr;')
     print('<div class="entryinfo">')
     print(' &mdash; '.join([updated, cat, feed + flink]))
     print('</div>')
