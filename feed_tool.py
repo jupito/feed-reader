@@ -99,6 +99,7 @@ def main():
 
     db = feed_db.FeedDb(args.file)
 
+    # Add and remove.
     for s in args.add or []:
         params = [x.strip().strip('"') for x in s.split(',')]
         add_feed(db, params, args.verbose)
@@ -109,6 +110,7 @@ def main():
     for i in args.remove or []:
         remove_feed(db, i, args.verbose)
 
+    # Refresh.
     if args.refresh:
         if args.verbose:
             print('Refreshing...')
@@ -116,19 +118,21 @@ def main():
         if args.verbose:
             print('Done.')
 
+    # List things.
     if args.feeds is not None:
         print_feeds(db, args.feeds, args.verbose)
     if args.entries is not None:
         print_entries(db, args.entries, args.verbose)
-
     if args.categories:
         for cat in db.get_categories():
             print(cat, str(db.n_entries(maxprg=0, cat=cat)))
 
+    # Print entry.
     if args.get:
         print(feed_util.describe(db.get_next(maxprg=0, cat=args.category,
                                              limit=1, priority=1)[0], 1))
 
+    # Print general info.
     if args.verbose:
         print('Total {nf} feeds, {ne} entries, {nu} unread.'.format(
             nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
