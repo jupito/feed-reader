@@ -47,30 +47,30 @@ def parse_args():
     args = p.parse_args()
     return args
 
+def print_feeds(db, ids, v):
+    xs = map(db.get_feed, ids) if ids else db.get_feeds()
+    for x in xs:
+        print(feed_util.describe(x, v))
+
+def print_entries(db, ids, v):
+    xs = map(db.get_entry, ids) if ids else db.get_entries()
+    for x in xs:
+        print(feed_util.describe(x, v))
+
+def add_feed(db, params, v):
+    """Add feed tuple."""
+    category, priority, url = params
+    if v:
+        print('Adding %s' % url)
+    db.add_feed(url, category, int(priority))
+
+def remove_feed(db, i, v):
+    if v:
+        feed = db.get_feed(i)
+        print('Removing %s (%s)' % (feed['title'], feed['url']))
+    db.remove_feed(i)
+
 def main():
-    def print_feeds(db, ids, v):
-        xs = map(db.get_feed, ids) if ids else db.get_feeds()
-        for x in xs:
-            print(feed_util.describe(x, v))
-
-    def print_entries(db, ids, v):
-        xs = map(db.get_entry, ids) if ids else db.get_entries()
-        for x in xs:
-            print(feed_util.describe(x, v))
-
-    def add_feed(db, params, v):
-        """Add feed tuple."""
-        category, priority, url = params
-        if v:
-            print('Adding %s' % url)
-        db.add_feed(url, category, int(priority))
-
-    def remove_feed(db, i, v):
-        if v:
-            feed = db.get_feed(i)
-            print('Removing %s (%s)' % (feed['title'], feed['url']))
-        db.remove_feed(i)
-
     # Install UTF-8 conversion wrapper for output.
     if sys.stdout.encoding != 'UTF-8':
         sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
