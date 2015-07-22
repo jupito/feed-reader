@@ -253,7 +253,7 @@ def redirect(db):
     entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1,
                           priority=args['priority'])
     if entries:
-        e = entries[0]
+        e = util.sole(entries)
         print(html.head('Redirecting...', SHEET, e['link']))
         print('Redirecting to:')
         f = db.get_feed(e['feed_id'])
