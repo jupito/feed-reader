@@ -139,7 +139,7 @@ class FeedDb(object):
         """Get all feed ids."""
         self.cur.execute('SELECT id FROM Feeds')
         rows = self.cur.fetchall()
-        ids = [row[0] for row in rows]
+        ids = [util.sole(r) for r in rows]
         return ids
 
     def n_feeds(self, cat=None):
@@ -197,7 +197,7 @@ class FeedDb(object):
     def get_categories(self):
         self.cur.execute('SELECT DISTINCT category FROM Feeds')
         rows = self.cur.fetchall()
-        return sorted(r[0] for r in rows)
+        return sorted(util.sole(r) for r in rows)
 
     def add_feed(self, url, category, priority):
         """Add feed."""
