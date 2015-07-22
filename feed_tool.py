@@ -86,20 +86,23 @@ def refresh(db, feed_ids, v):
     else:
         feeds = db.get_feeds()
     d = dict(nf=len(feeds), ne=0)
-    print('Starting refresh for {nf} feeds.'.format(**d))
+    if v:
+        print('Starting refresh for {nf} feeds.'.format(**d))
     for f in feeds:
         i = f['id']
         try:
             feed, entries = feed_util.parse_url(f['url'])
             db.refresh_feed(i, feed, entries)
         except (IOError, ValueError) as e:
-            print(u'Error parsing feed {i}: {e}'.format(i=i, e=e))
+            if v:
+                print(u'Error parsing feed {i}: {e}'.format(i=i, e=e))
             continue
         if v:
             print(u'Saved feed {i} with {n} entries from {t}.'.format(
                 i=i, n=len(entries), t=f['title']))
         d['ne'] += len(entries)
-    print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
+    if v:
+        print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 
 def main():
     # Install UTF-8 conversion wrapper for output.
@@ -159,7 +162,8 @@ def main():
             nu=db.n_entries(maxprg=0)))
 
     total_changes = db.close()
-    print('Changes within this session: {}.'.format(total_changes))
+    if args.verbose:
+        print('Changes within this session: {}.'.format(total_changes))
 
 if __name__ == '__main__':
     main()
