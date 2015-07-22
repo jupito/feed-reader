@@ -1,12 +1,9 @@
 """Database API."""
 
 from __future__ import division, print_function
-import logging
 import sqlite3
 
 import util
-
-logger = logging.getLogger(__name__)
 
 CREATE_DB = """
     CREATE TABLE IF NOT EXISTS Feeds(
@@ -118,12 +115,7 @@ class FeedDb(object):
         if row is None:
             raise Exception('Could not find feed {i}'.format(**d))
         url = util.sole(row)
-        try:
-            feed, entries = parse_url(url)
-        except (IOError, ValueError) as e:
-            d.update(e=str(e))
-            logger.error('Error parsing feed {i}: {e}'.format(**d))
-            return 0
+        feed, entries = parse_url(url)
         self.update_feed(feed)
         for entry in entries:
             self.insert_entry(entry['guid'], feed_id)
