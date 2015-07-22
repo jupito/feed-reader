@@ -11,6 +11,7 @@ import sys
 
 import feed_db
 import feed_util
+import util
 
 LOGLEVELS = 'DEBUG INFO WARNING ERROR CRITICAL'.split()
 
@@ -129,8 +130,9 @@ def main():
 
     # Print entry.
     if args.get:
-        print(feed_util.describe(db.get_next(maxprg=0, cat=args.category,
-                                             limit=1, priority=1)[0], 1))
+        entry = util.sole(db.get_next(minprg=0, maxprg=0, cat=args.category,
+                                      limit=1, priority=1))
+        print(feed_util.describe(entry, 1))
 
     # Print general info.
     if args.verbose:
