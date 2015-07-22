@@ -195,7 +195,7 @@ class FeedDb(object):
     def get_categories(self):
         self.cur.execute('SELECT DISTINCT category FROM Feeds')
         rows = self.cur.fetchall()
-        return sorted([row[0] for row in rows])
+        return sorted(row[0] for row in rows)
 
     def add_feed(self, url, category, priority):
         """Add feed."""
