@@ -84,7 +84,7 @@ def refresh(db, feed_ids, v):
     feed_ids = feed_ids or db.get_feed_ids()
     d = dict(nf=len(feed_ids), ne=0)
     print('Starting refresh for {nf} feeds.'.format(**d))
-    for i in feed_ids:
+    for i in sorted(feed_ids):
         try:
             n = db.refresh_feed(i, feed_util.parse_url)
         except (IOError, ValueError) as e:
