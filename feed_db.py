@@ -113,7 +113,7 @@ class FeedDb(object):
         row = self.cur.fetchone()
         if row is None:
             raise Exception('Could not find feed {i}'.format(**d))
-        url = row[0]
+        url = util.sole(row)
         try:
             feed, entries = parse_url(url)
         except (IOError, ValueError) as e:
