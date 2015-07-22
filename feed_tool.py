@@ -91,7 +91,7 @@ def refresh(db, feed_ids, v):
             print('Error parsing feed {i}: {e}'.format(i=i, e=e))
             continue
         if v:
-            print('Feed {i}: {n} entries.'.format(i=i, n=n))
+            print('Refreshed feed {i}: {n} entries.'.format(i=i, n=n))
         d['ne'] += n
     print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 
