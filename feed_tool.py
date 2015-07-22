@@ -83,12 +83,13 @@ def refresh(db, feed_ids, v):
     """Refresh feeds."""
     feed_ids = feed_ids or db.get_feed_ids()
     d = dict(nf=len(feed_ids), ne=0)
-    print('Refresh starting for {nf} feeds.'.format(**d))
+    print('Starting refresh for {nf} feeds.'.format(**d))
     for i in feed_ids:
+        n = db.refresh_feed(i, feed_util.parse_url)
         if v:
-            print(i)
-        d['ne'] += db.refresh_feed(i, feed_util.parse_url)
-    print('Refresh done for {nf} feeds, {ne} entries.'.format(**d))
+            print('Feed {i}: {n} entries'.format(i=i, n=n))
+        d['ne'] += n
+    print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 
 def main():
     # Install UTF-8 conversion wrapper for output.
