@@ -185,7 +185,7 @@ def print_entryinfo(e, f):
     d = dict(updated=html.tag('em', util.time_fmt(e['updated'])),
              cat=html.href(link_entries(cat=f['category']), f['category']),
              feed=html.href(link_entries(feed=f['id']), f['title']),
-             flink = html.href(f['link'], '&rarr;'))
+             flink=html.href(f['link'], '&rarr;'))
     print('<div class="entryinfo">')
     print('{updated} &mdash; {cat} &mdash; {feed} {flink}'.format(**d))
     print('</div>')
