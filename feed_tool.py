@@ -48,12 +48,18 @@ def parse_args():
     return args
 
 def print_feeds(db, ids, v):
-    xs = map(db.get_feed, ids) if ids else db.get_feeds()
+    if ids:
+        xs = (db.get_feed(i) for i in ids)
+    else:
+        xs = db.get_feeds()
     for x in xs:
         print(feed_util.describe(x, v))
 
 def print_entries(db, ids, v):
-    xs = map(db.get_entry, ids) if ids else db.get_entries()
+    if ids:
+        xs = (db.get_entry(i) for i in ids)
+    else:
+        xs = db.get_entries()
     for x in xs:
         print(feed_util.describe(x, v))
 
