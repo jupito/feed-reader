@@ -47,10 +47,6 @@ def parse_args():
     args = p.parse_args()
     return args
 
-def db_info(db):
-    return 'Total {nf} feeds, {ne} entries ({nu} unread).'.format(
-        nf=db.n_feeds(), ne=db.n_entries(maxprg=1), nu=db.n_entries(maxprg=0))
-
 def main():
     def print_feeds(db, ids, v):
         xs = map(db.get_feed, ids) if ids else db.get_feeds()
@@ -126,7 +122,9 @@ def main():
                                              limit=1, priority=1)[0], 1))
 
     if args.verbose:
-        print(db_info(db))
+        print('Total {nf} feeds, {ne} entries, {nu} unread.'.format(
+            nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
+            nu=db.n_entries(maxprg=0)))
 
     db.close()
 
