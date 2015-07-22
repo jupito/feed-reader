@@ -162,7 +162,7 @@ class FeedDb(object):
             SELECT COUNT(*)
             FROM Entries INNER JOIN Feeds
             ON Entries.feed_id = Feeds.id
-            WHERE (progress between :minprg and :maxprg)
+            WHERE (progress BETWEEN :minprg AND :maxprg)
                 AND (:notcat OR Feeds.category LIKE :cat)
                 AND (:notfeed OR feed_id = :feed)
             """, d)
@@ -228,7 +228,7 @@ class FeedDb(object):
             SELECT Entries.*
             FROM Entries INNER JOIN Feeds
             ON Entries.feed_id = Feeds.id
-            WHERE (progress between :minprg and :maxprg)
+            WHERE (progress BETWEEN :minprg AND :maxprg)
                 AND (:notcat OR Feeds.category LIKE :cat)
                 AND (:notfeed OR feed_id = :feed)
             ORDER BY {order}
@@ -239,6 +239,5 @@ class FeedDb(object):
 
     def set_progress(self, entry_id, progress):
         """Set progress of given entry."""
-        s = 'UPDATE Entries SET progress=:p WHERE id=:i'
         d = dict(p=progress, i=entry_id)
-        self.cur.execute(s, d)
+        self.cur.execute('UPDATE Entries SET progress=:p WHERE id=:i', d)
