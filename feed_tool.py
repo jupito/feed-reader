@@ -75,7 +75,7 @@ def remove_feed(db, i, v):
     """Remove feed."""
     if v:
         feed = db.get_feed(i)
-        print('Removing {title} ({url})'.format(**feed))
+        print(u'Removing {title} ({url})'.format(**feed))
     db.remove_feed(i)
 
 def main():
