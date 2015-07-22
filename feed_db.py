@@ -121,8 +121,8 @@ class FeedDb(object):
         try:
             feed, entries = parse_url(url)
         except (IOError, ValueError) as e:
-            d.update(u=url, e=e.message)
-            logger.error('Error parsing {i} from {u}: {e}'.format(**d))
+            d.update(e=str(e))
+            logger.error('Error parsing feed {i}: {e}'.format(**d))
             return 0
         self.update_feed(feed)
         for entry in entries:

@@ -14,10 +14,10 @@ def parse_url(url):
     if status == -1:
         if 'bozo_exception' in d:
             raise d['bozo_exception']
-        raise IOError(-1)
+        raise IOError(-1, url)
     if status > 299:
         logging.debug(pprint.pformat(d))
-        raise IOError(status)
+        raise IOError(status, url)
     href = d.get('href', None)
     if href is not None and href != url:
         logging.debug('Redirection from {} to {}'.format(url, href))
