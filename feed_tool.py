@@ -68,7 +68,7 @@ def add_feed(db, params, v):
     """Add feed tuple."""
     category, priority, url = params
     if v:
-        print('Adding %s' % url)
+        print('Adding {}'.format(params))
     db.add_feed(url, category, int(priority))
 
 def remove_feed(db, i, v):
