@@ -81,15 +81,14 @@ def remove_feed(db, i, v):
 
 def refresh(db, feed_ids, v):
     """Refresh feeds."""
-    if v:
-        print('Refreshing...')
-    if feed_ids:
-        for i in feed_ids:
-            db.refresh_feed(i, feed_util.parse_url)
-    else:
-        db.refresh_all(feed_util.parse_url)
-    if v:
-        print('Done.')
+    feed_ids = feed_ids or db.get_feed_ids()
+    d = dict(nf=len(feed_ids), ne=0)
+    print('Refresh starting for {nf} feeds.'.format(**d))
+    for i in feed_ids:
+        if v:
+            print(i)
+        d['ne'] += db.refresh_feed(i, feed_util.parse_url)
+    print('Refresh done for {nf} feeds, {ne} entries.'.format(**d))
 
 def main():
     # Install UTF-8 conversion wrapper for output.

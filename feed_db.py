@@ -130,15 +130,6 @@ class FeedDb(object):
             self.update_entry(entry)
         return len(entries)
 
-    def refresh_all(self, parse_url):
-        """Refresh and update all feeds and their entries."""
-        feed_ids = self.get_feed_ids()
-        d = dict(nf=len(feed_ids), ne=0)
-        logger.info('Refresh starting for {nf} feeds.'.format(**d))
-        for i in feed_ids:
-            d['ne'] += self.refresh_feed(i, parse_url)
-        logger.info('Refresh done for {nf} feeds, {ne} entries.'.format(**d))
-
     def get_feed_ids(self):
         """Get all feed ids."""
         self.cur.execute('SELECT id FROM Feeds')
