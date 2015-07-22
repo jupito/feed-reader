@@ -47,6 +47,7 @@ def parse_args():
     return p.parse_args()
 
 def print_feeds(db, ids, v):
+    """Print feeds."""
     if ids:
         xs = (db.get_feed(i) for i in ids)
     else:
@@ -55,6 +56,7 @@ def print_feeds(db, ids, v):
         print(feed_util.describe(x, v))
 
 def print_entries(db, ids, v):
+    """Print entries."""
     if ids:
         xs = (db.get_entry(i) for i in ids)
     else:
@@ -70,6 +72,7 @@ def add_feed(db, params, v):
     db.add_feed(url, category, int(priority))
 
 def remove_feed(db, i, v):
+    """Remove feed."""
     if v:
         feed = db.get_feed(i)
         print('Removing %s (%s)' % (feed['title'], feed['url']))
