@@ -237,14 +237,13 @@ def show_entries(db):
         print('</div>')
     else:
         rows = ['No entries left.']
-        if args['cat']:
+        if args['cat'] or args['feed']:
             rows.append(html.href(link_entries(), 'Show all categories'))
-        if args['cat'] and args['feed']:
-            rows.append(html.href(link_entries(cat=args['cat']),
-                                  'Show category {}'.format(args['cat'])))
         if args['feed']:
-            rows.append(html.href(link_entries(feed=args['feed']),
-                                  'Show feed {}'.format(args['cat'])))
+            f = db.get_feed(args['feed'])
+            cat = f['category']
+            rows.append(html.href(link_entries(cat=cat),
+                                  'Show category {}'.format(cat)))
         par = html.tag('p', html.tag('br').join(rows))
         print(par)
     print_bottom(ids)
