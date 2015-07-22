@@ -187,7 +187,7 @@ def print_entryinfo(e, f):
              feed=html.href(link_entries(feed=f['id']), f['title']),
              flink=html.href(f['link'], '&rarr;'))
     print('<div class="entryinfo">')
-    print('{updated} &mdash; {cat} &mdash; {feed} {flink}'.format(**d))
+    print(u'{updated} &mdash; {cat} &mdash; {feed} {flink}'.format(**d))
     print('</div>')
 
 def print_title(x):
