@@ -87,7 +87,7 @@ def refresh(db, feed_ids, v):
     for i in feed_ids:
         n = db.refresh_feed(i, feed_util.parse_url)
         if v:
-            print('Feed {i}: {n} entries'.format(i=i, n=n))
+            print('Feed {i}: {n} entries.'.format(i=i, n=n))
         d['ne'] += n
     print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 
@@ -144,12 +144,12 @@ def main():
 
     # Print general info.
     if args.verbose:
-        print('Total {nf} feeds, {ne} entries, {nu} unread.'.format(
+        print('Database contains {nf} feeds, {ne} entries, {nu} unread.'.format(
             nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
             nu=db.n_entries(maxprg=0)))
 
     total_changes = db.close()
-    print('Changes within this session: {}'.format(total_changes))
+    print('Changes within this session: {}.'.format(total_changes))
 
 if __name__ == '__main__':
     main()
