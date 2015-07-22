@@ -236,10 +236,17 @@ def show_entries(db):
             print_entry(e, f, cls=i%2)
         print('</div>')
     else:
-        d = dict(all_cats=html.href(link_entries(), 'All'),
-                 cat=html.href(link_entries(cat=f['category']), f['category']),
-                 feed=html.href(link_entries(feed=f['id']), f['title']))
-        print('No entries left. Go to {all_cats}; {cat}; {feed}'.format(**d))
+        rows = ['No entries left.']
+        if args['cat']:
+            rows.append(html.href(link_entries(), 'Show all categories'))
+        if args['cat'] and args['feed']:
+            rows.append(html.href(link_entries(cat=args['cat']),
+                                  'Show category {}'.format(args['cat']))
+        if args['feed']:
+            rows.append(html.href(link_entries(feed=args['feed']),
+                                  'Show feed {}'.format(args['cat']))
+        par = html.tag('p', html.tag('br').join(rows))
+        print(par)
     print_bottom(ids)
     print(html.tail())
 
