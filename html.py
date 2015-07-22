@@ -31,14 +31,14 @@ def table(rows, headers=None):
 
 def head_redirect(link, time=0):
     return tag('meta', None,
-            ('http-equiv', 'refresh'),
-            ('content', '{t}; {l}'.format(t=time, l=link)))
+               ('http-equiv', 'refresh'),
+               ('content', '{t}; {l}'.format(t=time, l=link)))
 
 def stylesheet(sheet):
     return tag('link', None,
-            ('rel', 'stylesheet'),
-            ('type', 'text/css'),
-            ('href', sheet))
+               ('rel', 'stylesheet'),
+               ('type', 'text/css'),
+               ('href', sheet))
 
 def head(title, sheet='', redirect=''):
     if sheet:
