@@ -89,16 +89,16 @@ class FeedDb(object):
             INTO Entries(guid, feed_id) VALUES(:guid, :feed_id)
             """, d)
 
-    def update_feed(self, x):
+    def update_feed(self, feed):
         """Update feed."""
         self.cur.execute("""
             UPDATE Feeds
             SET refreshed=:refreshed, updated=:updated,
                 title=:title, description=:description, link=:link
             WHERE url=:url
-            """, x)
+            """, feed)
 
-    def update_entry(self, x):
+    def update_entry(self, entry):
         """Update entry."""
         self.cur.execute("""
             UPDATE Entries
@@ -106,7 +106,7 @@ class FeedDb(object):
                 title=:title, description=:description, link=:link,
             enc_url=:enc_url, enc_length=:enc_length, enc_type=:enc_type
             WHERE guid=:guid
-            """, x)
+            """, entry)
 
     def refresh_feed(self, feed_id, parse_url):
         """Refresh given feed."""
