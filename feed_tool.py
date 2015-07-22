@@ -29,7 +29,7 @@ def parse_args():
                    help='category')
     p.add_argument('--priority', type=int, default=0,
                    help='priority')
-    p.add_argument('--refresh', action='store_true',
+    p.add_argument('--refresh', nargs='*', metavar='FEED_ID', type=int,
                    help='refresh feeds')
     p.add_argument('--feeds', '-f', nargs='*', metavar='FEED_ID', type=int,
                    help='list feeds')
@@ -79,6 +79,18 @@ def remove_feed(db, i, v):
         print(u'Removing {title} ({url})'.format(**feed))
     db.remove_feed(i)
 
+def refresh(db, feed_ids, v):
+    """Refresh feeds."""
+    if v:
+        print('Refreshing...')
+    if feed_ids:
+        for i in feed_ids:
+            db.refresh_feed(i, feed_util.parse_url)
+    else:
+        db.refresh_all(feed_util.parse_url)
+    if v:
+        print('Done.')
+
 def main():
     # Install UTF-8 conversion wrapper for output.
     if sys.stdout.encoding != 'UTF-8':
@@ -112,12 +124,8 @@ def main():
         remove_feed(db, i, args.verbose)
 
     # Refresh.
-    if args.refresh:
-        if args.verbose:
-            print('Refreshing...')
-        db.refresh_all(feed_util.parse_url)
-        if args.verbose:
-            print('Done.')
+    if args.refresh is not None:
+        refresh(db, args.refresh, args.verbose)
 
     # List things.
     if args.feeds is not None:
