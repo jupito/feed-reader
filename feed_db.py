@@ -123,7 +123,7 @@ class FeedDb(object):
         except (IOError, ValueError) as e:
             d.update(u=url, e=e.message)
             logger.error('Error parsing {i} from {u}: {e}'.format(**d))
-            return 0 # Continue with other feeds.
+            return 0
         self.update_feed(feed)
         for entry in entries:
             self.insert_entry(entry['guid'], feed_id)
