@@ -4,6 +4,8 @@ from __future__ import division, print_function
 import logging
 import sqlite3
 
+import util
+
 logger = logging.getLogger(__name__)
 
 CREATE_DB = """
@@ -147,7 +149,7 @@ class FeedDb(object):
             SELECT COUNT(*) FROM Feeds
             WHERE (:notcat OR Feeds.category LIKE :cat)
             """, d)
-        return self.cur.fetchone()[0]
+        return util.sole(self.cur.fetchone())
 
     def n_entries(self, minprg=0, maxprg=0, cat=None, feed=None):
         """Return the number of entries in the database."""
@@ -162,7 +164,7 @@ class FeedDb(object):
                 AND (:notcat OR Feeds.category LIKE :cat)
                 AND (:notfeed OR feed_id = :feed)
             """, d)
-        return self.cur.fetchone()[0]
+        return util.sole(self.cur.fetchone())
 
     def get_feed(self, feed_id):
         """Get given feed."""
