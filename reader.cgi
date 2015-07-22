@@ -241,10 +241,10 @@ def show_entries(db):
             rows.append(html.href(link_entries(), 'Show all categories'))
         if args['cat'] and args['feed']:
             rows.append(html.href(link_entries(cat=args['cat']),
-                                  'Show category {}'.format(args['cat']))
+                                  'Show category {}'.format(args['cat'])))
         if args['feed']:
             rows.append(html.href(link_entries(feed=args['feed']),
-                                  'Show feed {}'.format(args['cat']))
+                                  'Show feed {}'.format(args['cat'])))
         par = html.tag('p', html.tag('br').join(rows))
         print(par)
     print_bottom(ids)
