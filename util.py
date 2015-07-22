@@ -2,6 +2,7 @@
 
 from __future__ import division, print_function
 from HTMLParser import HTMLParser
+from itertools import islice
 import datetime
 import os
 import time
@@ -58,3 +59,16 @@ def first_line(s):
     lines = s.lstrip().splitlines() or ['']
     line = lines[0].rstrip()
     return line
+
+def take(n, iterable):
+    """Return first n items of the iterable as a list."""
+    return list(islice(iterable, n))
+
+def sole(it):
+    """Make sure that iterable has only one element, and return it."""
+    lst = take(2, it)
+    n = len(lst)
+    if n != 1:
+        raise ValueError('Element count not exactly one, observed {}.'.format(n))
+    return lst[0]
+
