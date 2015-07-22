@@ -107,20 +107,12 @@ class FeedDb(object):
             WHERE guid=:guid
             """, entry)
 
-    def refresh_feed(self, feed_id, parse_url):
+    def refresh_feed(self, feed_id, feed, entries):
         """Refresh given feed."""
-        d = dict(i=feed_id)
-        self.cur.execute('SELECT url FROM Feeds WHERE id=:i', d)
-        row = self.cur.fetchone()
-        if row is None:
-            raise Exception('Could not find feed {i}'.format(**d))
-        url = util.sole(row)
-        feed, entries = parse_url(url)
         self.update_feed(feed)
         for entry in entries:
             self.insert_entry(entry['guid'], feed_id)
             self.update_entry(entry)
-        return len(entries)
 
     def n_feeds(self, cat=None):
         """Return the number of feeds in the database."""

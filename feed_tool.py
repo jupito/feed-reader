@@ -90,14 +90,15 @@ def refresh(db, feed_ids, v):
     for f in feeds:
         i = f['id']
         try:
-            n = db.refresh_feed(i, feed_util.parse_url)
+            feed, entries = feed_util.parse_url(f['url'])
+            db.refresh_feed(i, feed, entries)
         except (IOError, ValueError) as e:
             print(u'Error parsing feed {i}: {e}'.format(i=i, e=e))
             continue
         if v:
             print(u'Saved feed {i} with {n} entries from {t}.'.format(
-                i=i, n=n, t=f['title']))
-        d['ne'] += n
+                i=i, n=len(entries), t=f['title']))
+        d['ne'] += len(entries)
     print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 
 def main():
