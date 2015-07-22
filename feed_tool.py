@@ -81,17 +81,22 @@ def remove_feed(db, i, v):
 
 def refresh(db, feed_ids, v):
     """Refresh feeds."""
-    feed_ids = feed_ids or db.get_feed_ids()
-    d = dict(nf=len(feed_ids), ne=0)
+    if feed_ids:
+        feeds = [db.get_feed(i) for i in sorted(feed_ids)]
+    else:
+        feeds = db.get_feeds()
+    d = dict(nf=len(feeds), ne=0)
     print('Starting refresh for {nf} feeds.'.format(**d))
-    for i in sorted(feed_ids):
+    for f in feeds:
+        i = f['id']
         try:
             n = db.refresh_feed(i, feed_util.parse_url)
         except (IOError, ValueError) as e:
-            print('Error parsing feed {i}: {e}'.format(i=i, e=e))
+            print(u'Error parsing feed {i}: {e}'.format(i=i, e=e))
             continue
         if v:
-            print('Refreshed feed {i}: {n} entries.'.format(i=i, n=n))
+            print(u'Saved feed {i} with {n} entries from {t}.'.format(
+                i=i, n=n, t=f['title']))
         d['ne'] += n
     print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 

@@ -122,13 +122,6 @@ class FeedDb(object):
             self.update_entry(entry)
         return len(entries)
 
-    def get_feed_ids(self):
-        """Get all feed ids."""
-        self.cur.execute('SELECT id FROM Feeds')
-        rows = self.cur.fetchall()
-        ids = [util.sole(r) for r in rows]
-        return ids
-
     def n_feeds(self, cat=None):
         """Return the number of feeds in the database."""
         d = dict(notcat=not cat, cat=cat or '%')
