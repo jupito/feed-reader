@@ -140,7 +140,8 @@ def main():
             nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
             nu=db.n_entries(maxprg=0)))
 
-    db.close()
+    total_changes = db.close()
+    print('Changes within this session: {}'.format(total_changes))
 
 if __name__ == '__main__':
     main()

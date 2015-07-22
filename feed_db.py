@@ -59,7 +59,9 @@ class FeedDb(object):
 
     def close(self):
         self.conn.commit()
+        total_changes = self.conn.total_changes
         self.conn.close()
+        return total_changes
 
     def create_db(self):
         self.conn.executescript(CREATE_DB)
