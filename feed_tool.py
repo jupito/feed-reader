@@ -44,8 +44,7 @@ def parse_args():
                    help='set loglevel ({})'.format(', '.join(LOGLEVELS)))
     p.add_argument('--logfile',
                    help='set logfile')
-    args = p.parse_args()
-    return args
+    return p.parse_args()
 
 def print_feeds(db, ids, v):
     if ids:
