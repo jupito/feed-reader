@@ -15,7 +15,6 @@ import util
 
 DBFILE = '_reader.db'  # Database filename.
 SHEET = 'reader.css'  # Stylesheet filename.
-CONTENT_TYPE = 'Content-Type: text/html\n'
 
 # Argument definitions (name, converter, default).
 ARG_DEFS = [
@@ -296,7 +295,6 @@ def reader(db_filename):
 
 def main():
     util.install_utf8_conversion()
-    print(CONTENT_TYPE)
     if args['foo'] == 'baz':
         try:
             reader(DBFILE)
