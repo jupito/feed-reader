@@ -18,6 +18,7 @@ class HTMLStripper(HTMLParser):
         self.fed.append(data)
 
     def get_data(self):
+        """Return processed text."""
         return ''.join(self.fed)
 
     @classmethod
@@ -48,22 +49,19 @@ def time_fmt(secs=None, local=False, fmt='rfc2822'):
         t = time.localtime(secs)
     else:
         t = time.gmtime(secs)
-    s = time.strftime(fmt, t)
-    return s
+    return time.strftime(fmt, t)
 
 
 def file_age(filename):
     """Return file age as a timedelta, with second precision."""
     seconds = int(time.time() - os.path.getmtime(filename))
-    age = datetime.timedelta(seconds=seconds)
-    return age
+    return datetime.timedelta(seconds=seconds)
 
 
 def first_line(s):
     """Return the first line with characters from a string, stripped."""
     lines = s.lstrip().splitlines() or ['']
-    line = lines[0].rstrip()
-    return line
+    return lines[0].rstrip()
 
 
 def take(n, iterable):
