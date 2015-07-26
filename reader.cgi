@@ -63,43 +63,22 @@ def link(args, **kwargs):
 
 
 def link_cats():
-    #a = args.copy()
-    #a['action'] = 'cats'
-    #a['cat'] = None
-    #a['feed'] = None
-    #return link(a)
     return link(args, action='cats', cat=None, feed=None)
 
 
 def link_feeds(cat=None):
-    #a = args.copy()
-    #a['action'] = 'feeds'
-    #a['cat'] = cat
-    #a['feed'] = None
-    #return link(a)
     return link(args, action='feeds', cat=cat, feed=None)
 
 
 def link_entries(cat=None, feed=None):
-    #a = args.copy()
-    #a['action'] = 'entries'
-    #a['cat'] = cat
-    #a['feed'] = feed
-    #return link(a)
     return link(args, action='entries', cat=cat, feed=feed)
 
 
 def link_redirect():
-    #a = args.copy()
-    #a['action'] = 'redirect'
-    #return link(a)
     return link(args, action='redirect')
 
 
 def link_markread(ids):
-    #a = args.copy()
-    #a['markread'] = ','.join(str(x) for x in ids)
-    #return link(a)
     return link(args, markread=','.join(str(x) for x in ids))
 
 
