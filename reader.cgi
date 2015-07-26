@@ -18,23 +18,23 @@ SHEET = 'reader.css'  # Stylesheet filename.
 
 
 def link_cats():
-    return args.link(args, action='cats', cat=None, feed=None, markread=None)
+    return args.link(action='cats', cat=None, feed=None, markread=None)
 
 
 def link_feeds(cat=None):
-    return args.link(args, action='feeds', cat=cat, feed=None, markread=None)
+    return args.link(action='feeds', cat=cat, feed=None, markread=None)
 
 
 def link_entries(cat=None, feed=None):
-    return args.link(args, action='entries', cat=cat, feed=feed, markread=None)
+    return args.link(action='entries', cat=cat, feed=feed, markread=None)
 
 
 def link_redirect():
-    return args.link(args, action='redirect', markread=None)
+    return args.link(action='redirect', markread=None)
 
 
 def link_markread(ids):
-    return args.link(args, markread=ids)
+    return args.link(markread=ids)
 
 
 def print_top(ids=None):
