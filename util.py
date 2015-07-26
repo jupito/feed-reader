@@ -39,7 +39,7 @@ class CGIArgs(object):
 
     def __getitem__(self, name):
         """Get argument value."""
-        return self.args[name].value
+        return self.args[name]['value']
 
     def link(self, **kwargs):
         """Create a URL with GET arguments."""
