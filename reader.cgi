@@ -52,47 +52,55 @@ def markread(db):
     args['markread'] = None
 
 
-def link(a):
-    params = ['{}={}'.format(k, v) for k, v in a.items() if v is not None]
+def link(args, **kwargs):
+    if kwargs:
+        args = args.copy()
+        args.update(kwargs)
+    params = ['{}={}'.format(k, v) for k, v in args.items() if v is not None]
     params = '&'.join(params)
     url = '{}?{}'.format(sys.argv[0], params)
     return url
 
 
 def link_cats():
-    a = args.copy()
-    a['action'] = 'cats'
-    a['cat'] = None
-    a['feed'] = None
-    return link(a)
+    #a = args.copy()
+    #a['action'] = 'cats'
+    #a['cat'] = None
+    #a['feed'] = None
+    #return link(a)
+    return link(args, action='cats', cat=None, feed=None)
 
 
 def link_feeds(cat=None):
-    a = args.copy()
-    a['action'] = 'feeds'
-    a['cat'] = cat
-    a['feed'] = None
-    return link(a)
+    #a = args.copy()
+    #a['action'] = 'feeds'
+    #a['cat'] = cat
+    #a['feed'] = None
+    #return link(a)
+    return link(args, action='feeds', cat=cat, feed=None)
 
 
 def link_entries(cat=None, feed=None):
-    a = args.copy()
-    a['action'] = 'entries'
-    a['cat'] = cat
-    a['feed'] = feed
-    return link(a)
+    #a = args.copy()
+    #a['action'] = 'entries'
+    #a['cat'] = cat
+    #a['feed'] = feed
+    #return link(a)
+    return link(args, action='entries', cat=cat, feed=feed)
 
 
 def link_redirect():
-    a = args.copy()
-    a['action'] = 'redirect'
-    return link(a)
+    #a = args.copy()
+    #a['action'] = 'redirect'
+    #return link(a)
+    return link(args, action='redirect')
 
 
 def link_markread(ids):
-    a = args.copy()
-    a['markread'] = ','.join(str(x) for x in ids)
-    return link(a)
+    #a = args.copy()
+    #a['markread'] = ','.join(str(x) for x in ids)
+    #return link(a)
+    return link(args, markread=','.join(str(x) for x in ids))
 
 
 def print_top(ids=None):
