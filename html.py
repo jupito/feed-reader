@@ -1,15 +1,16 @@
 """Generate HTML."""
 
 from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
 
 IND = ' '*4 # Indentation.
 
 def tag(name, content=None, *attributes):
-    a = ''.join(u' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
+    a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
     if content:
-        s = u'<{n}{a}>{c}</{n}>'
+        s = '<{n}{a}>{c}</{n}>'
     else:
-        s = u'<{n}{a} />'
+        s = '<{n}{a} />'
     return s.format(n=name, a=a, c=content)
 
 def href(link, content):
