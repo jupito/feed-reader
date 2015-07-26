@@ -1,4 +1,6 @@
-from __future__ import division, print_function
+"""Parsing feeds and handling them as objects."""
+
+from __future__ import absolute_import, division, print_function
 import logging
 import pprint
 import time

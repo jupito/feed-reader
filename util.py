@@ -1,6 +1,6 @@
-"""Utility functionality."""
+"""General utility functionality."""
 
-from __future__ import division, print_function
+from __future__ import absolute_import, division, print_function
 from HTMLParser import HTMLParser
 from itertools import islice
 import datetime

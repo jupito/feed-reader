@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 
-"""Manage feeds."""
+"""Command-line interface for managing the database."""
 
-from __future__ import division, print_function
+from __future__ import absolute_import, division, print_function
 import argparse
 import codecs
 import csv
