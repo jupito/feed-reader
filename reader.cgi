@@ -306,7 +306,6 @@ def main():
             else:
                 raise
     else:
-        print(sys.path)
         cgi.test()
 
 
