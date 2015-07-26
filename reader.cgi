@@ -287,6 +287,8 @@ def main():
                 show_entries(db)
             elif action == 'redirect':
                 redirect(db)
+            else:
+                raise ValueError('Unknown action: {}', action)
             db.close()
         except Exception as e:
             error(str(e))
