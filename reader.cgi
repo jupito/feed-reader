@@ -17,7 +17,7 @@ import util
 DBFILE = '_reader.db'  # Database filename.
 SHEET = 'reader.css'  # Stylesheet filename.
 
-# Argument definitions (name, converter, default).
+# Argument definitions (name, factory, default).
 ARG_DEFS = [
     ('foo', str, None),  # Temporary.
     ('action', str, 'cats'),  # What to do.
@@ -35,15 +35,14 @@ def get_args(arg_defs):
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
     args = OrderedDict()
-    for name, converter, default in arg_defs:
+    for name, factory, default in arg_defs:
         value = form.getfirst(name, default)
-        if value is None:
-            args[name] = None
-        else:
+        if value is not None:
             try:
-                args[name] = converter(value)
+                value = factory(value)
             except ValueError:
-                args[name] = default
+                value = default
+        args[name] = value
     return args
 
 
