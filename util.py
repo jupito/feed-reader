@@ -142,6 +142,11 @@ def tokens(s, factory=None, filt=None, sep=',', strip=True):
 int_tokens = partial(tokens, factory=int, filt=lambda x: x.isdigit())
 
 
+def token_str(tokens, sep','):
+    """Tokens as string."""
+    sep.join(str(x) for x in ids)
+
+
 def install_utf8_conversion():
     """Install UTF-8 conversion wrapper for output."""
     if sys.stdout.encoding != 'UTF-8':
