@@ -278,6 +278,13 @@ def redirect(db):
     print(html.tail())
 
 
+def error(e):
+    print(html.head(str(e.message), SHEET))
+    print(str(e.message))
+    print(str(e))
+    print(html.tail())
+
+
 def reader(db_filename):
     db = feed_db.FeedDb(db_filename)
     markread(db)
@@ -299,10 +306,7 @@ def main():
         try:
             reader(DBFILE)
         except Exception as e:
-            if e.message == 'database is locked':
-                print(e.message)
-            else:
-                raise
+            error(e)
     else:
         cgi.test()
 
