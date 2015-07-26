@@ -3,6 +3,7 @@
 """CGI Web UI for reading feeds."""
 
 from __future__ import absolute_import, division, print_function
+from operator import itemgetter
 import cgi
 import cgitb
 import codecs
@@ -57,7 +58,7 @@ def markread(db):
 
 
 def link(a):
-    params = ['{k}={v}'.format(k=k, v=v) for k, v in a.items() if not v is None]
+    params = ['{}={}'.format(k, v) for k, v in a.items() if v is not None]
     url = '{path}?{params}'.format(path=sys.argv[0], params='&'.join(params))
     return url
 
@@ -177,8 +178,7 @@ def print_feed(f, n_unread, n_total):
 
 def show_feeds(db):
     feeds = db.get_feeds(args['cat'])
-    key = lambda x: x['priority'], x['updated'], x['title']
-    feeds = sorted(feeds, key=key)
+    feeds = sorted(feeds, key=itemgetter('priority', 'updated', 'title'))
     print(html.head('Feeds ({cat})'.format(cat=args['cat'] or 'all'), SHEET))
     print_top()
     print('<div id="feeds">')
@@ -243,13 +243,14 @@ def show_entries(db):
     entries = db.get_next(maxprg=maxprg, cat=args['cat'], feed=args['feed'],
                           limit=args['limit'], priority=args['priority'])
     ids = [e['id'] for e in entries]
-    print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg), SHEET))
+    print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg),
+                    SHEET))
     print_top(ids)
     if entries:
         print('<div id="entries">')
         for i, e in enumerate(entries):
             f = db.get_feed(e['feed_id'])
-            print_entry(e, f, cls=i%2)
+            print_entry(e, f, cls=i % 2)
         print('</div>')
     else:
         rows = ['No entries left.']
@@ -267,8 +268,8 @@ def show_entries(db):
 
 
 def redirect(db):
-    entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1,
-                          priority=args['priority'])
+    entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'],
+                          limit=1, priority=args['priority'])
     if entries:
         e = util.sole(entries)
         print(html.head('Redirecting...', SHEET, e['link']))
