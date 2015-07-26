@@ -60,23 +60,23 @@ def link(args, **kwargs):
 def markread(db):
     for i in args['markread'] or []:
         db.set_progress(i, 1)
-    args['markread'] = None
+    #args['markread'] = None
 
 
 def link_cats():
-    return link(args, action='cats', cat=None, feed=None)
+    return link(args, action='cats', cat=None, feed=None, markread=None)
 
 
 def link_feeds(cat=None):
-    return link(args, action='feeds', cat=cat, feed=None)
+    return link(args, action='feeds', cat=cat, feed=None, markread=None)
 
 
 def link_entries(cat=None, feed=None):
-    return link(args, action='entries', cat=cat, feed=feed)
+    return link(args, action='entries', cat=cat, feed=feed, markread=None)
 
 
 def link_redirect():
-    return link(args, action='redirect')
+    return link(args, action='redirect', markread=None)
 
 
 def link_markread(ids):

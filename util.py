@@ -12,56 +12,47 @@ import sys
 import time
 
 
-class Arg(object):
-    def __init__(self, name, decoder=str, encoder=str, default=None):
-        self.name = name
-        self.decoder = decoder
-        self.encoder = encoder
-        self.default = default
-        self.value = default
-
-    def set(self, value):
-        if value is None:
-            self.value = self.default
-        else:
-            try:
-                self.value = self.decoder(value)
-            except ValueError:
-                self.value = self.default
-
-    def url(self, value=None):
-        if value is None:
-            value = self.value
-        if value is None or value == self.default:
-            return None
-        return '{}={}'.format(self.name, self.encoder(value))
-
-
 class CGIArgs(object):
     """CGI URL argument handling."""
-
     def __init__(self, scriptname):
         self.scriptname = scriptname
         self.args = OrderedDict()
 
-    def add_arg(self, name, **kwargs):
+    def add_arg(self, name, decoder=str, encoder=str, default=None):
         """Add an argument definition."""
-        self.args[name] = Arg(name, **kwargs)
+        self.args[name] = dict(decoder=decoder, encoder=encoder,
+                               default=default, value=default)
 
     def parse(self, cgi):
         """Parse arguments from the form."""
         form = cgi.FieldStorage()
         for name, arg in self.args.iteritems():
-            arg.set(form.getfirst(name))
+            value = form.getfirst(name)
+            if value is None:
+                value = arg['default']
+            else:
+                try:
+                    value = arg['decoder'](value)
+                except ValueError:
+                    value = arg['default']
+            arg['name'] = value
 
     def __getitem__(self, name):
         """Get argument value."""
         return self.args[name].value
 
-    def url(self, **kwargs):
+    def link(self, **kwargs):
         """Create a URL with GET arguments."""
-        lst = [x.url(kwargs.get(x.name)) for x in self.args]
-        url = '{}?{}'.format(self.scriptname, '&'.join(filter(None, lst)))
+        args = self.args
+        strings = []
+        for name, arg in self.args.iteritems():
+            value = arg['value']
+            if name in kwargs:
+                value = kwargs[name]
+            if value is not None and value != arg['default']:
+                value = arg['encoder'](value)
+                strings.append('{}={}'.format(name, value))
+        url = '{}?{}'.format(self.scriptname, '&'.join(strings))
         return url
 
 
