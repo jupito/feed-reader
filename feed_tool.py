@@ -4,9 +4,7 @@
 
 from __future__ import absolute_import, division, print_function
 import argparse
-import codecs
 import csv
-import sys
 
 import feed_db
 import feed_util
@@ -109,12 +107,7 @@ def refresh(db, feed_ids, v):
 
 
 def main():
-    # Install UTF-8 conversion wrapper for output.
-    if sys.stdout.encoding != 'UTF-8':
-        sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
-    if sys.stderr.encoding != 'UTF-8':
-        sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
-
+    util.install_utf8_conversion()
     args = parse_args()
     db = feed_db.FeedDb(args.file)
 

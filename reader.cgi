@@ -6,7 +6,6 @@ from __future__ import absolute_import, division, print_function
 import cgi
 import cgitb
 cgitb.enable(display=0, logdir='cgitb', format='plaintext')
-import codecs
 from operator import itemgetter
 import sys
 
@@ -296,12 +295,7 @@ def reader(db_filename):
 
 
 def main():
-    # Install UTF-8 conversion wrapper for output.
-    if sys.stdout.encoding != 'UTF-8':
-        sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
-    if sys.stderr.encoding != 'UTF-8':
-        sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
-
+    util.install_utf8_conversion()
     print(CONTENT_TYPE)
     if args['foo'] == 'baz':
         try:

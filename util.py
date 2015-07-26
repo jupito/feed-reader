@@ -1,11 +1,13 @@
 """General utility functionality."""
 
 from __future__ import absolute_import, division, print_function
+import codecs
 import datetime
 from functools import partial
 from HTMLParser import HTMLParser
 from itertools import islice
 import os
+import sys
 import time
 
 
@@ -93,3 +95,11 @@ def tokens(s, factory=None, filt=None, sep=',', strip=True):
 
 
 int_tokens = partial(tokens, factory=int, filt=lambda x: x.isdigit())
+
+
+def install_utf8_conversion():
+    """Install UTF-8 conversion wrapper for output."""
+    if sys.stdout.encoding != 'UTF-8':
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
+    if sys.stderr.encoding != 'UTF-8':
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
