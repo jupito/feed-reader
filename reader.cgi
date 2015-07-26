@@ -54,7 +54,7 @@ def link(args, **kwargs):
     #params = '&'.join(params)
     #url = '{}?{}'.format(sys.argv[0], params)
     #return url
-    return args.url(**kwargs)
+    return args.link(**kwargs)
 
 
 def markread(db):
@@ -268,7 +268,7 @@ def redirect(db):
 
 
 def error(msg):
-    print(html.head(msg, SHEET))
+    print(html.head('Error', sheet=SHEET))
     print(msg)
     print(html.tail())
 
