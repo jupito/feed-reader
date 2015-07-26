@@ -12,8 +12,6 @@ import feed_db
 import feed_util
 import util
 
-LOGLEVELS = 'DEBUG INFO WARNING ERROR CRITICAL'.split()
-
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
