@@ -6,7 +6,6 @@ from __future__ import absolute_import, division, print_function
 import cgi
 import cgitb
 cgitb.enable(display=0, logdir='cgitb', format='plaintext')
-from collections import OrderedDict
 from operator import itemgetter
 import sys
 
@@ -265,12 +264,12 @@ if __name__ == '__main__':
     args = util.CGIArgs(sys.argv[0])
     args.add_arg('foo')  # Temporary.
     args.add_arg('action', default='cats')  # What to do.
-    args.add_arg('minprg', decoder=int, default=0)  # Minimum progress of entries to show.
-    args.add_arg('maxprg', decoder=int, default=0)  # Maximum progress of entries to show.
+    args.add_arg('minprg', decoder=int, default=0)  # Min progress to show.
+    args.add_arg('maxprg', decoder=int, default=0)  # Max progress to show.
     args.add_arg('limit', decoder=int, default=5)  # How many entries to show.
     args.add_arg('cat')  # Feed category.
     args.add_arg('feed', decoder=int)  # Feed id.
-    args.add_arg('markread', decoder=util.int_tokens)  # Entries to mark as read.
+    args.add_arg('markread', decoder=util.int_tokens)  # Entries mark read.
     args.add_arg('priority', decoder=int, default=1)  # Sort by score?
     args.parse(cgi)
     main()
