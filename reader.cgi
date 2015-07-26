@@ -5,9 +5,7 @@
 from __future__ import absolute_import, division, print_function
 import cgi
 import cgitb
-#cgitb.enable(display=0, logdir='/home/users/jupito/cgitb', format='plaintext')
 cgitb.enable(display=0, logdir='cgitb', format='plaintext')
-
 import codecs
 import logging
 from operator import itemgetter
@@ -35,9 +33,6 @@ ARG_DEFS = [
     ('priority', int, 1),  # Sort by score?
     ]
 
-import os
-print(os.path.getcwd())
-print(ARG_DEFS[122])
 
 def get_args():
     """Collect arguments into a dictionary."""
