@@ -94,7 +94,7 @@ def link_redirect():
 
 def link_markread(ids):
     a = args.copy()
-    a['markread'] = ','.join(map(str, ids))
+    a['markread'] = ','.join(str(x) for x in ids)
     return link(a)
 
 
