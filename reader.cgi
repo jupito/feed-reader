@@ -47,13 +47,14 @@ def get_args(arg_defs):
 
 
 def link(args, **kwargs):
-    if kwargs:
-        args = args.copy()
-        args.update(kwargs)
-    params = ['{}={}'.format(k, v) for k, v in args.items() if v is not None]
-    params = '&'.join(params)
-    url = '{}?{}'.format(sys.argv[0], params)
-    return url
+    #if kwargs:
+    #    args = args.copy()
+    #    args.update(kwargs)
+    #params = ['{}={}'.format(k, v) for k, v in args.items() if v is not None]
+    #params = '&'.join(params)
+    #url = '{}?{}'.format(sys.argv[0], params)
+    #return url
+    return args.url(**kwargs)
 
 
 def markread(db):
@@ -297,5 +298,16 @@ def main():
 
 
 if __name__ == '__main__':
-    args = get_args(ARG_DEFS)
+    #args = get_args(ARG_DEFS)
+    args = util.CGIArgs(sys.argv[0])
+    args.add_arg('foo')  # Temporary.
+    args.add_arg('action', default='cats')  # What to do.
+    args.add_arg('minprg', decoder=int, default=0)  # Minimum progress of entries to show.
+    args.add_arg('maxprg', decoder=int, default=0)  # Maximum progress of entries to show.
+    args.add_arg('limit', decoder=int, default=5)  # How many entries to show.
+    args.add_arg('cat')  # Feed category.
+    args.add_arg('feed', decoder=int)  # Feed id.
+    args.add_arg('markread', decoder=util.int_tokens)  # Entries to mark as read.
+    args.add_arg('priority', decoder=int, default=1)  # Sort by score?
+    args.parse(cgi)
     main()
