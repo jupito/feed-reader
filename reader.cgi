@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function
 import cgi
 import cgitb
 cgitb.enable(display=0, logdir='cgitb', format='plaintext')
+from collections import OrderedDict
 from operator import itemgetter
 import sys
 
@@ -33,11 +34,11 @@ ARG_DEFS = [
 def get_args(arg_defs):
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
-    args = {}
+    args = OrderedDict()
     for name, converter, default in arg_defs:
         value = form.getfirst(name, default)
         if value is None:
-            args[name] = value
+            args[name] = None
         else:
             try:
                 args[name] = converter(value)
