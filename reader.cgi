@@ -231,7 +231,7 @@ def main():
     util.install_utf8_conversion()
     if args['foo'] == 'baz':
         print('Content-Type: text/html')
-        print('Set-Cookie: session=')
+        print('Set-Cookie: session=baz')
         print()
         try:
             db = feed_db.FeedDb(DBFILE)
