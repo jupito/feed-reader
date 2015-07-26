@@ -80,11 +80,6 @@ def sole(it):
     return lst[0]
 
 
-#def list_converter(s):
-#    """Convert a string of comma-separated digits into a list."""
-#    return [int(i) for i in s.split(',') if i.isdigit()] or None
-
-
 def tokens(s, factory=None, filt=None, sep=',', strip=True):
     """Simple string tokenizer primarily meant for CGI parameters."""
     tokens = s.split(sep)
