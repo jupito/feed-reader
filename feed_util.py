@@ -31,14 +31,14 @@ def parse_url(url):
         feed['updated'] = max(e['updated'] for e in entries)
     else:
         logging.debug('Feed with no entries: {}'.format(url))
-        #logging.debug(pprint.pformat(d))
+        # logging.debug(pprint.pformat(d))
     return feed, entries
 
 def parse_feed(url, x):
     logging.debug('Parsing feed {}'.format(url))
     d = dict(
         url=url,
-        refreshed=util.now(), # TODO: Use x.headers.date instead (TZ?).
+        refreshed=util.now(),  # TODO: Use x.headers.date instead (TZ?).
         updated=get_updated(x),
         title=x.get('title', '(no title)'),
         link=x.get('link', '(no link)'),
@@ -52,7 +52,7 @@ def parse_entry(x):
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
         guid=x.get('id', x.link),
-        refreshed=util.now(), # TODO: Remove, use one from feed instead.
+        refreshed=util.now(),  # TODO: Remove, use one from feed instead.
         updated=get_updated(x),
         title=x.get('title', '(no title)'),
         link=x.get('link', '(no link)'),

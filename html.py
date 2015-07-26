@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 
-IND = ' '*4 # Indentation.
+IND = ' '*4  # Indentation.
 
 def tag(name, content=None, *attributes):
     a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)

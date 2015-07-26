@@ -15,9 +15,9 @@ import util
 
 cgitb.enable()
 
-DBFILE = '_reader.db' # Database filename.
-LOGFILE = 'reader.log' # Log filename.
-SHEET = 'reader.css' # Stylesheet filename.
+DBFILE = '_reader.db'  # Database filename.
+LOGFILE = 'reader.log'  # Log filename.
+SHEET = 'reader.css'  # Stylesheet filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 
 def list_converter(s):
@@ -26,15 +26,15 @@ def list_converter(s):
 
 # Arguments (name, converter, default).
 ARGS = [
-    ('foo', str, None), # Temporary.
-    ('action', str, 'cats'), # What to do.
-    ('minprg', int, 0), # Minimum progress of entries to show.
-    ('maxprg', int, 0), # Maximum progress of entries to show.
-    ('limit', int, 5), # How many entries to show.
-    ('cat', str, None), # Feed category.
-    ('feed', int, None), # Feed id.
-    ('markread', list_converter, None), # Entries to mark as read.
-    ('priority', int, 1), # Sort by score?
+    ('foo', str, None),  # Temporary.
+    ('action', str, 'cats'),  # What to do.
+    ('minprg', int, 0),  # Minimum progress of entries to show.
+    ('maxprg', int, 0),  # Maximum progress of entries to show.
+    ('limit', int, 5),  # How many entries to show.
+    ('cat', str, None),  # Feed category.
+    ('feed', int, None),  # Feed id.
+    ('markread', list_converter, None),  # Entries to mark as read.
+    ('priority', int, 1),  # Sort by score?
     ]
 
 def get_args():
