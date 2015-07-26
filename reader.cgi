@@ -34,11 +34,11 @@ ARG_DEFS = [
     ]
 
 
-def get_args():
+def get_args(arg_defs):
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
     args = {}
-    for name, converter, default in ARG_DEFS:
+    for name, converter, default in arg_defs:
         value = form.getfirst(name, default)
         if value is None:
             args[name] = value
@@ -303,7 +303,7 @@ if sys.stdout.encoding != 'UTF-8':
 if sys.stderr.encoding != 'UTF-8':
     sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
-args = get_args()
+args = get_args(ARG_DEFS)
 logging.basicConfig(
     format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
     datefmt='%Y-%m-%d %H:%M',
