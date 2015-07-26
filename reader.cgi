@@ -31,19 +31,19 @@ ARG_DEFS = [
     ]
 
 
-def get_args(arg_defs):
-    """Collect arguments into a dictionary."""
-    form = cgi.FieldStorage()
-    args = OrderedDict()
-    for name, factory, default in arg_defs:
-        value = form.getfirst(name, default)
-        if value is not None:
-            try:
-                value = factory(value)
-            except ValueError:
-                value = default
-        args[name] = value
-    return args
+#def get_args(arg_defs):
+#    """Collect arguments into a dictionary."""
+#    form = cgi.FieldStorage()
+#    args = OrderedDict()
+#    for name, factory, default in arg_defs:
+#        value = form.getfirst(name, default)
+#        if value is not None:
+#            try:
+#                value = factory(value)
+#            except ValueError:
+#                value = default
+#        args[name] = value
+#    return args
 
 
 def link(args, **kwargs):
