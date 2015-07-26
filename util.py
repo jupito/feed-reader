@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 from HTMLParser import HTMLParser
+from functools import partial
 from itertools import islice
 import datetime
 import os
@@ -77,3 +78,23 @@ def sole(it):
         msg = 'Element count not exactly one, observed {}.'
         raise ValueError(msg.format(n))
     return lst[0]
+
+
+#def list_converter(s):
+#    """Convert a string of comma-separated digits into a list."""
+#    return [int(i) for i in s.split(',') if i.isdigit()] or None
+
+
+def tokens(s, factory=None, filt=None, sep=',', strip=True):
+    """Simple string tokenizer primarily meant for CGI parameters."""
+    tokens = s.split(sep)
+    if strip:
+        tokens = [x.strip() for x in tokens]
+    if filt:
+        tokens = filter(filt, tokens)
+    if factory:
+        tokens = [factory(x) for x in tokens]
+    return tokens or None
+
+
+int_tokens = partial(tokens, factory=int, filt=lambda x: x.isdigit())
