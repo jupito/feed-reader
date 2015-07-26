@@ -3,18 +3,19 @@
 """CGI Web UI for reading feeds."""
 
 from __future__ import absolute_import, division, print_function
-from operator import itemgetter
 import cgi
 import cgitb
+#cgitb.enable(display=0, logdir='/home/users/jupito/cgitb', format='plaintext')
+cgitb.enable(display=0, logdir='cgitb', format='plaintext')
+
 import codecs
 import logging
+from operator import itemgetter
 import sys
 
 import feed_db
 import html
 import util
-
-cgitb.enable()
 
 DBFILE = '_reader.db'  # Database filename.
 LOGFILE = 'reader.log'  # Log filename.
