@@ -17,33 +17,24 @@ DBFILE = '_reader.db'  # Database filename.
 SHEET = 'reader.css'  # Stylesheet filename.
 
 
-def link(args, **kwargs):
-    return args.link(**kwargs)
-
-
-def markread(db):
-    for i in args['markread'] or []:
-        db.set_progress(i, 1)
-
-
 def link_cats():
-    return link(args, action='cats', cat=None, feed=None, markread=None)
+    return args.link(args, action='cats', cat=None, feed=None, markread=None)
 
 
 def link_feeds(cat=None):
-    return link(args, action='feeds', cat=cat, feed=None, markread=None)
+    return args.link(args, action='feeds', cat=cat, feed=None, markread=None)
 
 
 def link_entries(cat=None, feed=None):
-    return link(args, action='entries', cat=cat, feed=feed, markread=None)
+    return args.link(args, action='entries', cat=cat, feed=feed, markread=None)
 
 
 def link_redirect():
-    return link(args, action='redirect', markread=None)
+    return args.link(args, action='redirect', markread=None)
 
 
 def link_markread(ids):
-    return link(args, markread=','.join(str(x) for x in ids))
+    return args.link(args, markread=','.join(str(x) for x in ids))
 
 
 def print_top(ids=None):
@@ -241,7 +232,8 @@ def main():
     if args['foo'] == 'baz':
         try:
             db = feed_db.FeedDb(DBFILE)
-            markread(db)
+            for i in args['markread'] or []:
+                db.set_progress(i, 1)
             action = args['action']
             if action == 'cats':
                 show_categories(db)
