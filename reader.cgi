@@ -7,7 +7,6 @@ import cgi
 import cgitb
 cgitb.enable(display=0, logdir='cgitb', format='plaintext')
 import codecs
-import logging
 from operator import itemgetter
 import sys
 
@@ -16,7 +15,6 @@ import html
 import util
 
 DBFILE = '_reader.db'  # Database filename.
-LOGFILE = 'reader.log'  # Log filename.
 SHEET = 'reader.css'  # Stylesheet filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 
@@ -304,14 +302,6 @@ def main():
     if sys.stderr.encoding != 'UTF-8':
         sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
-    logging.basicConfig(
-        format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
-        datefmt='%Y-%m-%d %H:%M',
-        filename=LOGFILE,
-        level=logging.DEBUG,
-        )
-    logging.captureWarnings(True)
-
     print(CONTENT_TYPE)
     if args['foo'] == 'baz':
         try:
@@ -319,7 +309,6 @@ def main():
         except Exception as e:
             if e.message == 'database is locked':
                 print(e.message)
-                logging.info('Database locked: {}'.format(DBFILE))
             else:
                 raise
     else:

@@ -6,7 +6,6 @@ from __future__ import absolute_import, division, print_function
 import argparse
 import codecs
 import csv
-import logging
 import sys
 
 import feed_db
@@ -42,10 +41,6 @@ def parse_args():
                    help='show next unread')
     p.add_argument('--verbose', '-v', action='count',
                    help='be more verbose')
-    p.add_argument('--log', metavar='LOGLEVEL', default='WARNING',
-                   help='set loglevel ({})'.format(', '.join(LOGLEVELS)))
-    p.add_argument('--logfile',
-                   help='set logfile')
     return p.parse_args()
 
 
@@ -119,17 +114,6 @@ def main():
         sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
     args = parse_args()
-    d = dict(
-        format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
-        datefmt='%Y-%m-%d %H:%M',
-        filename=args.logfile,
-        level=getattr(logging, args.log.upper(), None),
-        )
-    if d['level'] is None:
-        raise ValueError('Invalid log level: {}'.format(args.log))
-    logging.basicConfig(**d)
-    logging.captureWarnings(True)
-
     db = feed_db.FeedDb(args.file)
 
     # Add and remove.
