@@ -222,9 +222,9 @@ def redirect(db):
 
 
 def error(msg):
-    print(html.head('Error', sheet=SHEET))
+    # print(html.head('Error', sheet=SHEET))
     print(msg)
-    print(html.tail())
+    # print(html.tail())
 
 
 def main():
