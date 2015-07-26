@@ -20,6 +20,7 @@ LOGFILE = 'reader.log'  # Log filename.
 SHEET = 'reader.css'  # Stylesheet filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 
+
 def list_converter(s):
     """Convert a string of comma-separated digits into a list."""
     return [int(i) for i in s.split(',') if i.isdigit()] or None
@@ -37,6 +38,7 @@ ARGS = [
     ('priority', int, 1),  # Sort by score?
     ]
 
+
 def get_args():
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
@@ -52,15 +54,18 @@ def get_args():
                 args[name] = default
     return args
 
+
 def markread(db):
     for i in args['markread'] or []:
         db.set_progress(i, 1)
     args['markread'] = None
 
+
 def link(a):
     params = ['{k}={v}'.format(k=k, v=v) for k, v in a.items() if not v is None]
     url = '{path}?{params}'.format(path=sys.argv[0], params='&'.join(params))
     return url
+
 
 def link_cats():
     a = args.copy()
@@ -69,12 +74,14 @@ def link_cats():
     a['feed'] = None
     return link(a)
 
+
 def link_feeds(cat=None):
     a = args.copy()
     a['action'] = 'feeds'
     a['cat'] = cat
     a['feed'] = None
     return link(a)
+
 
 def link_entries(cat=None, feed=None):
     a = args.copy()
@@ -83,15 +90,18 @@ def link_entries(cat=None, feed=None):
     a['feed'] = feed
     return link(a)
 
+
 def link_redirect():
     a = args.copy()
     a['action'] = 'redirect'
     return link(a)
 
+
 def link_markread(ids):
     a = args.copy()
     a['markread'] = ','.join(map(str, ids))
     return link(a)
+
 
 def print_top(ids=None):
     elems = [
@@ -107,11 +117,13 @@ def print_top(ids=None):
     print(' | '.join(elems))
     print('</div>')
 
+
 def print_bottom(ids=None):
     print('<div id="bottom">')
     if ids:
         print(html.href(link_markread(ids), 'Mark these read'))
     print('</div>')
+
 
 def show_categories(db):
     print(html.head('Categories', SHEET))
@@ -136,6 +148,7 @@ def show_categories(db):
     print_bottom()
     print(html.tail())
 
+
 def print_feedinfo(f, n_unread, n_total):
     print('<div class="feedinfo">')
     d = dict(
@@ -159,11 +172,13 @@ def print_feedinfo(f, n_unread, n_total):
     print(par)
     print('</div>')
 
+
 def print_feed(f, n_unread, n_total):
     print('<div class="feed">')
     print_feedinfo(f, n_unread, n_total)
     print_description(f, plaintext=True)
     print('</div>')
+
 
 def show_feeds(db):
     feeds = db.get_feeds(args['cat'])
@@ -181,6 +196,7 @@ def show_feeds(db):
     print_bottom()
     print(html.tail())
 
+
 def print_entryinfo(e, f):
     d = dict(updated=html.tag('em', util.time_fmt(e['updated'])),
              cat=html.href(link_entries(cat=f['category']), f['category']),
@@ -190,10 +206,12 @@ def print_entryinfo(e, f):
     print(u'{updated} &mdash; {cat} &mdash; {feed} {flink}'.format(**d))
     print('</div>')
 
+
 def print_title(x):
     print('<div class="title">')
     print(html.href(x['link'], x['title']))
     print('</div>')
+
 
 def print_description(x, plaintext=False):
     desc = x['description']
@@ -204,6 +222,7 @@ def print_description(x, plaintext=False):
         print(desc)
         print('</div>')
 
+
 def print_enclosure(e):
     url = e['enc_url']
     if url:
@@ -211,6 +230,7 @@ def print_enclosure(e):
         print('<div class="enclosure">')
         print(html.href(url, 'Enclosure (type: {t}, length: {l})'.format(**d)))
         print('</div>')
+
 
 def print_entry(e, f, cls=0):
     classes = 'entry', 'entry_alt'
@@ -220,6 +240,7 @@ def print_entry(e, f, cls=0):
     print_description(e)
     print_enclosure(e)
     print('</div>')
+
 
 def show_entries(db):
     maxprg = args['maxprg']
@@ -249,6 +270,7 @@ def show_entries(db):
     print_bottom(ids)
     print(html.tail())
 
+
 def redirect(db):
     entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1,
                           priority=args['priority'])
@@ -263,6 +285,7 @@ def redirect(db):
         print(html.head('Cannot redirect', SHEET))
         print('No unread entries.')
     print(html.tail())
+
 
 def reader(db_filename):
     db = feed_db.FeedDb(db_filename)

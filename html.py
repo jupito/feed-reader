@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 IND = ' '*4  # Indentation.
 
+
 def tag(name, content=None, *attributes):
     a = ''.join(' {k}="{v}"'.format(k=k, v=v) for k, v in attributes)
     if content:
@@ -13,14 +14,17 @@ def tag(name, content=None, *attributes):
         s = '<{n}{a} />'
     return s.format(n=name, a=a, c=content)
 
+
 def href(link, content):
     return tag('a', content, ('href', link))
+
 
 def ulist(items):
     s = '\n'
     for item in items:
         s += IND + tag('li', item) + '\n'
     return tag('ul', s)
+
 
 def table(rows, headers=None):
     s = '\n'
@@ -32,16 +36,19 @@ def table(rows, headers=None):
         s += IND + tag('tr', row) + '\n'
     return tag('table', s)
 
+
 def head_redirect(link, time=0):
     return tag('meta', None,
                ('http-equiv', 'refresh'),
                ('content', '{t}; {l}'.format(t=time, l=link)))
+
 
 def stylesheet(sheet):
     return tag('link', None,
                ('rel', 'stylesheet'),
                ('type', 'text/css'),
                ('href', sheet))
+
 
 def head(title, sheet='', redirect=''):
     if sheet:
@@ -59,6 +66,7 @@ def head(title, sheet='', redirect=''):
 </head>
 <body>'''
     return s.format(title=title, sheet=sheet, redirect=redirect)
+
 
 def tail():
     return '</body>\n</html>'

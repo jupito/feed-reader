@@ -9,6 +9,7 @@ import feedparser
 
 import util
 
+
 def parse_url(url):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
@@ -34,6 +35,7 @@ def parse_url(url):
         # logging.debug(pprint.pformat(d))
     return feed, entries
 
+
 def parse_feed(url, x):
     logging.debug('Parsing feed {}'.format(url))
     d = dict(
@@ -45,6 +47,7 @@ def parse_feed(url, x):
         description=x.get('description', '(no description)'),
         )
     return d
+
 
 def parse_entry(x):
     if 'id' not in x:
@@ -63,12 +66,14 @@ def parse_entry(x):
         )
     return d
 
+
 def get_updated(x):
     """Get updated field or current time as seconds."""
     # TODO: Feeds have 'updated_parsed', is it the same?
     st = x.get('published_parsed', time.gmtime(0))
     seconds = int(time.mktime(st))
     return seconds
+
 
 def get_enc(x):
     """Return the first enclosure."""
@@ -79,6 +84,7 @@ def get_enc(x):
     else:
         return tuple(None for _ in names)
 
+
 def field_fmt(k, v):
     """Return object field name and value formatted."""
     if k == 'refreshed' or k == 'updated':
@@ -86,6 +92,7 @@ def field_fmt(k, v):
     elif k == 'description':
         v = util.HTMLStripper.strip(util.first_line(v or str(v)))[:66]
     return k, unicode(v)
+
 
 def describe(x, verbosity):
     """Describe a feed or an entry."""

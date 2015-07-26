@@ -7,6 +7,7 @@ import datetime
 import os
 import time
 
+
 class HTMLStripper(HTMLParser):
     """HTML markup stripper."""
     def __init__(self):
@@ -26,9 +27,11 @@ class HTMLStripper(HTMLParser):
         parser.feed(text)
         return parser.get_data()
 
+
 def now():
     """Get current time as seconds."""
     return int(time.time())
+
 
 def time_fmt(secs=None, local=False, fmt='rfc2822'):
     """Format time represented as seconds since the epoch."""
@@ -48,11 +51,13 @@ def time_fmt(secs=None, local=False, fmt='rfc2822'):
     s = time.strftime(fmt, t)
     return s
 
+
 def file_age(filename):
     """Return file age as a timedelta, with second precision."""
     seconds = int(time.time() - os.path.getmtime(filename))
     age = datetime.timedelta(seconds=seconds)
     return age
+
 
 def first_line(s):
     """Return the first line with characters from a string, stripped."""
@@ -60,15 +65,17 @@ def first_line(s):
     line = lines[0].rstrip()
     return line
 
+
 def take(n, iterable):
     """Return first n items of the iterable as a list."""
     return list(islice(iterable, n))
+
 
 def sole(it):
     """Make sure that iterable has only one element, and return it."""
     lst = take(2, it)
     n = len(lst)
     if n != 1:
-        raise ValueError('Element count not exactly one, observed {}.'.format(n))
+        msg = 'Element count not exactly one, observed {}.'
+        raise ValueError(msg.format(n))
     return lst[0]
-

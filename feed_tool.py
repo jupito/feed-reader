@@ -15,6 +15,7 @@ import util
 
 LOGLEVELS = 'DEBUG INFO WARNING ERROR CRITICAL'.split()
 
+
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('file', metavar='DB_FILE',
@@ -47,6 +48,7 @@ def parse_args():
                    help='set logfile')
     return p.parse_args()
 
+
 def print_feeds(db, ids, v):
     """Print feeds."""
     if ids:
@@ -55,6 +57,7 @@ def print_feeds(db, ids, v):
         xs = db.get_feeds()
     for x in xs:
         print(feed_util.describe(x, v))
+
 
 def print_entries(db, ids, v):
     """Print entries."""
@@ -65,6 +68,7 @@ def print_entries(db, ids, v):
     for x in xs:
         print(feed_util.describe(x, v))
 
+
 def add_feed(db, params, v):
     """Add feed tuple."""
     category, priority, url = params
@@ -72,12 +76,14 @@ def add_feed(db, params, v):
         print(u'Adding {}'.format(params))
     db.add_feed(url, category, int(priority))
 
+
 def remove_feed(db, i, v):
     """Remove feed."""
     if v:
         feed = db.get_feed(i)
         print(u'Removing {title} ({url})'.format(**feed))
     db.remove_feed(i)
+
 
 def refresh(db, feed_ids, v):
     """Refresh feeds."""
@@ -103,6 +109,7 @@ def refresh(db, feed_ids, v):
         d['ne'] += len(entries)
     if v:
         print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
+
 
 def main():
     # Install UTF-8 conversion wrapper for output.
@@ -157,13 +164,14 @@ def main():
 
     # Print general info.
     if args.verbose:
-        print('Database contains {nf} feeds, {ne} entries, {nu} unread.'.format(
-            nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
-            nu=db.n_entries(maxprg=0)))
+        msg = 'Database contains {nf} feeds, {ne} entries, {nu} unread.'
+        print(msg.format(nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
+                         nu=db.n_entries(maxprg=0)))
 
     total_changes = db.close()
     if args.verbose:
         print('Changes within this session: {}.'.format(total_changes))
+
 
 if __name__ == '__main__':
     main()

@@ -45,6 +45,7 @@ DELETE_DB = """
 
 # ALTER TABLE Feeds ADD COLUMN connection_status INTEGER;
 
+
 class FeedDb(object):
     def __init__(self, filename):
         self.conn = sqlite3.connect(filename, timeout=5)
