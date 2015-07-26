@@ -284,26 +284,22 @@ def error(msg):
     print(html.tail())
 
 
-def reader(db_filename):
-    db = feed_db.FeedDb(db_filename)
-    markread(db)
-    action = args['action'] or 'cats'
-    if action == 'cats':
-        show_categories(db)
-    elif action == 'feeds':
-        show_feeds(db)
-    elif action == 'entries':
-        show_entries(db)
-    elif action == 'redirect':
-        redirect(db)
-    db.close()
-
-
 def main():
     util.install_utf8_conversion()
     if args['foo'] == 'baz':
         try:
-            reader(DBFILE)
+            db = feed_db.FeedDb(DBFILE)
+            markread(db)
+            action = args['action'] or 'cats'
+            if action == 'cats':
+                show_categories(db)
+            elif action == 'feeds':
+                show_feeds(db)
+            elif action == 'entries':
+                show_entries(db)
+            elif action == 'redirect':
+                redirect(db)
+            db.close()
         except Exception as e:
             error(str(e))
     else:
