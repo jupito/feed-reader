@@ -279,7 +279,7 @@ def main():
         try:
             db = feed_db.FeedDb(DBFILE)
             markread(db)
-            action = args['action'] or 'cats'
+            action = args['action']
             if action == 'cats':
                 show_categories(db)
             elif action == 'feeds':
