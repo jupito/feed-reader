@@ -46,12 +46,6 @@ def get_args(arg_defs):
     return args
 
 
-def markread(db):
-    for i in args['markread'] or []:
-        db.set_progress(i, 1)
-    args['markread'] = None
-
-
 def link(args, **kwargs):
     if kwargs:
         args = args.copy()
@@ -60,6 +54,12 @@ def link(args, **kwargs):
     params = '&'.join(params)
     url = '{}?{}'.format(sys.argv[0], params)
     return url
+
+
+def markread(db):
+    for i in args['markread'] or []:
+        db.set_progress(i, 1)
+    args['markread'] = None
 
 
 def link_cats():
