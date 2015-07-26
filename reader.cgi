@@ -297,31 +297,36 @@ def reader(db_filename):
     db.close()
 
 
-# Install UTF-8 conversion wrapper for output.
-if sys.stdout.encoding != 'UTF-8':
-    sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
-if sys.stderr.encoding != 'UTF-8':
-    sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
+def main():
+    # Install UTF-8 conversion wrapper for output.
+    if sys.stdout.encoding != 'UTF-8':
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
+    if sys.stderr.encoding != 'UTF-8':
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
 
-args = get_args(ARG_DEFS)
-logging.basicConfig(
-    format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
-    datefmt='%Y-%m-%d %H:%M',
-    filename=LOGFILE,
-    level=logging.DEBUG,
-    )
-logging.captureWarnings(True)
+    logging.basicConfig(
+        format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
+        datefmt='%Y-%m-%d %H:%M',
+        filename=LOGFILE,
+        level=logging.DEBUG,
+        )
+    logging.captureWarnings(True)
 
-print(CONTENT_TYPE)
-if args['foo'] == 'baz':
-    try:
-        reader(DBFILE)
-    except Exception as e:
-        if e.message == 'database is locked':
-            print(e.message)
-            logging.info('Database locked: {}'.format(DBFILE))
-        else:
-            raise
-else:
-    print(sys.path)
-    cgi.test()
+    print(CONTENT_TYPE)
+    if args['foo'] == 'baz':
+        try:
+            reader(DBFILE)
+        except Exception as e:
+            if e.message == 'database is locked':
+                print(e.message)
+                logging.info('Database locked: {}'.format(DBFILE))
+            else:
+                raise
+    else:
+        print(sys.path)
+        cgi.test()
+
+
+if __name__ == '__main__':
+    args = get_args(ARG_DEFS)
+    main()
