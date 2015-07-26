@@ -5,7 +5,7 @@
 from __future__ import absolute_import, division, print_function
 import cgi
 import cgitb
-cgitb.enable(display=0, logdir='cgitb', format='plaintext')
+cgitb.enable(display=0, logdir='cgitb', format='plain')
 from operator import itemgetter
 import sys
 
