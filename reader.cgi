@@ -20,11 +20,6 @@ LOGFILE = 'reader.log'  # Log filename.
 SHEET = 'reader.css'  # Stylesheet filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 
-
-def list_converter(s):
-    """Convert a string of comma-separated digits into a list."""
-    return [int(i) for i in s.split(',') if i.isdigit()] or None
-
 # Arguments (name, converter, default).
 ARGS = [
     ('foo', str, None),  # Temporary.
@@ -34,7 +29,7 @@ ARGS = [
     ('limit', int, 5),  # How many entries to show.
     ('cat', str, None),  # Feed category.
     ('feed', int, None),  # Feed id.
-    ('markread', list_converter, None),  # Entries to mark as read.
+    ('markread', util.int_tokens, None),  # Entries to mark as read.
     ('priority', int, 1),  # Sort by score?
     ]
 
