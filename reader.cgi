@@ -17,50 +17,14 @@ import util
 DBFILE = '_reader.db'  # Database filename.
 SHEET = 'reader.css'  # Stylesheet filename.
 
-# Argument definitions (name, factory, default).
-ARG_DEFS = [
-    ('foo', str, None),  # Temporary.
-    ('action', str, 'cats'),  # What to do.
-    ('minprg', int, 0),  # Minimum progress of entries to show.
-    ('maxprg', int, 0),  # Maximum progress of entries to show.
-    ('limit', int, 5),  # How many entries to show.
-    ('cat', str, None),  # Feed category.
-    ('feed', int, None),  # Feed id.
-    ('markread', util.int_tokens, None),  # Entries to mark as read.
-    ('priority', int, 1),  # Sort by score?
-    ]
-
-
-#def get_args(arg_defs):
-#    """Collect arguments into a dictionary."""
-#    form = cgi.FieldStorage()
-#    args = OrderedDict()
-#    for name, factory, default in arg_defs:
-#        value = form.getfirst(name, default)
-#        if value is not None:
-#            try:
-#                value = factory(value)
-#            except ValueError:
-#                value = default
-#        args[name] = value
-#    return args
-
 
 def link(args, **kwargs):
-    #if kwargs:
-    #    args = args.copy()
-    #    args.update(kwargs)
-    #params = ['{}={}'.format(k, v) for k, v in args.items() if v is not None]
-    #params = '&'.join(params)
-    #url = '{}?{}'.format(sys.argv[0], params)
-    #return url
     return args.link(**kwargs)
 
 
 def markread(db):
     for i in args['markread'] or []:
         db.set_progress(i, 1)
-    #args['markread'] = None
 
 
 def link_cats():
@@ -298,7 +262,6 @@ def main():
 
 
 if __name__ == '__main__':
-    #args = get_args(ARG_DEFS)
     args = util.CGIArgs(sys.argv[0])
     args.add_arg('foo')  # Temporary.
     args.add_arg('action', default='cats')  # What to do.
