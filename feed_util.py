@@ -8,7 +8,7 @@ import feedparser
 import util
 
 
-def parse_url(url):
+def parse_url(url, debug=None):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
     status = d.get('status', -1)
@@ -19,21 +19,20 @@ def parse_url(url):
     if status > 299:
         raise IOError(status, 'Link error', url)
     href = d.get('href', None)
-    # if href is not None and href != url:
-    #     logging.debug('Redirection from {} to {}'.format(url, href))
+    if debug and href is not None and href != url:
+        debug('Redirection from {} to {}'.format(url, href))
 
     feed = parse_feed(url, d.feed)
-    entries = [parse_entry(e) for e in d.entries]
+    entries = [parse_entry(e, debug) for e in d.entries]
     if entries:
         # Set feed publish time as newest entry publish time.
         feed['updated'] = max(e['updated'] for e in entries)
-    # else:
-    #     logging.debug('Feed with no entries: {}'.format(url))
+    if debug and not entries:
+        debug('Feed with no entries: {}'.format(url))
     return feed, entries
 
 
 def parse_feed(url, x):
-    # logging.debug('Parsing feed {}'.format(url))
     d = dict(
         url=url,
         refreshed=util.now(),  # TODO: Use x.headers.date instead (TZ?).
@@ -45,9 +44,9 @@ def parse_feed(url, x):
     return d
 
 
-def parse_entry(x):
-    # if 'id' not in x:
-    #     logging.debug('Entry without GUID, using link: {link}'.format(**x))
+def parse_entry(x, debug=None):
+    if debug and 'id' not in x:
+        debug('Entry without GUID, using link: {link}'.format(**x))
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
         guid=x.get('id', x.link),
