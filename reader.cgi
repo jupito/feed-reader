@@ -279,7 +279,7 @@ def redirect(db):
 
 
 def error(msg):
-    print(html.head(msg), SHEET)
+    print(html.head(msg, SHEET))
     print(msg)
     print(html.tail())
 
