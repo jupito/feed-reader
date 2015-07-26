@@ -230,6 +230,7 @@ def error(msg):
 def main():
     util.install_utf8_conversion()
     if args['foo'] == 'baz':
+        print('Content-Type: text/html\n')
         try:
             db = feed_db.FeedDb(DBFILE)
             for i in args['markread'] or []:
