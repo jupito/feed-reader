@@ -278,10 +278,9 @@ def redirect(db):
     print(html.tail())
 
 
-def error(e):
-    print(html.head(str(e.message), SHEET))
-    print(str(e.message))
-    print(str(e))
+def error(msg):
+    print(html.head(msg), SHEET)
+    print(msg)
     print(html.tail())
 
 
@@ -306,7 +305,7 @@ def main():
         try:
             reader(DBFILE)
         except Exception as e:
-            error(e)
+            error(str(e))
     else:
         cgi.test()
 
