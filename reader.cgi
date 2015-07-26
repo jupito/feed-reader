@@ -262,7 +262,7 @@ if __name__ == '__main__':
     args.add_arg('cat')  # Feed category.
     args.add_arg('feed', decoder=int)  # Feed id.
     args.add_arg('markread', decoder=util.int_tokens,
-                 encoder=token_str)  # Entries mark read.
+                 encoder=util.token_str)  # Entries mark read.
     args.add_arg('priority', decoder=int, default=1)  # Sort by score?
     args.parse(cgi)
     main()

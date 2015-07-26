@@ -43,7 +43,6 @@ class CGIArgs(object):
 
     def link(self, **kwargs):
         """Create a URL with GET arguments."""
-        args = self.args
         strings = []
         for name, arg in self.args.iteritems():
             value = arg['value']
@@ -142,9 +141,9 @@ def tokens(s, factory=None, filt=None, sep=',', strip=True):
 int_tokens = partial(tokens, factory=int, filt=lambda x: x.isdigit())
 
 
-def token_str(tokens, sep','):
+def token_str(tokens, sep=','):
     """Tokens as string."""
-    sep.join(str(x) for x in ids)
+    return sep.join(str(x) for x in tokens)
 
 
 def install_utf8_conversion():
