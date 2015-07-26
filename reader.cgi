@@ -20,8 +20,8 @@ LOGFILE = 'reader.log'  # Log filename.
 SHEET = 'reader.css'  # Stylesheet filename.
 CONTENT_TYPE = 'Content-Type: text/html\n'
 
-# Arguments (name, converter, default).
-ARGS = [
+# Argument definitions (name, converter, default).
+ARG_DEFS = [
     ('foo', str, None),  # Temporary.
     ('action', str, 'cats'),  # What to do.
     ('minprg', int, 0),  # Minimum progress of entries to show.
@@ -38,7 +38,7 @@ def get_args():
     """Collect arguments into a dictionary."""
     form = cgi.FieldStorage()
     args = {}
-    for name, converter, default in ARGS:
+    for name, converter, default in ARG_DEFS:
         value = form.getfirst(name, default)
         if value is None:
             args[name] = value
