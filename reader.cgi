@@ -35,6 +35,9 @@ ARG_DEFS = [
     ('priority', int, 1),  # Sort by score?
     ]
 
+import os
+print(os.path.getcwd())
+print(ARG_DEFS[122])
 
 def get_args():
     """Collect arguments into a dictionary."""
