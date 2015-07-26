@@ -54,7 +54,8 @@ def markread(db):
 
 def link(a):
     params = ['{}={}'.format(k, v) for k, v in a.items() if v is not None]
-    url = '{path}?{params}'.format(path=sys.argv[0], params='&'.join(params))
+    params = '&'.join(params)
+    url = '{}?{}'.format(sys.argv[0], params)
     return url
 
 
