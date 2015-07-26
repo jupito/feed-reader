@@ -94,7 +94,7 @@ def tokens(s, factory=None, filt=None, sep=',', strip=True):
         tokens = filter(filt, tokens)
     if factory:
         tokens = [factory(x) for x in tokens]
-    return tokens or None
+    return tokens
 
 
 int_tokens = partial(tokens, factory=int, filt=lambda x: x.isdigit())
