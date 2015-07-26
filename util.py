@@ -35,7 +35,7 @@ class CGIArgs(object):
                     value = arg['decoder'](value)
                 except ValueError:
                     value = arg['default']
-            arg['name'] = value
+            arg['value'] = value
 
     def __getitem__(self, name):
         """Get argument value."""
