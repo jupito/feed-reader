@@ -59,30 +59,6 @@ def print_bottom(ids=None):
     print('</div>')
 
 
-def show_categories(db):
-    print(html.head('Categories', SHEET))
-    print_top()
-    headers = ['Category', 'Feeds', 'Unread', 'Total']
-    rows = [[
-        html.href(link_entries(cat=cat), cat),
-        html.href(link_feeds(cat=cat), db.n_feeds(cat)),
-        str(db.n_entries(maxprg=0, cat=cat) or '&nbsp;&middot;&nbsp;'),
-        str(db.n_entries(maxprg=1, cat=cat) or '&nbsp;&middot;&nbsp;'),
-        ] for cat in db.get_categories()]
-    rows.append([
-        html.href(link_entries(), 'All'),
-        html.href(link_feeds(), db.n_feeds()),
-        str(db.n_entries(maxprg=0)),
-        str(db.n_entries(maxprg=1)),
-        ])
-    table = html.table(rows, headers)
-    print('<div id="categories">')
-    print(table)
-    print('</div>')
-    print_bottom()
-    print(html.tail())
-
-
 def print_feedinfo(f, n_unread, n_total):
     print('<div class="feedinfo">')
     d = dict(
@@ -112,22 +88,6 @@ def print_feed(f, n_unread, n_total):
     print_feedinfo(f, n_unread, n_total)
     print_description(f, plaintext=True)
     print('</div>')
-
-
-def show_feeds(db):
-    feeds = db.get_feeds(args['cat'])
-    feeds = sorted(feeds, key=itemgetter('priority', 'updated', 'title'))
-    print(html.head('Feeds ({cat})'.format(cat=args['cat'] or 'all'), SHEET))
-    print_top()
-    print('<div id="feeds">')
-    for f in feeds:
-        n_unread = db.n_entries(maxprg=0, feed=f['id'])
-        if n_unread or args['maxprg'] == 1:
-            n_total = db.n_entries(maxprg=1, feed=f['id'])
-            print_feed(f, n_unread, n_total)
-    print('</div>')
-    print_bottom()
-    print(html.tail())
 
 
 def print_entryinfo(e, f):
@@ -175,6 +135,46 @@ def print_entry(e, f, cls=0):
     print('</div>')
 
 
+def show_categories(db):
+    print(html.head('Categories', SHEET))
+    print_top()
+    headers = ['Category', 'Feeds', 'Unread', 'Total']
+    rows = [[
+        html.href(link_entries(cat=cat), cat),
+        html.href(link_feeds(cat=cat), db.n_feeds(cat)),
+        str(db.n_entries(maxprg=0, cat=cat) or '&nbsp;&middot;&nbsp;'),
+        str(db.n_entries(maxprg=1, cat=cat) or '&nbsp;&middot;&nbsp;'),
+        ] for cat in db.get_categories()]
+    rows.append([
+        html.href(link_entries(), 'All'),
+        html.href(link_feeds(), db.n_feeds()),
+        str(db.n_entries(maxprg=0)),
+        str(db.n_entries(maxprg=1)),
+        ])
+    table = html.table(rows, headers)
+    print('<div id="categories">')
+    print(table)
+    print('</div>')
+    print_bottom()
+    print(html.tail())
+
+
+def show_feeds(db):
+    feeds = db.get_feeds(args['cat'])
+    feeds = sorted(feeds, key=itemgetter('priority', 'updated', 'title'))
+    print(html.head('Feeds ({cat})'.format(cat=args['cat'] or 'all'), SHEET))
+    print_top()
+    print('<div id="feeds">')
+    for f in feeds:
+        n_unread = db.n_entries(maxprg=0, feed=f['id'])
+        if n_unread or args['maxprg'] == 1:
+            n_total = db.n_entries(maxprg=1, feed=f['id'])
+            print_feed(f, n_unread, n_total)
+    print('</div>')
+    print_bottom()
+    print(html.tail())
+
+
 def show_entries(db):
     maxprg = args['maxprg']
     n = db.n_entries(maxprg=maxprg, cat=args['cat'], feed=args['feed'])
@@ -205,7 +205,7 @@ def show_entries(db):
     print(html.tail())
 
 
-def redirect(db):
+def show_redirect(db):
     entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'],
                           limit=1, priority=args['priority'])
     if entries:
@@ -221,7 +221,7 @@ def redirect(db):
     print(html.tail())
 
 
-def error(msg):
+def show_error(msg):
     # print(html.head('Error', sheet=SHEET))
     print(msg)
     # print(html.tail())
@@ -244,12 +244,12 @@ def main():
             elif action == 'entries':
                 show_entries(db)
             elif action == 'redirect':
-                redirect(db)
+                show_redirect(db)
             else:
                 raise ValueError('Unknown action: {}', action)
             db.close()
         except Exception as e:
-            error(str(e))
+            show_error(str(e))
     else:
         cgi.test()
 
