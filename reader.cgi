@@ -136,8 +136,6 @@ def print_entry(e, f, cls=0):
 
 
 def show_categories(db):
-    print(html.head('Categories', SHEET))
-    print_top()
     headers = ['Category', 'Feeds', 'Unread', 'Total']
     rows = [[
         html.href(link_entries(cat=cat), cat),
@@ -152,6 +150,8 @@ def show_categories(db):
         str(db.n_entries(maxprg=1)),
         ])
     table = html.table(rows, headers)
+    print(html.head('Categories', SHEET))
+    print_top()
     print('<div id="categories">')
     print(table)
     print('</div>')
