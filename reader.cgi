@@ -43,7 +43,6 @@ def print_top(ids=None):
         html.href(link_feeds(), 'Feeds'),
         html.href(link_entries(), 'Entries'),
         html.href(link_redirect(), 'Redirect'),
-        str(util.file_age(DBFILE)),
         ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
