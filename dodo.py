@@ -1,8 +1,10 @@
 """PyDoIt tasks."""
 
 from __future__ import absolute_import, division, print_function
+import glob
 
 from doit.tools import Interactive
+
 
 DOIT_CONFIG = {
     'default_tasks': ['check'],
@@ -17,20 +19,16 @@ CHECKERS = [
     # 'pychecker',
     ]
 
-SRC = [
-    'dodo.py',
-    'feed_db.py',
-    'feed_tool.py',
-    'feed_util.py',
-    'html.py',
-    'reader.cgi',
-    'util.py',
-    ]
+
+def src():
+    for pattern in ('*.py', '*.cgi'):
+        for path in glob.iglob(pattern):
+            yield path
 
 
 def task_check():
     """Check source files."""
-    for filename in SRC:
+    for filename in src():
         actions = ['{} {}'.format(c, filename) for c in CHECKERS]
         yield {
             'name': filename,
@@ -43,7 +41,7 @@ def task_commit():
     """Commit."""
     return {
         'actions': [Interactive('git commit -v -a')],
-        'file_dep': SRC,
+        'file_dep': list(src()),
         'task_dep': ['check'],
         }
 
