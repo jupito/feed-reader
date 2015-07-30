@@ -1,13 +1,14 @@
-from __future__ import division, print_function
-import logging
-import pprint
+"""Parsing feeds and handling them as objects."""
+
+from __future__ import absolute_import, division, print_function
 import time
 
 import feedparser
 
 import util
 
-def parse_url(url):
+
+def parse_url(url, debug=None):
     """Parse a feed and its entries."""
     d = feedparser.parse(url)
     status = d.get('status', -1)
@@ -16,27 +17,25 @@ def parse_url(url):
             raise d['bozo_exception']
         raise IOError(-1, 'Bozo content', url)
     if status > 299:
-        logging.debug(pprint.pformat(d))
         raise IOError(status, 'Link error', url)
     href = d.get('href', None)
-    if href is not None and href != url:
-        logging.debug('Redirection from {} to {}'.format(url, href))
+    if debug and href is not None and href != url:
+        debug('Redirection from {} to {}'.format(url, href))
 
     feed = parse_feed(url, d.feed)
-    entries = [parse_entry(e) for e in d.entries]
+    entries = [parse_entry(e, debug) for e in d.entries]
     if entries:
         # Set feed publish time as newest entry publish time.
         feed['updated'] = max(e['updated'] for e in entries)
-    else:
-        logging.debug('Feed with no entries: {}'.format(url))
-        #logging.debug(pprint.pformat(d))
+    if debug and not entries:
+        debug('Feed with no entries: {}'.format(url))
     return feed, entries
 
+
 def parse_feed(url, x):
-    logging.debug('Parsing feed {}'.format(url))
     d = dict(
         url=url,
-        refreshed=util.now(), # TODO: Use x.headers.date instead (TZ?).
+        refreshed=util.now(),  # TODO: Use x.headers.date instead (TZ?).
         updated=get_updated(x),
         title=x.get('title', '(no title)'),
         link=x.get('link', '(no link)'),
@@ -44,13 +43,14 @@ def parse_feed(url, x):
         )
     return d
 
-def parse_entry(x):
-    if 'id' not in x:
-        logging.debug('Entry without GUID, using link: {link}'.format(**x))
+
+def parse_entry(x, debug=None):
+    if debug and 'id' not in x:
+        debug('Entry without GUID, using link: {link}'.format(**x))
     enc_url, enc_length, enc_type = get_enc(x)
     d = dict(
         guid=x.get('id', x.link),
-        refreshed=util.now(), # TODO: Remove, use one from feed instead.
+        refreshed=util.now(),  # TODO: Remove, use one from feed instead.
         updated=get_updated(x),
         title=x.get('title', '(no title)'),
         link=x.get('link', '(no link)'),
@@ -61,12 +61,14 @@ def parse_entry(x):
         )
     return d
 
+
 def get_updated(x):
     """Get updated field or current time as seconds."""
     # TODO: Feeds have 'updated_parsed', is it the same?
     st = x.get('published_parsed', time.gmtime(0))
     seconds = int(time.mktime(st))
     return seconds
+
 
 def get_enc(x):
     """Return the first enclosure."""
@@ -77,6 +79,7 @@ def get_enc(x):
     else:
         return tuple(None for _ in names)
 
+
 def field_fmt(k, v):
     """Return object field name and value formatted."""
     if k == 'refreshed' or k == 'updated':
@@ -84,6 +87,7 @@ def field_fmt(k, v):
     elif k == 'description':
         v = util.HTMLStripper.strip(util.first_line(v or str(v)))[:66]
     return k, unicode(v)
+
 
 def describe(x, verbosity):
     """Describe a feed or an entry."""

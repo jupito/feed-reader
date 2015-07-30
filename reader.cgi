@@ -2,96 +2,40 @@
 
 """CGI Web UI for reading feeds."""
 
-from __future__ import division, print_function
+from __future__ import absolute_import, division, print_function
 import cgi
 import cgitb
-import codecs
-import logging
+cgitb.enable(display=0, logdir='cgitb', format='plain')
+from operator import itemgetter
 import sys
 
 import feed_db
 import html
 import util
 
-cgitb.enable()
+DBFILE = '_reader.db'  # Database filename.
+SHEET = 'reader.css'  # Stylesheet filename.
 
-DBFILE = '_reader.db' # Database filename.
-LOGFILE = 'reader.log' # Log filename.
-SHEET = 'reader.css' # Stylesheet filename.
-CONTENT_TYPE = 'Content-Type: text/html\n'
-
-def list_converter(s):
-    """Convert a string of comma-separated digits into a list."""
-    return [int(i) for i in s.split(',') if i.isdigit()] or None
-
-# Arguments (name, converter, default).
-ARGS = [
-    ('foo', str, None), # Temporary.
-    ('action', str, 'cats'), # What to do.
-    ('minprg', int, 0), # Minimum progress of entries to show.
-    ('maxprg', int, 0), # Maximum progress of entries to show.
-    ('limit', int, 5), # How many entries to show.
-    ('cat', str, None), # Feed category.
-    ('feed', int, None), # Feed id.
-    ('markread', list_converter, None), # Entries to mark as read.
-    ('priority', int, 1), # Sort by score?
-    ]
-
-def get_args():
-    """Collect arguments into a dictionary."""
-    form = cgi.FieldStorage()
-    args = {}
-    for name, converter, default in ARGS:
-        value = form.getfirst(name, default)
-        if value is None:
-            args[name] = value
-        else:
-            try:
-                args[name] = converter(value)
-            except ValueError:
-                args[name] = default
-    return args
-
-def markread(db):
-    for i in args['markread'] or []:
-        db.set_progress(i, 1)
-    args['markread'] = None
-
-def link(a):
-    params = ['{k}={v}'.format(k=k, v=v) for k, v in a.items() if not v is None]
-    url = '{path}?{params}'.format(path=sys.argv[0], params='&'.join(params))
-    return url
 
 def link_cats():
-    a = args.copy()
-    a['action'] = 'cats'
-    a['cat'] = None
-    a['feed'] = None
-    return link(a)
+    return args.link(action='cats', cat=None, feed=None, markread=None)
+
 
 def link_feeds(cat=None):
-    a = args.copy()
-    a['action'] = 'feeds'
-    a['cat'] = cat
-    a['feed'] = None
-    return link(a)
+    return args.link(action='feeds', cat=cat, feed=None, markread=None)
+
 
 def link_entries(cat=None, feed=None):
-    a = args.copy()
-    a['action'] = 'entries'
-    a['cat'] = cat
-    a['feed'] = feed
-    return link(a)
+    return args.link(action='entries', cat=cat, feed=feed, markread=None)
+
 
 def link_redirect():
-    a = args.copy()
-    a['action'] = 'redirect'
-    return link(a)
+    return args.link(action='redirect', markread=None)
+
 
 def link_markread(ids):
-    a = args.copy()
-    a['markread'] = ','.join(map(str, ids))
-    return link(a)
+    return args.link(markread=ids)
+
 
 def print_top(ids=None):
     elems = [
@@ -99,7 +43,6 @@ def print_top(ids=None):
         html.href(link_feeds(), 'Feeds'),
         html.href(link_entries(), 'Entries'),
         html.href(link_redirect(), 'Redirect'),
-        str(util.file_age(DBFILE)),
         ]
     if ids:
         elems.append(html.href(link_markread(ids), 'Mark these read'))
@@ -107,34 +50,13 @@ def print_top(ids=None):
     print(' | '.join(elems))
     print('</div>')
 
+
 def print_bottom(ids=None):
     print('<div id="bottom">')
     if ids:
         print(html.href(link_markread(ids), 'Mark these read'))
     print('</div>')
 
-def show_categories(db):
-    print(html.head('Categories', SHEET))
-    print_top()
-    headers = ['Category', 'Feeds', 'Unread', 'Total']
-    rows = [[
-        html.href(link_entries(cat=cat), cat),
-        html.href(link_feeds(cat=cat), db.n_feeds(cat)),
-        str(db.n_entries(maxprg=0, cat=cat) or '&nbsp;&middot;&nbsp;'),
-        str(db.n_entries(maxprg=1, cat=cat) or '&nbsp;&middot;&nbsp;'),
-        ] for cat in db.get_categories()]
-    rows.append([
-        html.href(link_entries(), 'All'),
-        html.href(link_feeds(), db.n_feeds()),
-        str(db.n_entries(maxprg=0)),
-        str(db.n_entries(maxprg=1)),
-        ])
-    table = html.table(rows, headers)
-    print('<div id="categories">')
-    print(table)
-    print('</div>')
-    print_bottom()
-    print(html.tail())
 
 def print_feedinfo(f, n_unread, n_total):
     print('<div class="feedinfo">')
@@ -159,16 +81,86 @@ def print_feedinfo(f, n_unread, n_total):
     print(par)
     print('</div>')
 
+
 def print_feed(f, n_unread, n_total):
     print('<div class="feed">')
     print_feedinfo(f, n_unread, n_total)
     print_description(f, plaintext=True)
     print('</div>')
 
+
+def print_entryinfo(e, f):
+    d = dict(updated=html.tag('em', util.time_fmt(e['updated'])),
+             cat=html.href(link_entries(cat=f['category']), f['category']),
+             feed=html.href(link_entries(feed=f['id']), f['title']),
+             flink=html.href(f['link'], '&rarr;'))
+    print('<div class="entryinfo">')
+    print(u'{updated} &mdash; {cat} &mdash; {feed} {flink}'.format(**d))
+    print('</div>')
+
+
+def print_title(x):
+    print('<div class="title">')
+    print(html.href(x['link'], x['title']))
+    print('</div>')
+
+
+def print_description(x, plaintext=False):
+    desc = x['description']
+    if desc:
+        if plaintext:
+            desc = util.HTMLStripper.strip(desc)
+        print('<div class="description">')
+        print(desc)
+        print('</div>')
+
+
+def print_enclosure(e):
+    url = e['enc_url']
+    if url:
+        d = dict(t=e['enc_type'] or 'unknown', l=e['enc_length'] or 'unknown')
+        print('<div class="enclosure">')
+        print(html.href(url, 'Enclosure (type: {t}, length: {l})'.format(**d)))
+        print('</div>')
+
+
+def print_entry(e, f, cls=0):
+    classes = 'entry', 'entry_alt'
+    print('<div class="{}">'.format(classes[cls]))
+    print_entryinfo(e, f)
+    print_title(e)
+    print_description(e)
+    print_enclosure(e)
+    print('</div>')
+
+
+def show_categories(db):
+    headers = ['Category', 'Feeds', 'Unread', 'Total']
+    rows = [[
+        html.href(link_entries(cat=cat), cat),
+        html.href(link_feeds(cat=cat), db.n_feeds(cat)),
+        str(db.n_entries(maxprg=0, cat=cat) or '&nbsp;&middot;&nbsp;'),
+        str(db.n_entries(maxprg=1, cat=cat) or '&nbsp;&middot;&nbsp;'),
+        ] for cat in db.get_categories()]
+    rows.append([
+        html.href(link_entries(), 'All'),
+        html.href(link_feeds(), db.n_feeds()),
+        str(db.n_entries(maxprg=0)),
+        str(db.n_entries(maxprg=1)),
+        ])
+    table = html.table(rows, headers)
+    print(html.head('Categories', SHEET))
+    print_top()
+    print('<div id="categories">')
+    print(table)
+    print('</div>')
+    print_bottom()
+    print(html.tail())
+
+
 def show_feeds(db):
     feeds = db.get_feeds(args['cat'])
-    feeds = sorted(feeds, key=lambda x: (x['priority'], x['updated'],
-                                         x['title']))
+    feeds = sorted(feeds, key=itemgetter('priority', 'updated', 'title'))
     print(html.head('Feeds ({cat})'.format(cat=args['cat'] or 'all'), SHEET))
     print_top()
     print('<div id="feeds">')
@@ -181,45 +173,6 @@ def show_feeds(db):
     print_bottom()
     print(html.tail())
 
-def print_entryinfo(e, f):
-    d = dict(updated=html.tag('em', util.time_fmt(e['updated'])),
-             cat=html.href(link_entries(cat=f['category']), f['category']),
-             feed=html.href(link_entries(feed=f['id']), f['title']),
-             flink=html.href(f['link'], '&rarr;'))
-    print('<div class="entryinfo">')
-    print(u'{updated} &mdash; {cat} &mdash; {feed} {flink}'.format(**d))
-    print('</div>')
-
-def print_title(x):
-    print('<div class="title">')
-    print(html.href(x['link'], x['title']))
-    print('</div>')
-
-def print_description(x, plaintext=False):
-    desc = x['description']
-    if desc:
-        if plaintext:
-            desc = util.HTMLStripper.strip(desc)
-        print('<div class="description">')
-        print(desc)
-        print('</div>')
-
-def print_enclosure(e):
-    url = e['enc_url']
-    if url:
-        d = dict(t=e['enc_type'] or 'unknown', l=e['enc_length'] or 'unknown')
-        print('<div class="enclosure">')
-        print(html.href(url, 'Enclosure (type: {t}, length: {l})'.format(**d)))
-        print('</div>')
-
-def print_entry(e, f, cls=0):
-    classes = 'entry', 'entry_alt'
-    print('<div class="{}">'.format(classes[cls]))
-    print_entryinfo(e, f)
-    print_title(e)
-    print_description(e)
-    print_enclosure(e)
-    print('</div>')
 
 def show_entries(db):
     maxprg = args['maxprg']
@@ -227,13 +180,14 @@ def show_entries(db):
     entries = db.get_next(maxprg=maxprg, cat=args['cat'], feed=args['feed'],
                           limit=args['limit'], priority=args['priority'])
     ids = [e['id'] for e in entries]
-    print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg), SHEET))
+    print(html.head('{n} in entries {p:.0%} read'.format(n=n, p=maxprg),
+                    SHEET))
     print_top(ids)
     if entries:
         print('<div id="entries">')
         for i, e in enumerate(entries):
             f = db.get_feed(e['feed_id'])
-            print_entry(e, f, cls=i%2)
+            print_entry(e, f, cls=i % 2)
         print('</div>')
     else:
         rows = ['No entries left.']
@@ -249,9 +203,10 @@ def show_entries(db):
     print_bottom(ids)
     print(html.tail())
 
-def redirect(db):
-    entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'], limit=1,
-                          priority=args['priority'])
+
+def show_redirect(db):
+    entries = db.get_next(maxprg=0, cat=args['cat'], feed=args['feed'],
+                          limit=1, priority=args['priority'])
     if entries:
         e = util.sole(entries)
         print(html.head('Redirecting...', SHEET, e['link']))
@@ -264,46 +219,51 @@ def redirect(db):
         print('No unread entries.')
     print(html.tail())
 
-def reader(db_filename):
-    db = feed_db.FeedDb(db_filename)
-    markread(db)
-    action = args['action'] or 'cats'
-    if action == 'cats':
-        show_categories(db)
-    elif action == 'feeds':
-        show_feeds(db)
-    elif action == 'entries':
-        show_entries(db)
-    elif action == 'redirect':
-        redirect(db)
-    db.close()
+
+def show_error(msg):
+    # print(html.head('Error', sheet=SHEET))
+    print(msg)
+    # print(html.tail())
 
 
-# Install UTF-8 conversion wrapper for output.
-if sys.stdout.encoding != 'UTF-8':
-    sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
-if sys.stderr.encoding != 'UTF-8':
-    sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
+def main():
+    util.install_utf8_conversion()
+    if args['foo'] == 'baz':
+        print('Content-Type: text/html')
+        print()
+        try:
+            db = feed_db.FeedDb(DBFILE)
+            for i in args['markread'] or []:
+                db.set_progress(i, 1)
+            action = args['action']
+            if action == 'cats':
+                show_categories(db)
+            elif action == 'feeds':
+                show_feeds(db)
+            elif action == 'entries':
+                show_entries(db)
+            elif action == 'redirect':
+                show_redirect(db)
+            else:
+                raise ValueError('Unknown action: {}', action)
+            db.close()
+        except Exception as e:
+            show_error(str(e))
+    else:
+        cgi.test()
 
-args = get_args()
-logging.basicConfig(
-    format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
-    datefmt='%Y-%m-%d %H:%M',
-    filename=LOGFILE,
-    level=logging.DEBUG,
-    )
-logging.captureWarnings(True)
 
-print(CONTENT_TYPE)
-if args['foo'] == 'baz':
-    try:
-        reader(DBFILE)
-    except Exception as e:
-        if e.message == 'database is locked':
-            print(e.message)
-            logging.info('Database locked: {}'.format(DBFILE))
-        else:
-            raise
-else:
-    print(sys.path)
-    cgi.test()
+if __name__ == '__main__':
+    args = util.CGIArgs(sys.argv[0])
+    args.add_arg('foo')  # Temporary.
+    args.add_arg('action', default='cats')  # What to do.
+    args.add_arg('minprg', decoder=int, default=0)  # Min progress to show.
+    args.add_arg('maxprg', decoder=int, default=0)  # Max progress to show.
+    args.add_arg('limit', decoder=int, default=5)  # How many entries to show.
+    args.add_arg('cat')  # Feed category.
+    args.add_arg('feed', decoder=int)  # Feed id.
+    args.add_arg('markread', decoder=util.int_tokens,
+                 encoder=util.token_str)  # Entries mark read.
+    args.add_arg('priority', decoder=int, default=1)  # Sort by score?
+    args.parse(cgi)
+    main()

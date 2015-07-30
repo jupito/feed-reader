@@ -1,19 +1,15 @@
 #!/usr/bin/env python2
 
-"""Manage feeds."""
+"""Command-line interface for managing the database."""
 
-from __future__ import division, print_function
+from __future__ import absolute_import, division, print_function
 import argparse
-import codecs
 import csv
-import logging
-import sys
 
 import feed_db
 import feed_util
 import util
 
-LOGLEVELS = 'DEBUG INFO WARNING ERROR CRITICAL'.split()
 
 
 def parse_args():
@@ -42,10 +38,6 @@ def parse_args():
                    help='show next unread')
     p.add_argument('--verbose', '-v', action='count',
                    help='be more verbose')
-    p.add_argument('--log', metavar='LOGLEVEL', default='WARNING',
-                   help='set loglevel ({})'.format(', '.join(LOGLEVELS)))
-    p.add_argument('--logfile',
-                   help='set logfile')
     return p.parse_args()
 
 
@@ -91,13 +83,17 @@ def refresh(db, feed_ids, v):
         feeds = [db.get_feed(i) for i in sorted(feed_ids)]
     else:
         feeds = db.get_feeds()
+    if v > 1:
+        debug = print
+    else:
+        debug = None
     d = dict(nf=len(feeds), ne=0)
     if v:
         print('Starting refresh for {nf} feeds.'.format(**d))
     for f in feeds:
         i = f['id']
         try:
-            feed, entries = feed_util.parse_url(f['url'])
+            feed, entries = feed_util.parse_url(f['url'], debug=debug)
             db.refresh_feed(i, feed, entries)
         except (IOError, ValueError) as e:
             if v:
@@ -110,6 +106,7 @@ def refresh(db, feed_ids, v):
     if v:
         print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 
+<<<<<<< HEAD
 
 def main():
     # Install UTF-8 conversion wrapper for output.
@@ -117,19 +114,12 @@ def main():
         sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
     if sys.stderr.encoding != 'UTF-8':
         sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
+=======
+>>>>>>> a6078c62db727c61d29e9304b22681bd127de680
 
+def main():
+    util.install_utf8_conversion()
     args = parse_args()
-    d = dict(
-        format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
-        datefmt='%Y-%m-%d %H:%M',
-        filename=args.logfile,
-        level=getattr(logging, args.log.upper(), None),
-        )
-    if d['level'] is None:
-        raise ValueError('Invalid log level: {}'.format(args.log))
-    logging.basicConfig(**d)
-    logging.captureWarnings(True)
-
     db = feed_db.FeedDb(args.file)
 
     # Add and remove.
@@ -164,9 +154,15 @@ def main():
 
     # Print general info.
     if args.verbose:
+<<<<<<< HEAD
         s = 'Database contains {nf} feeds, {ne} entries, {nu} unread.'
         print(s.format(nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
                        nu=db.n_entries(maxprg=0)))
+=======
+        msg = 'Database contains {nf} feeds, {ne} entries, {nu} unread.'
+        print(msg.format(nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
+                         nu=db.n_entries(maxprg=0)))
+>>>>>>> a6078c62db727c61d29e9304b22681bd127de680
 
     total_changes = db.close()
     if args.verbose:
