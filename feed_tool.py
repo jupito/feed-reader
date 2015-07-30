@@ -11,7 +11,6 @@ import feed_util
 import util
 
 
-
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('file', metavar='DB_FILE',
@@ -106,16 +105,6 @@ def refresh(db, feed_ids, v):
     if v:
         print('Completed refresh for {nf} feeds, {ne} entries.'.format(**d))
 
-<<<<<<< HEAD
-
-def main():
-    # Install UTF-8 conversion wrapper for output.
-    if sys.stdout.encoding != 'UTF-8':
-        sys.stdout = codecs.getwriter('utf-8')(sys.stdout, 'strict')
-    if sys.stderr.encoding != 'UTF-8':
-        sys.stderr = codecs.getwriter('utf-8')(sys.stderr, 'strict')
-=======
->>>>>>> a6078c62db727c61d29e9304b22681bd127de680
 
 def main():
     util.install_utf8_conversion()
@@ -154,15 +143,9 @@ def main():
 
     # Print general info.
     if args.verbose:
-<<<<<<< HEAD
-        s = 'Database contains {nf} feeds, {ne} entries, {nu} unread.'
-        print(s.format(nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
-                       nu=db.n_entries(maxprg=0)))
-=======
         msg = 'Database contains {nf} feeds, {ne} entries, {nu} unread.'
         print(msg.format(nf=db.n_feeds(), ne=db.n_entries(maxprg=1),
                          nu=db.n_entries(maxprg=0)))
->>>>>>> a6078c62db727c61d29e9304b22681bd127de680
 
     total_changes = db.close()
     if args.verbose:
