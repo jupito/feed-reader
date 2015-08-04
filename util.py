@@ -126,7 +126,7 @@ def sole(it):
     return lst[0]
 
 
-def tokens(s, factory=None, filt=None, sep=',', strip=True):
+def tokenize(s, factory=None, filt=None, sep=',', strip=True):
     """Simple string tokenizer primarily meant for CGI parameters."""
     tokens = s.split(sep)
     if strip:
@@ -138,7 +138,7 @@ def tokens(s, factory=None, filt=None, sep=',', strip=True):
     return tokens
 
 
-int_tokens = partial(tokens, factory=int, filt=lambda x: x.isdigit())
+int_tokens = partial(tokenize, factory=int, filt=lambda x: x.isdigit())
 
 
 def token_str(tokens, sep=','):
