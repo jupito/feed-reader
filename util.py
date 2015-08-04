@@ -132,7 +132,8 @@ def tokenize(s, factory=None, filt=None, sep=',', strip=True):
     if strip:
         tokens = [x.strip() for x in tokens]
     if filt:
-        tokens = filter(filt, tokens)
+        # tokens = filter(filt, tokens)
+        tokens = [x for x in tokens if filt(x)]
     if factory:
         tokens = [factory(x) for x in tokens]
     return tokens
