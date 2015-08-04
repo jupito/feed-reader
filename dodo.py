@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 import glob
+import os
 
 from doit.tools import Interactive
 
@@ -18,6 +19,9 @@ CHECKERS = [
     'pylint -r no -E',
     # 'pychecker',
     ]
+
+SRC = ['feed_db.py', 'feed_tool.py', 'feed_util.py', 'html.py', 'util.py',
+       'reader.cgi', 'reader.css']
 
 
 def src():
@@ -51,4 +55,18 @@ def task_push():
     return {
         'actions': [Interactive('git push')],
         'task_dep': ['commit'],
+        }
+
+
+def task_install():
+    """Install."""
+    dst = 'installdir'
+    for filename in SRC:
+        trg = os.path.join(dst, filename)
+        yield {
+            'name': filename,
+            'actions': ['cp -f %(dependencies)s %(targets)s'],
+            'file_dep': [filename],
+            'task_dep': ['check'],
+            'targets': [trg],
         }
