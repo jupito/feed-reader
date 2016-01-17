@@ -14,9 +14,9 @@ DOIT_CONFIG = {
 CHECKERS = [
     # 'pep8',
     # 'pyflakes',
-    'flake8',
+    'flake8-python2',
     # 'pylint -r no',
-    'pylint -r no -E',
+    'pylint2 -r no -E',
     # 'pychecker',
     ]
 
