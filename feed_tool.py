@@ -92,8 +92,15 @@ def refresh(db, feed_ids, v):
     for f in feeds:
         i = f['id']
         try:
-            feed, entries = feed_util.parse_url(f['url'], debug=debug)
-            db.refresh_feed(i, feed, entries)
+            feed, entries = feed_util.parse_url(f['url'], etag=f['etag'],
+                                                modified=f['modified'],
+                                                debug=debug)
+            if feed is None and entries is None:
+                if v:
+                    print(u'Feed already up-to-date: {}'.format(f['url']))
+                    continue
+            else:
+                db.refresh_feed(i, feed, entries)
         except (IOError, ValueError) as e:
             if v:
                 print(u'Error parsing feed {i}: {e}'.format(i=i, e=e))

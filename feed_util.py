@@ -8,16 +8,18 @@ import feedparser
 import util
 
 
-def parse_url(url, debug=None):
+def parse_url(url, etag, modified, debug=None):
     """Parse a feed and its entries."""
-    d = feedparser.parse(url)
+    d = feedparser.parse(url, etag=etag, modified=modified)
     status = d.get('status', -1)
     if status == -1:
         if 'bozo_exception' in d:
             raise d['bozo_exception']
         raise IOError(-1, 'Bozo content', url)
-    if status > 299:
+    elif status > 299:
         raise IOError(status, 'Link error', url)
+    elif status == 304:
+        return False, False  # No need to download. Don't change anything.
     href = d.get('href', None)
     if debug and href is not None and href != url:
         debug('Redirection from {} to {}'.format(url, href))
@@ -35,6 +37,8 @@ def parse_url(url, debug=None):
 def parse_feed(url, x):
     d = dict(
         url=url,
+        etag=x.get('etag'),
+        modified=x.get('modified'),
         refreshed=util.now(),  # TODO: Use x.headers.date instead (TZ?).
         updated=get_updated(x),
         title=x.get('title', '(no title)'),

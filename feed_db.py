@@ -9,6 +9,8 @@ CREATE_DB = """
     CREATE TABLE IF NOT EXISTS Feeds(
         id INTEGER PRIMARY KEY,
         url TEXT UNIQUE NOT NULL,
+        etag TEXT,
+        modified TEXT,
         refreshed INTEGER,
         updated INTEGER,
         title TEXT,
@@ -42,8 +44,10 @@ DELETE_DB = """
     DROP TABLE IF EXISTS Entries;
     DROP TABLE IF EXISTS Feeds;
     """
-
-# ALTER TABLE Feeds ADD COLUMN connection_status INTEGER;
+ALTER_DB = """
+    ALTER TABLE Feeds ADD COLUMN etag TEXT;
+    ALTER TABLE Feeds ADD COLUMN modified TEXT;
+    """
 
 
 class FeedDb(object):
@@ -63,6 +67,7 @@ class FeedDb(object):
 
     def create_db(self):
         self.conn.executescript(CREATE_DB)
+        # self.conn.executescript(ALTER_DB)
 
     def delete_db(self):
         self.conn.executescript(DELETE_DB)
@@ -93,7 +98,8 @@ class FeedDb(object):
         """Update feed."""
         self.cur.execute("""
             UPDATE Feeds
-            SET refreshed=:refreshed, updated=:updated,
+            SET etag=:etag, modified=:modified,
+                refreshed=:refreshed, updated=:updated,
                 title=:title, description=:description, link=:link
             WHERE url=:url
             """, feed)
