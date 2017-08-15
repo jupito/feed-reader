@@ -1,6 +1,8 @@
 feed-reader
 ===========
 
+- - - 8< - - - 8< - - - DISCONTINUED - - - 8< - - - 8< - - -
+
 Simplistic single-user feed reader for web browser. Uses Python, SQLite, CGI.
 
 I wrote most of this while still learning Python, so the code is messy and kind
